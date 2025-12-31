@@ -4,6 +4,10 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
+ext {
+    springAiVersion = "1.1.2"
+}
+
 group = 'org.sopt'
 version = '0.0.1-SNAPSHOT'
 description = 'carena'
@@ -37,21 +41,45 @@ dependencies {
 
     // data
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.14.1'
     runtimeOnly 'org.postgresql:postgresql'
 
     // auth
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+    // jwt 버전 확인 필요
+    implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.13.0'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.13.0'
+
+    // monitoring
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    // swagger 버전 확인 필요
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0'
+
+    // Webflux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
     // devtool
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    // TODO: AI 의존성 추가
+    // AI
+    implementation 'org.springframework.ai:spring-ai-starter-model-huggingface'
+    implementation 'org.springframework.ai:spring-ai-starter-vector-store-pgvector'
 
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.ai:spring-ai-bom:$springAiVersion"
+    }
 }
 
 tasks.named('test') {
