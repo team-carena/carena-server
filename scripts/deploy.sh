@@ -80,9 +80,34 @@ fi
 
 # nginx 스위치
 echo "트래픽을 $NEW 환경으로 전환 중..."
+
+# 설정 변경
 sed -i "s/server $ACTIVE:8080;/server $NEW:8080;/" nginx/conf.d/default.conf
 
-docker exec nginx nginx -s reload
+# 설정 검증
+if ! docker exec nginx nginx -t 2>/dev/null; then
+  echo "❌ Nginx 설정 오류!"
+  sed -i "s/server $NEW:8080;/server $ACTIVE:8080;/" nginx/conf.d/default.conf
+  docker compose stop $NEW
+  exit 1
+fi
+
+# Nginx 리로드
+if ! docker exec nginx nginx -s reload; then
+  echo "❌ Nginx reload 실패!"
+  sed -i "s/server $NEW:8080;/server $ACTIVE:8080;/" nginx/conf.d/default.conf
+  docker exec nginx nginx -s reload
+  docker compose stop $NEW
+  exit 1
+fi
+
+echo "✅ 트래픽 전환 완료"
+
+# 이전 컨테이너 중지
+echo "이전 컨테이너($ACTIVE) 중지 중"
+sleep 5
+docker compose stop $ACTIVE
+echo "✅ 이전 컨테이너 중지 완료"
 
 docker system prune -f
 
