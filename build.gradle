@@ -67,8 +67,8 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // AI
-    implementation 'org.springframework.ai:spring-ai-starter-model-huggingface'
-    implementation 'org.springframework.ai:spring-ai-starter-vector-store-pgvector'
+    //implementation 'org.springframework.ai:spring-ai-starter-model-huggingface'
+    //implementation 'org.springframework.ai:spring-ai-starter-vector-store-pgvector'
 
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
