@@ -5,6 +5,7 @@ import org.sopt.carena.global.exception.BaseException;
 import org.sopt.carena.global.exception.code.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -32,6 +33,11 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
 	@ExceptionHandler(NoHandlerFoundException.class)
 	protected ResponseEntity<ApiResponse> handleNoHandlerFoundException(NoHandlerFoundException e) {
 		return buildErrorResponse(ErrorCode.INVALID_ENDPOINT);
+	}
+
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	protected ResponseEntity<ApiResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+		return buildErrorResponse(ErrorCode.INVALID_REQUEST_METHOD);
 	}
 
 	@ExceptionHandler(Exception.class)

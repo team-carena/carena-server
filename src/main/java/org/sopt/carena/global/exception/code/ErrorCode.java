@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorCode implements ErrorResultCode {
 	// 400
 	INVALID_REQUEST_MESSAGE(HttpStatus.BAD_REQUEST, "요청 데이터의 입력값이 올바르지 않습니다."),
+	INVALID_REQUEST_METHOD(HttpStatus.BAD_REQUEST, "요청 메서드가 올바르지 않습니다."),
 
 	// 404
 	INVALID_ENDPOINT(HttpStatus.NOT_FOUND, "해당 엔드포인트의 요청을 처리할 수 없습니다."),
