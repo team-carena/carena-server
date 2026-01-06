@@ -41,7 +41,7 @@ proxy_pass http://app/actuator/health;
   }
 }
 EOFCONF
-  docker-compose up -d
+  docker compose up -d
   exit 0
 fi
 
