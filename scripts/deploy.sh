@@ -3,6 +3,15 @@ set -e
 
 cd ~/app
 
+# 필수 환경 변수 검증
+REQUIRED_VARS=("DOCKER_USERNAME" "DB_HOST" "DB_NAME" "DB_USERNAME" "DB_PASSWORD")
+for var in "${REQUIRED_VARS[@]}"; do
+  if [ -z "${!var}" ]; then
+    echo "❌ 오류: $var 환경 변수가 설정되지 않았습니다."
+    exit 1
+  fi
+done
+
 # .env 파일 생성
 cat > .env << EOF
 DOCKER_USERNAME=${DOCKER_USERNAME}
