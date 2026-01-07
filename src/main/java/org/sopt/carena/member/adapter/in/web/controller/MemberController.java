@@ -1,0 +1,56 @@
+package org.sopt.carena.member.adapter.in.web.controller;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sopt.carena.global.api.response.ApiResponse;
+import org.sopt.carena.global.api.response.SuccessResponse;
+import org.sopt.carena.member.adapter.in.web.dto.OAuthLoginResponse;
+import org.sopt.carena.member.adapter.in.web.dto.SignUpRequest;
+import org.sopt.carena.member.adapter.in.web.dto.SignupResponse;
+import org.sopt.carena.member.appliacation.code.MemberSuccessCode;
+import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
+import org.sopt.carena.member.appliacation.dto.view.SignupView;
+import org.sopt.carena.member.appliacation.port.in.OAuthLoginUseCase;
+import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RestController
+@RequestMapping("/api/v1/member")
+@RequiredArgsConstructor
+public class MemberController {
+
+    private final OAuthLoginUseCase oAuthLoginUseCase;
+    private final SignupUseCase signupUseCase;
+
+    @PostMapping("/login/{oauthProvider}")
+    public ResponseEntity<SuccessResponse<OAuthLoginResponse>> login(@PathVariable String oauthProvider) {
+
+        log.info("로그인 요청 - provider: {}", oauthProvider);
+
+        String authUrl = oAuthLoginUseCase.getAuthUrl(oauthProvider);
+
+        OAuthLoginResponse responseData = new OAuthLoginResponse(authUrl);
+
+        return ResponseEntity.ok(ApiResponse.success(MemberSuccessCode.LOGIN_URL_CREATED, responseData));
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<SuccessResponse<SignupResponse>> signup(
+            @RequestBody @Valid SignUpRequest request
+    ) {
+        log.info("회원가입 요청 - name: {}", request.name());
+
+        SignUpCommand command = SignUpCommand.from(request);
+        SignupView result = signupUseCase.signup(command);
+
+        SignupResponse response = SignupResponse.from(result);
+
+        return ResponseEntity.ok(
+                ApiResponse.success(MemberSuccessCode.SIGNUP_SUCCESS, response)
+        );
+    }
+}
