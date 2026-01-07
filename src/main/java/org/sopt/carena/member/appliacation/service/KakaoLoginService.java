@@ -1,0 +1,81 @@
+package org.sopt.carena.member.appliacation.service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sopt.carena.member.adapter.out.external.kakao.dto.KakaoOAuthInfo;
+import org.sopt.carena.member.appliacation.dto.view.KakaoLoginView;
+import org.sopt.carena.member.appliacation.dto.view.MemberView;
+import org.sopt.carena.member.appliacation.port.in.KakaoLoginUseCase;
+import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
+import org.sopt.carena.member.appliacation.port.out.KakaoOAuthPort;
+import org.sopt.carena.member.appliacation.port.out.MemberRepository;
+import org.sopt.carena.member.appliacation.port.out.OneTimeCodeStore;
+import org.sopt.carena.member.domain.AuthType;
+import org.sopt.carena.member.domain.Member;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Duration;
+import java.util.Optional;
+import java.util.UUID;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class KakaoLoginService implements KakaoLoginUseCase {
+
+    private final KakaoOAuthPort kakaoOAuthPort;
+    private final MemberRepository memberRepository;
+    private final JoinTokenStore joinTokenStore;
+    private final OneTimeCodeStore oneTimeCodeStore;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @Override
+    public KakaoLoginView handleCallback(String code) {
+        log.info("카카오 콜백 처리 시작 - code: {}", code);
+
+        // 1. 인가코드로 ID Token 발급
+        String idToken = kakaoOAuthPort.getIdToken(code);
+        log.info("ID Token 발급 완료");
+
+        // 2. ID Token 검증 및 파싱
+        KakaoOAuthInfo oauthInfo = kakaoOAuthPort.verifyIdToken(idToken);
+        String authId = oauthInfo.getSub();
+        log.info("카카오 식별자 추출: {}", authId);
+
+        // 3. 회원 조회
+        Optional<Member> memberOpt = memberRepository
+                .findByAuthIdAndAuthType(authId, AuthType.KAKAO);
+
+        if (memberOpt.isPresent()) {
+            // 4-A. 기존 회원: 1회용 코드 생성
+            Member member = memberOpt.get();
+            log.info("기존 회원 로그인: memberId={}", member.getId());
+
+            String jwt = jwtTokenProvider.createToken(member.getId());
+
+            return KakaoLoginView.forExistingMember(
+                    jwt,
+                    MemberView.from(member)
+            );
+        } else {
+            // 4-B. 신규 사용자: tempToken 생성
+            log.info("신규 사용자 - 회원가입 필요");
+
+            String tempToken = UUID.randomUUID().toString();
+            joinTokenStore.save(tempToken, authId, Duration.ofMinutes(10));
+
+            return KakaoLoginView.forNewMember(tempToken);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String exchangeOneTimeCode(String oneTimeCode) {
+        log.info("1회용 코드 교환 요청: {}", oneTimeCode);
+
+        return oneTimeCodeStore.getAndDelete(oneTimeCode)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 코드입니다"));
+    }
+}
