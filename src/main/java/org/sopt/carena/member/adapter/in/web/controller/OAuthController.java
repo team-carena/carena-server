@@ -24,6 +24,9 @@ public class OAuthController {
     @Value("${frontend.url}")
     private String frontendUrl;
 
+    private static final int TEMP_TOKEN_MAX_AGE = 600; //10분
+    private static final int ACCESS_TOKEN_MAX_AGE = 86400; //24시간
+
     /**
      * 카카오 콜백 엔드포인트
      * - 카카오가 인가코드를 이 엔드포인트로 전달
@@ -72,7 +75,7 @@ public class OAuthController {
         log.info("신규 회원 - 회원가입 페이지로 리다이렉트");
 
         // tempToken을 쿠키에 저장 (10분 유효)
-        addCookie(response, "tempToken", result.tempToken(), 600);
+        addCookie(response, "tempToken", result.tempToken(), TEMP_TOKEN_MAX_AGE);
 
         // 회원가입 페이지로 리다이렉트
         return redirect(frontendUrl + "/signup");
@@ -89,7 +92,7 @@ public class OAuthController {
                 result.member().id());
 
         // JWT를 쿠키에 저장 (24시간 유효)
-        addCookie(response, "accessToken", result.accessToken(), 86400);
+        addCookie(response, "accessToken", result.accessToken(), ACCESS_TOKEN_MAX_AGE);
 
         // 메인 페이지로 리다이렉트
         return redirect(frontendUrl + "/");
