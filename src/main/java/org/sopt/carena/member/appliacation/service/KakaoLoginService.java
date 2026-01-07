@@ -9,7 +9,6 @@ import org.sopt.carena.member.appliacation.port.in.KakaoLoginUseCase;
 import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
 import org.sopt.carena.member.appliacation.port.out.KakaoOAuthPort;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
-import org.sopt.carena.member.appliacation.port.out.OneTimeCodeStore;
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Member;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,6 @@ public class KakaoLoginService implements KakaoLoginUseCase {
     private final KakaoOAuthPort kakaoOAuthPort;
     private final MemberRepository memberRepository;
     private final JoinTokenStore joinTokenStore;
-    private final OneTimeCodeStore oneTimeCodeStore;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -68,14 +66,5 @@ public class KakaoLoginService implements KakaoLoginUseCase {
 
             return KakaoLoginView.forNewMember(tempToken);
         }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public String exchangeOneTimeCode(String oneTimeCode) {
-        log.info("1회용 코드 교환 요청: {}", oneTimeCode);
-
-        return oneTimeCodeStore.getAndDelete(oneTimeCode)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 코드입니다"));
     }
 }

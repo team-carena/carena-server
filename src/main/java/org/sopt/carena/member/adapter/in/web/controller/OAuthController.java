@@ -1,11 +1,9 @@
 package org.sopt.carena.member.adapter.in.web.controller;
 
-
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.adapter.in.web.dto.TokenResponse;
 import org.sopt.carena.member.appliacation.dto.view.KakaoLoginView;
 import org.sopt.carena.member.appliacation.port.in.KakaoLoginUseCase;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,10 +38,9 @@ public class OAuthController {
 
         log.info("카카오 콜백 수신 - code: {}", code);
 
-        // 서버에서 인가코드로 ID Token 처리
-        KakaoLoginView result = kakaoLoginUseCase.handleCallback(code);
-
         try {
+            // 서버에서 인가코드로 ID Token 처리
+            KakaoLoginView result = kakaoLoginUseCase.handleCallback(code);
             if (result.needsSignup()) {
                 // 신규 회원: tempToken을 쿠키에 담아서 회원가입 페이지로
                 return handleNewMember(result, response);
@@ -51,25 +48,12 @@ public class OAuthController {
                 // 기존 회원: JWT를 쿠키에 담아서 메인 페이지로
                 return handleExistingMember(result, response);
             }
-            }catch (Exception e){
-            log.error("카카오 OAuth 콜백 처리 실패", e);
+        } catch (Exception e){
+             log.error("카카오 OAuth 콜백 처리 실패", e);
              return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    /**
-     * 1회용 코드를 실제 JWT로 교환
-     */
-    @PostMapping("/token/exchange")
-    public ResponseEntity<TokenResponse> exchangeToken(
-            @RequestParam String code
-    ) {
-        log.info("토큰 교환 요청 - code: {}", code);
-
-        String accessToken = kakaoLoginUseCase.exchangeOneTimeCode(code);
-
-        return ResponseEntity.ok(new TokenResponse(accessToken));
-    }
     private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
