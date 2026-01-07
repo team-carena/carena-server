@@ -1,27 +1,22 @@
 package org.sopt.carena.member.domain;
 
-public enum AuthType {
-    KAKAO("KAKAO"),
-    NAVER("NAVER");
+import org.sopt.carena.member.appliacation.exception.UnsupportedOAuthProviderException;
 
-    private final String code;
-    AuthType(String code) {
-        this.code = code;
-    }
-    public static boolean isSupported(String provider) {
-        try {
-            fromCode(provider);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
+import java.util.Arrays;
+
+public enum AuthType {
+    KAKAO,
+    NAVER;
+
+
+    public static AuthType from(String provider) {
+        if (provider == null || provider.isBlank()) {
+            throw new UnsupportedOAuthProviderException();
         }
-    }
-    public static AuthType fromCode(String code) {
-        for (AuthType type : values()) {
-            if (type.code.equalsIgnoreCase(code)) {
-                return type;
-            }
-        }
-        throw new IllegalArgumentException("지원하지 않는 OAuth Provider: " + code);
+
+        return Arrays.stream(values())
+                .filter(type -> type.name().equalsIgnoreCase(provider))
+                .findFirst()
+                .orElseThrow(UnsupportedOAuthProviderException::new);
     }
 }
