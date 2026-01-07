@@ -4,7 +4,21 @@ networks:
   app-network:
     driver: bridge
 
+volumes:
+  redis_data:
+
 services:
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    command: [ "redis-server",  "--appendonly", "yes" ]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+    restart: always
 
   # Blue 환경
   blue:
@@ -16,6 +30,10 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+    depends_on:
+      - redis
     restart: unless-stopped
     networks:
       - app-network
@@ -35,6 +53,10 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+    depends_on:
+      - redis
     restart: unless-stopped
     networks:
       - app-network
