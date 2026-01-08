@@ -2,6 +2,8 @@ package org.sopt.carena.member.adapter.out.external.kakao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.carena.member.appliacation.exception.JwksRetrievalException;
+import org.sopt.carena.member.appliacation.exception.PublicKeyConversionException;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -41,10 +43,24 @@ public class KakaoJwksClient {
 
     @SuppressWarnings("unchecked")
     private Map<String, Object> fetchJwks() {
-        return restTemplate.getForObject(
-                URI.create(KAKAO_JWKS_URL),
-                Map.class
-        );
+        try {
+            log.debug("카카오 JWKS URL 호출: {}", KAKAO_JWKS_URL);
+
+            Map<String, Object> jwks = restTemplate.getForObject(
+                    URI.create(KAKAO_JWKS_URL),
+                    Map.class
+            );
+
+            if (jwks == null) {
+                throw new JwksRetrievalException("JWKS 응답이 null입니다");
+            }
+
+            return jwks;
+
+        } catch (Exception e) {
+            log.error("카카오 JWKS 조회 실패", e);
+            throw new JwksRetrievalException(e);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -52,11 +68,23 @@ public class KakaoJwksClient {
         List<Map<String, Object>> keys =
                 (List<Map<String, Object>>) jwks.get("keys");
 
+        if (keys == null || keys.isEmpty()) {
+            log.error("JWKS에 키가 없습니다");
+            throw new JwksRetrievalException("JWKS에 키가 없습니다");  
+        }
+
         return keys.stream()
                 .filter(key -> kid.equals(key.get("kid")))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "일치하는 카카오 공개키를 찾을 수 없습니다: " + kid));
+                .orElseThrow(() -> {
+                    log.error("일치하는 카카오 공개키 없음 - kid: {}, 사용 가능한 키: {}",
+                            kid,
+                            keys.stream().map(k -> k.get("kid")).toList()
+                    );
+                    return new JwksRetrievalException(
+                            "일치하는 공개키를 찾을 수 없습니다: " + kid);
+                });
+
     }
 
     private RSAPublicKey convertToRsaPublicKey(Map<String, Object> jwk) {
@@ -76,7 +104,7 @@ public class KakaoJwksClient {
             return (RSAPublicKey) keyFactory.generatePublic(keySpec);
 
         } catch (Exception e) {
-            throw new IllegalStateException("RSA 공개키 변환 실패", e);
+            throw new PublicKeyConversionException();
         }
     }
 }

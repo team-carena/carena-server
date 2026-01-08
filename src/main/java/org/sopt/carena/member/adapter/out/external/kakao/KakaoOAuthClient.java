@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.adapter.out.external.kakao.dto.KakaoOAuthInfo;
 import org.sopt.carena.member.adapter.out.external.kakao.dto.KakaoTokenResponse;
+import org.sopt.carena.member.appliacation.exception.KakaoTokenRequestException;
+import org.sopt.carena.member.appliacation.exception.KakaoTokenResponseException;
 import org.sopt.carena.member.appliacation.port.out.KakaoOAuthPort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -34,37 +37,46 @@ public class KakaoOAuthClient implements KakaoOAuthPort {
 
     @Override
     public String getIdToken(String code) {
+
         log.info("카카오 토큰 발급 요청 시작");
 
-        String tokenUrl = "https://kauth.kakao.com/oauth/token";
+        try {
+            String tokenUrl = "https://kauth.kakao.com/oauth/token";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", clientId);
-        params.add("client_secret", clientSecret);
-        params.add("redirect_uri", redirectUri);
-        params.add("code", code);
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("grant_type", "authorization_code");
+            params.add("client_id", clientId);
+            params.add("client_secret", clientSecret);
+            params.add("redirect_uri", redirectUri);
+            params.add("code", code);
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-        ResponseEntity<KakaoTokenResponse> response = restTemplate.postForEntity(
-                tokenUrl,
-                request,
-                KakaoTokenResponse.class
-        );
+            ResponseEntity<KakaoTokenResponse> response = restTemplate.postForEntity(
+                    tokenUrl,
+                    request,
+                    KakaoTokenResponse.class
+            );
 
-        KakaoTokenResponse tokenResponse = response.getBody();
-        if (tokenResponse == null || tokenResponse.getIdToken() == null) {
-            throw new IllegalStateException("카카오 토큰 발급 실패");
+            KakaoTokenResponse tokenResponse = response.getBody();
+            if (tokenResponse == null || tokenResponse.getIdToken() == null) {
+                log.error("카카오 토큰 응답이 유효하지 않음");
+                throw new KakaoTokenResponseException();
+            }
+            log.info("카카오 ID Token 발급 완료");
+            return tokenResponse.getIdToken();
+        } catch (RestClientException e) {
+            log.error("카카오 토큰 발급 요청 실패");
+            throw new KakaoTokenRequestException(e);
+        } catch (Exception e) {
+            // 예상치 못한 오류
+            log.error("카카오 토큰 발급 중 예상치 못한 오류", e);
+            throw new KakaoTokenRequestException(e);
         }
-
-        log.info("카카오 ID Token 발급 완료");
-        return tokenResponse.getIdToken();
-    }
-
+}
     @Override
     public KakaoOAuthInfo verifyIdToken(String idToken) {
         return kakaoOidcVerifier.verify(idToken);

@@ -5,6 +5,7 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.adapter.out.external.kakao.dto.KakaoOAuthInfo;
+import org.sopt.carena.member.appliacation.exception.InvalidIdTokenException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import com.auth0.jwt.JWT;
@@ -52,7 +53,8 @@ public class KakaoOidcVerifier {
         String kid = decoded.getKeyId();
 
         if (kid == null) {
-            throw new IllegalArgumentException("ID Token에 kid가 없습니다");
+            log.error("ID Token에 kid가 없습니다");
+            throw new InvalidIdTokenException("ID Token에 kid가 없습니다");
         }
 
         return kid;

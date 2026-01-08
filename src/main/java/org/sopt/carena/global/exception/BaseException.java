@@ -12,4 +12,19 @@ public abstract class BaseException extends RuntimeException {
 		super(errorResultCode.getMessage());
 		this.errorResultCode = errorResultCode;
 	}
+
+	protected BaseException(ErrorResultCode errorResultCode, String customMessage) {
+		super(customMessage);
+		this.errorResultCode = errorResultCode;
+	}
+
+	protected BaseException(ErrorResultCode errorResultCode, Throwable cause) {
+		super(errorResultCode.getMessage(), cause);
+		this.errorResultCode = errorResultCode;
+	}
+
+	protected BaseException(ErrorResultCode errorResultCode, String customMessage, Throwable cause) {
+		super(customMessage, cause);
+		this.errorResultCode = errorResultCode;
+	}
 }
