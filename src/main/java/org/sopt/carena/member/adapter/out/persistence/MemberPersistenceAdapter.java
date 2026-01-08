@@ -31,6 +31,6 @@ public class MemberPersistenceAdapter implements MemberRepository {
     }
     @Override
     public boolean existsByAuthIdAndAuthType(String authId, AuthType authType) {
-        return memberJpaRepository.existsByAuthIdAndAuthType(authId, authType);  // ← 추가!
+        return memberJpaRepository.existsByAuthIdAndAuthType(authId, authType);
     }
 }

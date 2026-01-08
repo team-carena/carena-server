@@ -21,20 +21,36 @@ public class JwtTokenProvider {
     //private String secretKey;
 
     private final Key key;
-    private final long validityInMilliseconds;
+    private final long accessTokenValidityInMilliseconds;
+    private final long refreshTokenValidityInMilliseconds;
 
     public JwtTokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.expiration}") long validityInMilliseconds
+            @Value("${jwt.access-token-expiration}") long accessTokenValidityInMilliseconds,
+            @Value("${jwt.refresh-token-expiration}") long refreshTokenValidityInMilliseconds
     ) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
-        this.validityInMilliseconds = validityInMilliseconds;
+        this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
+        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
+    }
+    /**
+     * Access Token 생성
+     */
+    public String createAccessToken(Long memberId) {
+        return createToken(memberId, accessTokenValidityInMilliseconds);
+    }
+
+    /**
+     * Refresh Token 생성
+     */
+    public String createRefreshToken(Long memberId) {
+        return createToken(memberId, refreshTokenValidityInMilliseconds);
     }
 
     /**
      * JWT 생성
      */
-    public String createToken(Long memberId) {
+    public String createToken(Long memberId,long validityInMilliseconds) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 

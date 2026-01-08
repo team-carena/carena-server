@@ -47,14 +47,16 @@ public class KakaoLoginService implements KakaoLoginUseCase {
                 .findByAuthIdAndAuthType(authId, AuthType.KAKAO);
 
         if (memberOpt.isPresent()) {
-            // 4-A. 기존 회원: 1회용 코드 생성
+            // 4-A. 기존 회원
             Member member = memberOpt.get();
             log.info("기존 회원 로그인: memberId={}", member.getId());
 
-            String jwt = jwtTokenProvider.createToken(member.getId());
+            String accessToken= jwtTokenProvider.createAccessToken(member.getId());
+            String refreshToken = jwtTokenProvider.createRefreshToken(member.getId());
 
             return KakaoLoginView.forExistingMember(
-                    jwt,
+                    accessToken,
+                    refreshToken,
                     MemberView.from(member)
             );
         } else {

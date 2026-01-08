@@ -4,6 +4,7 @@ public record KakaoLoginView(
         boolean needsSignup,
         String tempToken,
         String accessToken,
+        String refreshToken,
         MemberView member
 ) {
     public static KakaoLoginView forNewMember(String tempToken) {
@@ -11,15 +12,17 @@ public record KakaoLoginView(
                 true,
                 tempToken,
                 null,
+                null,
                 null
         );
     }
 
-    public static KakaoLoginView forExistingMember(String accessToken, MemberView member) {
+    public static KakaoLoginView forExistingMember(String accessToken,String refreshToken, MemberView member) {
         return new KakaoLoginView(
                 false,
                 null,
                 accessToken,
+                refreshToken,
                 member
         );
     }

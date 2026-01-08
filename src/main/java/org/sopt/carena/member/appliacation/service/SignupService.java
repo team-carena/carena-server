@@ -55,10 +55,12 @@ public class SignupService implements SignupUseCase {
         joinTokenStore.delete(command.tempToken());
 
         // 5. JWT 발급
-        String accessToken = jwtTokenProvider.createToken(savedMember.getId());
+        String accessToken = jwtTokenProvider.createAccessToken(savedMember.getId());
+        String refreshToken = jwtTokenProvider.createRefreshToken(member.getId());
 
         return new SignupView(
                 accessToken,
+                refreshToken,
                 MemberView.from(savedMember)
         );
     }

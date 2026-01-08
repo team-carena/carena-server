@@ -26,6 +26,7 @@ public class OAuthController {
 
     private static final int TEMP_TOKEN_MAX_AGE = 600; //10분
     private static final int ACCESS_TOKEN_MAX_AGE = 86400; //24시간
+    private static final int REFRESH_TOKEN_MAX_AGE = 1209600;// 24시간*14
 
     /**
      * 카카오 콜백 엔드포인트
@@ -93,6 +94,7 @@ public class OAuthController {
 
         // JWT를 쿠키에 저장 (24시간 유효)
         addCookie(response, "accessToken", result.accessToken(), ACCESS_TOKEN_MAX_AGE);
+        addCookie(response, "refreshToken", result.refreshToken(), REFRESH_TOKEN_MAX_AGE);
 
         // 메인 페이지로 리다이렉트
         return redirect(frontendUrl + "/");
