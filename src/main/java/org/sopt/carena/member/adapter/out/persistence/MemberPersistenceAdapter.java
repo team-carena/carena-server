@@ -29,4 +29,8 @@ public class MemberPersistenceAdapter implements MemberRepository {
         MemberJpaEntity saved = memberJpaRepository.save(entity);
         return saved.toDomain();
     }
+    @Override
+    public boolean existsByAuthIdAndAuthType(String authId, AuthType authType) {
+        return memberJpaRepository.existsByAuthIdAndAuthType(authId, authType);  // ← 추가!
+    }
 }

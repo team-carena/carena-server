@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface MemberJpaRepository extends JpaRepository<MemberJpaEntity, Long> {
     Optional<MemberJpaEntity> findByAuthIdAndAuthType(String authId, AuthType authType);
+    boolean existsByAuthIdAndAuthType(String authId, AuthType authType);
 }
