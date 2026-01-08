@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.appliacation.port.in.OAuthLoginUseCase;
 import org.sopt.carena.member.appliacation.port.out.OAuthUrlProviderPort;
 import org.sopt.carena.member.domain.AuthType;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
