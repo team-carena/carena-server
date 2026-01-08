@@ -1,4 +1,4 @@
-package org.sopt.carena.member.appliacation.exception;
+package org.sopt.carena.member.appliacation.exception.oauth;
 
 import org.sopt.carena.global.exception.BaseException;
 import org.sopt.carena.member.appliacation.code.OAuthErrorCode;

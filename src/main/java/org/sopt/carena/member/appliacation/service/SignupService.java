@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
 import org.sopt.carena.member.appliacation.dto.view.MemberView;
 import org.sopt.carena.member.appliacation.dto.view.SignupView;
+import org.sopt.carena.member.appliacation.exception.member.DuplicateMemberException;
 import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
 import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
+import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +34,13 @@ public class SignupService implements SignupUseCase {
 
         log.info("tempToken 검증 완료 - authId: {}", authId);
 
-        // 2. 회원 생성
+        // 2. 중복 회원 체크
+        if (memberRepository.existsByAuthIdAndAuthType(authId, AuthType.KAKAO)) {
+            log.error("이미 가입된 회원입니다 - authId: {}", authId);
+            throw new DuplicateMemberException();
+        }
+
+        // 3. 회원 생성
         Member member = Member.create(
                 command.name(),
                 command.birthdate(),
@@ -43,10 +51,10 @@ public class SignupService implements SignupUseCase {
         Member savedMember = memberRepository.save(member);
         log.info("회원 생성 완료 - memberId: {}", savedMember.getId());
 
-        // 3. tempToken 삭제
+        // 4. tempToken 삭제
         joinTokenStore.delete(command.tempToken());
 
-        // 4. JWT 발급
+        // 5. JWT 발급
         String accessToken = jwtTokenProvider.createToken(savedMember.getId());
 
         return new SignupView(

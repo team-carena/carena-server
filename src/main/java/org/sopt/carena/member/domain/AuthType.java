@@ -1,6 +1,6 @@
 package org.sopt.carena.member.domain;
 
-import org.sopt.carena.member.appliacation.exception.UnsupportedOAuthProviderException;
+import org.sopt.carena.member.appliacation.exception.oauth.UnsupportedOAuthProviderException;
 
 import java.util.Arrays;
 
