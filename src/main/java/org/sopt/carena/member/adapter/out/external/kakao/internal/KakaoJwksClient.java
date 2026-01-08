@@ -1,9 +1,9 @@
-package org.sopt.carena.member.adapter.out.external.kakao;
+package org.sopt.carena.member.adapter.out.external.kakao.internal;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.appliacation.exception.JwksRetrievalException;
-import org.sopt.carena.member.appliacation.exception.PublicKeyConversionException;
+import org.sopt.carena.member.appliacation.exception.oauth.JwksRetrievalException;
+import org.sopt.carena.member.appliacation.exception.oauth.PublicKeyConversionException;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

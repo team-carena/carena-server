@@ -1,11 +1,11 @@
-package org.sopt.carena.member.adapter.out.external.kakao;
+package org.sopt.carena.member.adapter.out.external.kakao.internal;
 
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.adapter.out.external.kakao.dto.KakaoOAuthInfo;
-import org.sopt.carena.member.appliacation.exception.InvalidIdTokenException;
+import org.sopt.carena.member.appliacation.exception.oauth.InvalidIdTokenException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import com.auth0.jwt.JWT;

@@ -1,4 +1,4 @@
-package org.sopt.carena.member.adapter.out.external.kakao;
+package org.sopt.carena.member.adapter.out.external.oauth;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.adapter.out.external.kakao.dto.KakaoOAuthInfo;
 import org.sopt.carena.member.adapter.out.external.kakao.dto.KakaoTokenResponse;
-import org.sopt.carena.member.appliacation.exception.KakaoTokenRequestException;
-import org.sopt.carena.member.appliacation.exception.KakaoTokenResponseException;
+import org.sopt.carena.member.adapter.out.external.kakao.internal.KakaoOidcVerifier;
+import org.sopt.carena.member.appliacation.exception.oauth.KakaoTokenRequestException;
+import org.sopt.carena.member.appliacation.exception.oauth.KakaoTokenResponseException;
 import org.sopt.carena.member.appliacation.port.out.KakaoOAuthPort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -18,10 +19,14 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+
+/**
+ * 카카오 ID Token 발급 + 검증
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KakaoOAuthClient implements KakaoOAuthPort {
+public class KakaoOauthAdapter implements KakaoOAuthPort {
 
     private final RestTemplate restTemplate;
     private final KakaoOidcVerifier kakaoOidcVerifier;
