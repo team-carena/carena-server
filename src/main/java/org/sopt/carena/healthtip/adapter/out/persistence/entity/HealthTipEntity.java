@@ -3,8 +3,6 @@ package org.sopt.carena.healthtip.adapter.out.persistence.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sopt.carena.healthtip.application.dto.commend.CreateHealthTipCommend;
-
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
