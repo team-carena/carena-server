@@ -14,7 +14,6 @@ import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
 import org.sopt.carena.member.appliacation.dto.view.SignupView;
 import org.sopt.carena.member.appliacation.port.in.OAuthLoginUseCase;
 import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -27,7 +26,7 @@ public class MemberController {
     private final SignupUseCase signupUseCase;
 
     @PostMapping("/login/{oauthProvider}")
-    public ResponseEntity<SuccessResponse<OAuthLoginResponse>> login(@PathVariable String oauthProvider) {
+    public SuccessResponse<OAuthLoginResponse> login(@PathVariable String oauthProvider) {
 
         log.info("로그인 요청 - provider: {}", oauthProvider);
 
@@ -35,11 +34,11 @@ public class MemberController {
 
         OAuthLoginResponse responseData = new OAuthLoginResponse(authUrl);
 
-        return ResponseEntity.ok(ApiResponse.success(MemberSuccessCode.LOGIN_URL_CREATED, responseData));
+        return ApiResponse.success(MemberSuccessCode.LOGIN_URL_CREATED, responseData);
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<SuccessResponse<SignupResponse>> signup(
+    public SuccessResponse<SignupResponse> signup(
             @RequestBody @Valid SignUpRequest request
     ) {
         log.info("회원가입 요청 - name: {}", request.name());
@@ -49,8 +48,6 @@ public class MemberController {
 
         SignupResponse response = SignupResponse.from(result);
 
-        return ResponseEntity.ok(
-                ApiResponse.success(MemberSuccessCode.SIGNUP_SUCCESS, response)
-        );
+        return ApiResponse.success(MemberSuccessCode.SIGNUP_SUCCESS, response);
     }
 }
