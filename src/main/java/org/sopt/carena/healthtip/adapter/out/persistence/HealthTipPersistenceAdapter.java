@@ -48,7 +48,7 @@ public class HealthTipPersistenceAdapter implements HealthTipPersistencePort {
 				.collect(Collectors.toSet());
 
 		// 기존 해시태그 조회
-		List<HashtagEntity> existingHashtags = hashtagEntityRepository.findByNameIn(commend.hashtags());
+		List<HashtagEntity> existingHashtags = hashtagEntityRepository.findByNameIn(tags);
 
 		// 이미 존재하는 해시태그 이름 추출
 		Set<String> existingNames = existingHashtags.stream()
