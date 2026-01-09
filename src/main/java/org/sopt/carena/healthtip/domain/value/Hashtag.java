@@ -1,7 +1,5 @@
 package org.sopt.carena.healthtip.domain.value;
 
-import org.sopt.carena.healthtip.adapter.out.persistence.entity.HealthTipEntity;
-
 public record Hashtag(
 		Long id,
 		String name
