@@ -3,6 +3,7 @@ package org.sopt.carena.healthtip.adapter.in.request;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record CreateHealthTipRequest(
 		@NotBlank
@@ -17,6 +18,7 @@ public record CreateHealthTipRequest(
 		@NotBlank
 		String reference,
 
+		@NotNull
 		List<@NotBlank String> hashtags
 ) {
 }
