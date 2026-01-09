@@ -17,6 +17,7 @@ import org.sopt.carena.member.appliacation.dto.view.TokenRefreshView;
 import org.sopt.carena.member.appliacation.port.in.OAuthLoginUseCase;
 import org.sopt.carena.member.appliacation.port.in.RefreshTokenUseCase;
 import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -30,7 +31,7 @@ public class MemberController extends BaseController {
     private final RefreshTokenUseCase refreshTokenUseCase;
 
     @PostMapping("/login/{oauthProvider}")
-    public SuccessResponse<OAuthLoginResponse> login(@PathVariable String oauthProvider) {
+    public ResponseEntity<SuccessResponse<OAuthLoginResponse>> login(@PathVariable String oauthProvider) {
 
         log.info("로그인 요청 - provider: {}", oauthProvider);
 
@@ -38,7 +39,11 @@ public class MemberController extends BaseController {
 
         OAuthLoginResponse responseData = new OAuthLoginResponse(authUrl);
 
-        return ApiResponse.success(MemberSuccessCode.LOGIN_URL_CREATED, responseData);
+        return ResponseEntity.status(MemberSuccessCode.SIGNUP_SUCCESS.getStatus())
+                .body(ApiResponse.success(
+                        MemberSuccessCode.SIGNUP_SUCCESS,
+                        responseData
+                ));
     }
 
     @PostMapping("/signup")
@@ -66,7 +71,7 @@ public class MemberController extends BaseController {
      * Access Token 재발급
      */
     @PostMapping("/token/refresh")
-    public SuccessResponse<Void> refreshToken(
+    public ResponseEntity<SuccessResponse<Void>> refreshToken(
             @CookieValue(name = "refreshToken", required = false) String refreshToken,
             HttpServletResponse response
     ) {
@@ -75,6 +80,10 @@ public class MemberController extends BaseController {
         TokenRefreshView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
         addAccessTokenCookie(response, result.accessToken());
 
-        return ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED);
+        return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())
+                .body(ApiResponse.success(
+                        MemberSuccessCode.TOKEN_REFRESHED,
+                        null
+                ));
     }
 }
