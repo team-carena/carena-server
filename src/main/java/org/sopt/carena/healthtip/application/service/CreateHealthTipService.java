@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class CreateHealthTipService implements CreateHealthTipUseCase {
 	private final HealthTipPersistencePort healthTipPersistencePort;
 
-	public void createHealthTip(final CreateHealthTipCommand commend) {
-		healthTipPersistencePort.saveHealthTipWithHashtags(HealthTip.create(commend));
+	public void createHealthTip(final CreateHealthTipCommand command) {
+		healthTipPersistencePort.saveHealthTipWithHashtags(HealthTip.create(command));
 	}
 }
