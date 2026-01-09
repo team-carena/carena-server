@@ -4,7 +4,7 @@ import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.sopt.carena.healthtip.adapter.in.request.CreateHealthTipRequest;
 import org.sopt.carena.healthtip.adapter.in.web.code.SuccessCode;
-import org.sopt.carena.healthtip.application.dto.commend.CreateHealthTipCommand;
+import org.sopt.carena.healthtip.application.dto.command.CreateHealthTipCommand;
 import org.sopt.carena.healthtip.application.dto.view.ReadHealthTipDetailView;
 import org.sopt.carena.healthtip.application.dto.view.ReadHealthTipListView;
 import org.sopt.carena.healthtip.application.port.in.CreateHealthTipUseCase;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -35,7 +36,7 @@ public class HealthTipController implements HealthTipApiDocs {
 
 	@GetMapping
 	public ResponseEntity<SuccessResponse<ReadHealthTipListView>> readHealthTipList(
-			@RequestParam(name = "page", defaultValue = "1") final int page
+			@RequestParam(name = "page", defaultValue = "1") @Min(1) final int page
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_TIP_FOUNDED.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_TIP_FOUNDED,

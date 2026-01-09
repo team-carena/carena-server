@@ -9,11 +9,12 @@ import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 
 @Tag(name = "건강팁 큐레이션", description = "건강팁 큐레이션 관련 API")
 public interface HealthTipApiDocs {
 	@Operation(summary = "건강팁 목록 조회", description = "건강팁의 목록을 조회합니다.")
-	ResponseEntity<SuccessResponse<ReadHealthTipListView>> readHealthTipList(int page);
+	ResponseEntity<SuccessResponse<ReadHealthTipListView>> readHealthTipList(@Min(1) int page);
 
 	@Operation(summary = "건강팁 상세 조회", description = "특정 ID에 해당하는 건강팁의 세부 내용을 조회합니다.")
 	ResponseEntity<SuccessResponse<ReadHealthTipDetailView>> readHealthTipDetail(long healthTipId);
