@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -23,12 +24,47 @@ import java.util.Arrays;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
 
+    // JWT 필터를 건너뛸 경로들
+    private static final List<String> EXCLUDE_URLS = Arrays.asList(
+            "/swagger-ui",
+            "/v3/api-docs",
+            "/swagger-resources",
+            "/api-docs",
+            "/webjars",
+            "/api/v1/member/token/refresh"
+    );
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+
+        // EXCLUDE_URLS의 경로로 시작하면 필터 건너뛰기
+        boolean shouldExclude = EXCLUDE_URLS.stream()
+                .anyMatch(path::startsWith);
+
+        if (shouldExclude) {
+            log.debug("JWT 필터 제외 경로 - URI: {}", path);
+        }
+
+        return shouldExclude;
+    }
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
+
+        String requestURI = request.getRequestURI();
+        log.debug("JWT 필터 실행 - URI: {}", requestURI);
+
+        // JWT 검증 건너뛰기
+        if (shouldNotFilter(request)) {
+            log.debug("JWT 필터 건너뛰기 - URI: {}", requestURI);
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         try {
             // 1. 쿠키에서 JWT 추출

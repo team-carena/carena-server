@@ -66,6 +66,7 @@ public class KakaoOidcVerifier {
         JWTVerifier verifier = JWT.require(algorithm)
                 .withIssuer(issuer)
                 .withAudience(clientId)
+                .acceptLeeway(60)
                 .build();
 
         return verifier.verify(idToken);

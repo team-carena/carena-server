@@ -29,16 +29,21 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+
                         // 인증 불필요
                         .requestMatchers(
+                                "/swagger-ui/**",
                                 "/api/v1/member/login/**",
                                 "/api/oauth/**",
                                 "/api/v1/member/signup",
-                                "/swagger-ui/**",
-                                "/api-docs/**"
+                                "/api-docs/**",
+                                "/api/v1/member/token/refresh"
                         ).permitAll()
                         // 나머지는 인증 필요
-                        .anyRequest().authenticated()
+                        //.anyRequest().authenticated()
+
+                        //임시로 나머지는 일단 permitAll로 설정
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(
                         (Filter) jwtAuthenticationFilter,
