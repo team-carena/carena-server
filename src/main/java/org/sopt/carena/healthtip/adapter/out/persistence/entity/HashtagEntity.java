@@ -21,7 +21,6 @@ public class HashtagEntity {
 	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 
-
 	public HashtagEntity(String name) {
 		this.name = name;
 	}

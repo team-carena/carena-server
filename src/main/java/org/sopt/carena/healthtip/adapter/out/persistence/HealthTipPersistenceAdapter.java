@@ -9,11 +9,13 @@ import java.util.stream.Collectors;
 import org.sopt.carena.healthtip.adapter.out.persistence.entity.HashtagEntity;
 import org.sopt.carena.healthtip.adapter.out.persistence.entity.HealthTipEntity;
 import org.sopt.carena.healthtip.adapter.out.persistence.entity.HealthTipHashtagEntity;
+import org.sopt.carena.healthtip.adapter.out.persistence.mapper.HealthTipMapper;
 import org.sopt.carena.healthtip.adapter.out.persistence.repository.HashtagEntityRepository;
 import org.sopt.carena.healthtip.adapter.out.persistence.repository.HealthTipEntityRepository;
 import org.sopt.carena.healthtip.adapter.out.persistence.repository.HealthTipHashtagEntityRepository;
-import org.sopt.carena.healthtip.application.dto.command.CreateHealthTipCommand;
 import org.sopt.carena.healthtip.application.port.out.HealthTipPersistencePort;
+import org.sopt.carena.healthtip.domain.HealthTip;
+import org.sopt.carena.healthtip.domain.value.Hashtag;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -30,25 +32,23 @@ public class HealthTipPersistenceAdapter implements HealthTipPersistencePort {
 	private final HashtagEntityRepository hashtagEntityRepository;
 	private final HealthTipHashtagEntityRepository healthTipHashtagEntityRepository;
 
-	public Slice<HealthTipEntity> getHealthTipList(final int page) {
+	public Slice<HealthTip> getHealthTipList(final int page) {
 		Pageable pageable = PageRequest.of(page - 1, 10);
-		return healthTipEntityRepository.findAllByOrderByIdDesc(pageable);
+		return healthTipEntityRepository.findAllByOrderByIdDesc(pageable)
+				.map(HealthTipMapper::toDomainWithoutHashtags);
 	}
 
-	public Optional<HealthTipEntity> getHealthTipDetail(final long id) {
-		return healthTipEntityRepository.findByIdWithHashtags(id);
+	public Optional<HealthTip> getHealthTipDetail(final long id) {
+		return healthTipEntityRepository.findByIdWithHashtags(id)
+				.map(HealthTipMapper::toDomain);
 	}
 
 	@Transactional
-	public void saveHealthTipWithHashtags(final CreateHealthTipCommand commend) {
-		// 해시태그 공백 및 중복 제거
-		Set<String> tags = commend.hashtags().stream()
-				.map(String::trim)
-				.filter(name -> !name.isEmpty())
-				.collect(Collectors.toSet());
+	public void saveHealthTipWithHashtags(final HealthTip healthTip) {
 
 		// 기존 해시태그 조회
-		List<HashtagEntity> existingHashtags = hashtagEntityRepository.findByNameIn(tags);
+		List<HashtagEntity> existingHashtags = hashtagEntityRepository.findByNameIn(
+				healthTip.getHashtags().stream().map(Hashtag::name).toList());
 
 		// 이미 존재하는 해시태그 이름 추출
 		Set<String> existingNames = existingHashtags.stream()
@@ -56,7 +56,8 @@ public class HealthTipPersistenceAdapter implements HealthTipPersistencePort {
 				.collect(Collectors.toSet());
 
 		// 새로운 태그의 엔티티 생성
-		List<HashtagEntity> newHashtags = tags.stream()
+		List<HashtagEntity> newHashtags = healthTip.getHashtags().stream()
+				.map(Hashtag::name)
 				.filter(name -> !existingNames.contains(name))
 				.map(HashtagEntity::new)
 				.toList();
@@ -71,18 +72,11 @@ public class HealthTipPersistenceAdapter implements HealthTipPersistencePort {
 		allHashtags.addAll(newHashtags);
 
 		// 건강팁 생성
-		HealthTipEntity healthTip = healthTipEntityRepository.save(
-				HealthTipEntity.builder()
-						.title(commend.title())
-						.subTitle(commend.subTitle())
-						.content(commend.content())
-						.reference(commend.reference())
-						.build()
-		);
+		HealthTipEntity healthTipEntity = healthTipEntityRepository.save(HealthTipMapper.toEntity(healthTip));
 
 		// 연관관계 생성
 		List<HealthTipHashtagEntity> relations = allHashtags.stream()
-				.map(tag -> new HealthTipHashtagEntity(healthTip, tag))
+				.map(tag -> new HealthTipHashtagEntity(healthTipEntity, tag))
 				.toList();
 
 		healthTipHashtagEntityRepository.saveAll(relations);

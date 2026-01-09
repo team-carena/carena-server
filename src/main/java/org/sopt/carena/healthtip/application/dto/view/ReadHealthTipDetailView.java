@@ -2,7 +2,8 @@ package org.sopt.carena.healthtip.application.dto.view;
 
 import java.util.List;
 
-import org.sopt.carena.healthtip.adapter.out.persistence.entity.HealthTipEntity;
+import org.sopt.carena.healthtip.domain.HealthTip;
+import org.sopt.carena.healthtip.domain.value.Hashtag;
 
 public record ReadHealthTipDetailView(
 		long id,
@@ -12,17 +13,15 @@ public record ReadHealthTipDetailView(
 		String reference,
 		List<String> hashtags
 ) {
-	public static ReadHealthTipDetailView from(final HealthTipEntity healthTipEntity) {
+	public static ReadHealthTipDetailView from(final HealthTip healthTip) {
 		return new ReadHealthTipDetailView(
-				healthTipEntity.getId(),
-				healthTipEntity.getTitle(),
-				healthTipEntity.getSubTitle(),
-				healthTipEntity.getContent(),
-				healthTipEntity.getReference(),
-				healthTipEntity.getHashtags().stream()
-						.map(healthTipHashtagEntity -> {
-							return healthTipHashtagEntity.getHashtag().getName();
-						}).toList()
+				healthTip.getId(),
+				healthTip.getTitle(),
+				healthTip.getSubTitle(),
+				healthTip.getContent(),
+				healthTip.getReference(),
+				healthTip.getHashtags().stream()
+						.map(Hashtag::name).toList()
 		);
 	}
 }
