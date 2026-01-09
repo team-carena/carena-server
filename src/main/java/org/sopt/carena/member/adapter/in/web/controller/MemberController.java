@@ -1,6 +1,5 @@
 package org.sopt.carena.member.adapter.in.web.controller;
 
-import jakarta.servlet.http.Cookie;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/member")
 @RequiredArgsConstructor
-public class MemberController {
+public class MemberController extends BaseController {
 
     private final OAuthLoginUseCase oAuthLoginUseCase;
     private final SignupUseCase signupUseCase;
@@ -51,11 +50,12 @@ public class MemberController {
 
         SignUpCommand command = SignUpCommand.from(request);
         SignupView result = signupUseCase.signup(command);
-        addCookie(response, "accessToken", result.accessToken(), 3600);
 
-        // Refresh Token (14일)
-        addCookie(response, "refreshToken", result.refreshToken(), 1209600);
-
+        addAuthTokenCookies(
+                response,
+                result.accessToken(),
+                result.refreshToken()
+        );
 
         SignupResponse signupResponse = SignupResponse.from(result);
 
@@ -73,15 +73,8 @@ public class MemberController {
         log.info("토큰 재발급 요청");
 
         TokenRefreshView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
-        addCookie(response, "accessToken", result.accessToken(), 3600);
+        addAccessTokenCookie(response, result.accessToken());
 
         return ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED);
-    }
-    private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setMaxAge(maxAge);
-        cookie.setHttpOnly(false);
-        response.addCookie(cookie);
     }
 }

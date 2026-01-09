@@ -1,6 +1,5 @@
 package org.sopt.carena.member.adapter.in.web.controller;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,16 +16,12 @@ import java.net.URI;
 @RestController
 @RequestMapping("/api/oauth")
 @RequiredArgsConstructor
-public class OAuthController {
+public class OAuthController extends BaseController {
 
     private final KakaoLoginUseCase kakaoLoginUseCase;
 
     @Value("${frontend.url}")
     private String frontendUrl;
-
-    private static final int TEMP_TOKEN_MAX_AGE = 600; //10분
-    private static final int ACCESS_TOKEN_MAX_AGE = 86400; //24시간
-    private static final int REFRESH_TOKEN_MAX_AGE = 1209600;// 24시간*14
 
     /**
      * 카카오 콜백 엔드포인트
@@ -58,14 +53,6 @@ public class OAuthController {
         }
     }
 
-    private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setMaxAge(maxAge);
-        cookie.setHttpOnly(false);
-        response.addCookie(cookie);
-    }
-
     /**
      * 신규 회원 처리
      */
@@ -76,8 +63,7 @@ public class OAuthController {
         log.info("신규 회원 - 회원가입 페이지로 리다이렉트");
 
         // tempToken을 쿠키에 저장 (10분 유효)
-        addCookie(response, "tempToken", result.tempToken(), TEMP_TOKEN_MAX_AGE);
-
+        addTempTokenCookie(response, result.tempToken());
         // 회원가입 페이지로 리다이렉트
         return redirect(frontendUrl + "/signup");
     }
@@ -92,9 +78,11 @@ public class OAuthController {
         log.info("기존 회원 - 메인 페이지로 리다이렉트 (memberId: {})",
                 result.member().id());
 
-        // JWT를 쿠키에 저장 (24시간 유효)
-        addCookie(response, "accessToken", result.accessToken(), ACCESS_TOKEN_MAX_AGE);
-        addCookie(response, "refreshToken", result.refreshToken(), REFRESH_TOKEN_MAX_AGE);
+        addAuthTokenCookies(
+                response,
+                result.accessToken(),
+                result.refreshToken()
+        );
 
         // 메인 페이지로 리다이렉트
         return redirect(frontendUrl + "/");
