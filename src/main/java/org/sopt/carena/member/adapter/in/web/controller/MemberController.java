@@ -39,9 +39,9 @@ public class MemberController extends BaseController {
 
         OAuthLoginResponse responseData = new OAuthLoginResponse(authUrl);
 
-        return ResponseEntity.status(MemberSuccessCode.SIGNUP_SUCCESS.getStatus())
+        return ResponseEntity.status(MemberSuccessCode.LOGIN_URL_CREATED.getStatus())
                 .body(ApiResponse.success(
-                        MemberSuccessCode.SIGNUP_SUCCESS,
+                        MemberSuccessCode.LOGIN_URL_CREATED,
                         responseData
                 ));
     }
