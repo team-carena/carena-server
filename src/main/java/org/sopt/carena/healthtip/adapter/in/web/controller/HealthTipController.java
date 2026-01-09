@@ -38,8 +38,8 @@ public class HealthTipController implements HealthTipApiDocs {
 	public ResponseEntity<SuccessResponse<ReadHealthTipListView>> readHealthTipList(
 			@RequestParam(name = "page", defaultValue = "1") @Min(1) final int page
 	) {
-		return ResponseEntity.status(SuccessCode.HEALTH_TIP_FOUNDED.getStatus())
-				.body(ApiResponse.success(SuccessCode.HEALTH_TIP_FOUNDED,
+		return ResponseEntity.status(SuccessCode.HEALTH_TIP_FOUND.getStatus())
+				.body(ApiResponse.success(SuccessCode.HEALTH_TIP_FOUND,
 						readHealthTipListUseCase.readHealthTipList(page)));
 	}
 
@@ -47,8 +47,8 @@ public class HealthTipController implements HealthTipApiDocs {
 	public ResponseEntity<SuccessResponse<ReadHealthTipDetailView>> readHealthTipDetail(
 			@PathVariable(name = "healthTipId") final long healthTipId
 	) {
-		return ResponseEntity.status(SuccessCode.HEALTH_TIP_FOUNDED.getStatus())
-				.body(ApiResponse.success(SuccessCode.HEALTH_TIP_FOUNDED, readHealthTipDetailUseCase.readHealthTipDetail(healthTipId)));
+		return ResponseEntity.status(SuccessCode.HEALTH_TIP_FOUND.getStatus())
+				.body(ApiResponse.success(SuccessCode.HEALTH_TIP_FOUND, readHealthTipDetailUseCase.readHealthTipDetail(healthTipId)));
 	}
 
 	@PostMapping
