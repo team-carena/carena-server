@@ -1,4 +1,4 @@
-package org.sopt.carena.healthtip.application.dto.commend;
+package org.sopt.carena.healthtip.application.dto.command;
 
 import java.util.List;
 

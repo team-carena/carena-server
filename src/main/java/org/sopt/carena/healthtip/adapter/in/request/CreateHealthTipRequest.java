@@ -17,6 +17,6 @@ public record CreateHealthTipRequest(
 		@NotBlank
 		String reference,
 
-		List<String> hashtags
+		List<@NotBlank String> hashtags
 ) {
 }

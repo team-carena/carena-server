@@ -1,6 +1,6 @@
 package org.sopt.carena.healthtip.application.service;
 
-import org.sopt.carena.healthtip.application.dto.commend.CreateHealthTipCommand;
+import org.sopt.carena.healthtip.application.dto.command.CreateHealthTipCommand;
 import org.sopt.carena.healthtip.application.port.in.CreateHealthTipUseCase;
 import org.sopt.carena.healthtip.application.port.out.HealthTipPersistencePort;
 import org.springframework.stereotype.Service;

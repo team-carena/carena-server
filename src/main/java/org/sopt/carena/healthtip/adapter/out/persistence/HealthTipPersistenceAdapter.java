@@ -12,7 +12,7 @@ import org.sopt.carena.healthtip.adapter.out.persistence.entity.HealthTipHashtag
 import org.sopt.carena.healthtip.adapter.out.persistence.repository.HashtagEntityRepository;
 import org.sopt.carena.healthtip.adapter.out.persistence.repository.HealthTipEntityRepository;
 import org.sopt.carena.healthtip.adapter.out.persistence.repository.HealthTipHashtagEntityRepository;
-import org.sopt.carena.healthtip.application.dto.commend.CreateHealthTipCommand;
+import org.sopt.carena.healthtip.application.dto.command.CreateHealthTipCommand;
 import org.sopt.carena.healthtip.application.port.out.HealthTipPersistencePort;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
