@@ -60,7 +60,7 @@ public class SignupService implements SignupUseCase {
 
         // 5. JWT 발급
         String accessToken = jwtTokenProvider.createAccessToken(savedMember.getId());
-        String refreshToken = jwtTokenProvider.createRefreshToken(member.getId());
+        String refreshToken = jwtTokenProvider.createRefreshToken(savedMember.getId());
 
         refreshTokenStore.save(
                 savedMember.getId(),

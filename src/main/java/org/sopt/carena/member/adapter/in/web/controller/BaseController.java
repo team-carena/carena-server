@@ -6,51 +6,22 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public abstract class BaseController {
     private static final int TEMP_TOKEN_MAX_AGE = 600;
+    private static final int REFRESH_TOKEN_MAX_AGE = 1209600; // 14일
 
-    /**
-     * 쿠키 추가 (공통 메서드)
-     */
-    protected void addCookie(
-            HttpServletResponse response,
-            String name,
-            String value,
-            int maxAge
-    ) {
-        Cookie cookie = new Cookie(name, value);
+    protected void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+        Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setPath("/");
-        cookie.setMaxAge(maxAge);
-        cookie.setHttpOnly(false);
+        cookie.setMaxAge(REFRESH_TOKEN_MAX_AGE);
+        cookie.setHttpOnly(true);
         response.addCookie(cookie);
     }
 
-    /**
-     * Access Token 쿠키 추가
-     */
-    protected void addAccessTokenCookie(HttpServletResponse response, String accessToken) {
-        addCookie(response, "accessToken", accessToken, 3600);  // 1시간
-    }
-
-    /**
-     * Refresh Token 쿠키 추가
-     */
-    protected void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
-        addCookie(response, "refreshToken", refreshToken, 1209600);  // 14일
-    }
-
-    /**
-     * 인증 토큰 쿠키 추가 (Access + Refresh)
-     */
-    protected void addAuthTokenCookies(
-            HttpServletResponse response,
-            String accessToken,
-            String refreshToken
-    ) {
-        addAccessTokenCookie(response, accessToken);
-        addRefreshTokenCookie(response, refreshToken);
-    }
-
     protected void addTempTokenCookie(HttpServletResponse response, String tempToken) {
-        addCookie(response, "tempToken", tempToken, TEMP_TOKEN_MAX_AGE);
+        Cookie cookie = new Cookie("tempToken", tempToken);
+        cookie.setPath("/");
+        cookie.setMaxAge(TEMP_TOKEN_MAX_AGE);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
     }
 
     /**

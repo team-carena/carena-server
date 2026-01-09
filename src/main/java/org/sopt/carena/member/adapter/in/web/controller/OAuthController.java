@@ -78,14 +78,17 @@ public class OAuthController extends BaseController {
         log.info("기존 회원 - 메인 페이지로 리다이렉트 (memberId: {})",
                 result.member().id());
 
-        addAuthTokenCookies(
+        addRefreshTokenCookie(
                 response,
-                result.accessToken(),
                 result.refreshToken()
         );
+        // Access Token은 URL 쿼리 파라미터로 전달 (리다이렉트이므로)
+        String redirectUrl = String.format("%s/?accessToken=%s",
+                frontendUrl,
+                result.accessToken());
 
         // 메인 페이지로 리다이렉트
-        return redirect(frontendUrl + "/");
+        return redirect(redirectUrl + "/");
     }
 
     /**

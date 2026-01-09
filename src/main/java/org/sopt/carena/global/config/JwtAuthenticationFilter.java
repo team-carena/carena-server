@@ -3,7 +3,6 @@ package org.sopt.carena.global.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -41,11 +40,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // EXCLUDE_URLS의 경로로 시작하면 필터 건너뛰기
         boolean shouldExclude = EXCLUDE_URLS.stream()
                 .anyMatch(path::startsWith);
-
-        if (shouldExclude) {
-            log.debug("JWT 필터 제외 경로 - URI: {}", path);
-        }
-
         return shouldExclude;
     }
 
@@ -67,14 +61,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
-            // 1. 쿠키에서 JWT 추출
-            String jwt = getJwtFromCookie(request);
+            // Authorization 헤더에서 JWT 추출
+            String jwt = getJwtFromHeader(request);
 
             if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
-                // 2. JWT에서 memberId 추출
                 Long memberId = jwtTokenProvider.getMemberIdFromToken(jwt);
 
-                // 3. Spring Security Context에 저장
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 memberId,
@@ -92,15 +84,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String getJwtFromCookie(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            return Arrays.stream(cookies)
-                    .filter(cookie -> "accessToken".equals(cookie.getName()))
-                    .map(Cookie::getValue)
-                    .findFirst()
-                    .orElse(null);
+    /**
+     * Authorization 헤더에서 JWT 추출
+     * "Bearer {token}"
+     */
+    private String getJwtFromHeader(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
         }
+
         return null;
     }
 }
