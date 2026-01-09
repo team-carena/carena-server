@@ -9,10 +9,13 @@ import org.sopt.carena.member.appliacation.exception.member.DuplicateMemberExcep
 import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
 import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
+import org.sopt.carena.member.appliacation.port.out.RefreshTokenStore;
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Duration;
 
 @Slf4j
 @Service
@@ -23,6 +26,7 @@ public class SignupService implements SignupUseCase {
     private final JoinTokenStore joinTokenStore;
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenStore refreshTokenStore;
 
     @Override
     public SignupView signup(SignUpCommand command) {
@@ -57,6 +61,15 @@ public class SignupService implements SignupUseCase {
         // 5. JWT 발급
         String accessToken = jwtTokenProvider.createAccessToken(savedMember.getId());
         String refreshToken = jwtTokenProvider.createRefreshToken(member.getId());
+
+        refreshTokenStore.save(
+                savedMember.getId(),
+                refreshToken,
+                Duration.ofDays(14)
+        );
+
+        log.info("Refresh Token Redis 저장 완료 - memberId: {}", savedMember.getId());
+
 
         return new SignupView(
                 accessToken,

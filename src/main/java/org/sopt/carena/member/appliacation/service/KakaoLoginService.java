@@ -9,6 +9,7 @@ import org.sopt.carena.member.appliacation.port.in.KakaoLoginUseCase;
 import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
 import org.sopt.carena.member.appliacation.port.out.KakaoOAuthPort;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
+import org.sopt.carena.member.appliacation.port.out.RefreshTokenStore;
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Member;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class KakaoLoginService implements KakaoLoginUseCase {
     private final KakaoOAuthPort kakaoOAuthPort;
     private final MemberRepository memberRepository;
     private final JoinTokenStore joinTokenStore;
+    private final RefreshTokenStore refreshTokenStore;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -53,6 +55,13 @@ public class KakaoLoginService implements KakaoLoginUseCase {
 
             String accessToken= jwtTokenProvider.createAccessToken(member.getId());
             String refreshToken = jwtTokenProvider.createRefreshToken(member.getId());
+            refreshTokenStore.save(
+                    member.getId(),
+                    refreshToken,
+                    Duration.ofDays(14)
+            );
+            log.info("Refresh Token Redis 저장 완료 - memberId: {}", member.getId());
+
 
             return KakaoLoginView.forExistingMember(
                     accessToken,

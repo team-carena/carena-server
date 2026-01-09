@@ -1,17 +1,15 @@
 package org.sopt.carena.member.adapter.in.web.dto;
 
-import lombok.Builder;
-import lombok.Getter;
 import org.sopt.carena.member.appliacation.dto.view.MemberView;
 import org.sopt.carena.member.appliacation.dto.view.SignupView;
 
 public record SignupResponse(
-        String accessToken,
+        //String accessToken,
         MemberView member
 ) {
     public static SignupResponse from(SignupView signupView) {
         return new SignupResponse(
-                signupView.accessToken(),
+                //signupView.accessToken(),
                 signupView.member()
         );
     }

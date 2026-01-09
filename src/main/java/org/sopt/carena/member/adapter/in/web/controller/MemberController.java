@@ -1,6 +1,8 @@
 package org.sopt.carena.member.adapter.in.web.controller;
 
+import jakarta.servlet.http.Cookie;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +14,9 @@ import org.sopt.carena.member.adapter.in.web.dto.SignupResponse;
 import org.sopt.carena.member.appliacation.code.MemberSuccessCode;
 import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
 import org.sopt.carena.member.appliacation.dto.view.SignupView;
+import org.sopt.carena.member.appliacation.dto.view.TokenRefreshView;
 import org.sopt.carena.member.appliacation.port.in.OAuthLoginUseCase;
+import org.sopt.carena.member.appliacation.port.in.RefreshTokenUseCase;
 import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +28,7 @@ public class MemberController {
 
     private final OAuthLoginUseCase oAuthLoginUseCase;
     private final SignupUseCase signupUseCase;
+    private final RefreshTokenUseCase refreshTokenUseCase;
 
     @PostMapping("/login/{oauthProvider}")
     public SuccessResponse<OAuthLoginResponse> login(@PathVariable String oauthProvider) {
@@ -39,15 +44,44 @@ public class MemberController {
 
     @PostMapping("/signup")
     public SuccessResponse<SignupResponse> signup(
-            @RequestBody @Valid SignUpRequest request
+            @RequestBody @Valid SignUpRequest request,
+            HttpServletResponse response
     ) {
         log.info("회원가입 요청 - name: {}", request.name());
 
         SignUpCommand command = SignUpCommand.from(request);
         SignupView result = signupUseCase.signup(command);
+        addCookie(response, "accessToken", result.accessToken(), 3600);
 
-        SignupResponse response = SignupResponse.from(result);
+        // Refresh Token (14일)
+        addCookie(response, "refreshToken", result.refreshToken(), 1209600);
 
-        return ApiResponse.success(MemberSuccessCode.SIGNUP_SUCCESS, response);
+
+        SignupResponse signupResponse = SignupResponse.from(result);
+
+        return ApiResponse.success(MemberSuccessCode.SIGNUP_SUCCESS, signupResponse);
+    }
+
+    /**
+     * Access Token 재발급
+     */
+    @PostMapping("/token/refresh")
+    public SuccessResponse<Void> refreshToken(
+            @CookieValue(name = "refreshToken", required = false) String refreshToken,
+            HttpServletResponse response
+    ) {
+        log.info("토큰 재발급 요청");
+
+        TokenRefreshView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
+        addCookie(response, "accessToken", result.accessToken(), 3600);
+
+        return ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED);
+    }
+    private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setPath("/");
+        cookie.setMaxAge(maxAge);
+        cookie.setHttpOnly(false);
+        response.addCookie(cookie);
     }
 }
