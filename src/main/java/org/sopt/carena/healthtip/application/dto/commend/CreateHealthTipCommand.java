@@ -4,15 +4,15 @@ import java.util.List;
 
 import org.sopt.carena.healthtip.adapter.in.request.CreateHealthTipRequest;
 
-public record CreateHealthTipCommend(
+public record CreateHealthTipCommand(
 		String title,
 		String subTitle,
 		String content,
 		String reference,
 		List<String> hashtags
 ) {
-	public static CreateHealthTipCommend from(final CreateHealthTipRequest createHealthTipDto) {
-		return new CreateHealthTipCommend(
+	public static CreateHealthTipCommand from(final CreateHealthTipRequest createHealthTipDto) {
+		return new CreateHealthTipCommand(
 				createHealthTipDto.title(),
 				createHealthTipDto.subTitle(),
 				createHealthTipDto.content(),

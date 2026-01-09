@@ -1,7 +1,7 @@
 package org.sopt.carena.healthtip.application.port.in;
 
-import org.sopt.carena.healthtip.application.dto.commend.CreateHealthTipCommend;
+import org.sopt.carena.healthtip.application.dto.commend.CreateHealthTipCommand;
 
 public interface CreateHealthTipUseCase {
-	void createHealthTip(CreateHealthTipCommend commend);
+	void createHealthTip(CreateHealthTipCommand commend);
 }

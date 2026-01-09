@@ -12,7 +12,7 @@ import org.sopt.carena.healthtip.adapter.out.persistence.entity.HealthTipHashtag
 import org.sopt.carena.healthtip.adapter.out.persistence.repository.HashtagEntityRepository;
 import org.sopt.carena.healthtip.adapter.out.persistence.repository.HealthTipEntityRepository;
 import org.sopt.carena.healthtip.adapter.out.persistence.repository.HealthTipHashtagEntityRepository;
-import org.sopt.carena.healthtip.application.dto.commend.CreateHealthTipCommend;
+import org.sopt.carena.healthtip.application.dto.commend.CreateHealthTipCommand;
 import org.sopt.carena.healthtip.application.port.out.HealthTipPersistencePort;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +40,7 @@ public class HealthTipPersistenceAdapter implements HealthTipPersistencePort {
 	}
 
 	@Transactional
-	public void saveHealthTipWithHashtags(final CreateHealthTipCommend commend) {
+	public void saveHealthTipWithHashtags(final CreateHealthTipCommand commend) {
 		// 해시태그 공백 및 중복 제거
 		Set<String> tags = commend.hashtags().stream()
 				.map(String::trim)

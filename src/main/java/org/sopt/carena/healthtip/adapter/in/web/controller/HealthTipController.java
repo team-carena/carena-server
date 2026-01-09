@@ -4,7 +4,7 @@ import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.sopt.carena.healthtip.adapter.in.request.CreateHealthTipRequest;
 import org.sopt.carena.healthtip.adapter.in.web.code.SuccessCode;
-import org.sopt.carena.healthtip.application.dto.commend.CreateHealthTipCommend;
+import org.sopt.carena.healthtip.application.dto.commend.CreateHealthTipCommand;
 import org.sopt.carena.healthtip.application.dto.view.ReadHealthTipDetailView;
 import org.sopt.carena.healthtip.application.dto.view.ReadHealthTipListView;
 import org.sopt.carena.healthtip.application.port.in.CreateHealthTipUseCase;
@@ -54,7 +54,7 @@ public class HealthTipController implements HealthTipApiDocs {
 	public ResponseEntity<SuccessResponse<Void>> createHealthTip(
 			@Valid @RequestBody final CreateHealthTipRequest request
 	) {
-		createHealthTipUseCase.createHealthTip(CreateHealthTipCommend.from(request));
+		createHealthTipUseCase.createHealthTip(CreateHealthTipCommand.from(request));
 
 		return ResponseEntity.status(SuccessCode.HEALTH_TIP_CREATED.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_TIP_CREATED));
