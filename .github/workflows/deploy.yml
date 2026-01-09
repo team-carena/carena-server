@@ -63,5 +63,10 @@ jobs:
             export DB_NAME="${{ secrets.DB_NAME }}"
             export DB_USERNAME="${{ secrets.DB_USERNAME }}"
             export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+            export KAKAO_CLIENT_ID="${{ secrets.KAKAO_CLIENT_ID }}"
+            export KAKAO_CLIENT_SECRET="${{ secrets.KAKAO_CLIENT_SECRET }}"
+            export KAKAO_REDIRECT_URI="${{ secrets.KAKAO_REDIRECT_URI }}"
+            export JWT_SECRET="${{ secrets.JWT_SECRET }}"
+            export FRONTEND_URL="${{ secrets.FRONTEND_URL }}"
             
             ~/app/scripts/deploy.sh
