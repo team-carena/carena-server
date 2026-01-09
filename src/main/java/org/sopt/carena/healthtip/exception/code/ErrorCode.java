@@ -1,4 +1,4 @@
-package org.sopt.carena.healthtip.adapter.in.web.code;
+package org.sopt.carena.healthtip.exception.code;
 
 import org.sopt.carena.global.api.code.ErrorResultCode;
 import org.springframework.http.HttpStatus;

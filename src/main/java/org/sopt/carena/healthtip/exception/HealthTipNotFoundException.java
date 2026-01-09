@@ -1,7 +1,7 @@
 package org.sopt.carena.healthtip.exception;
 
 import org.sopt.carena.global.exception.BaseException;
-import org.sopt.carena.healthtip.adapter.in.web.code.ErrorCode;
+import org.sopt.carena.healthtip.exception.code.ErrorCode;
 
 public class HealthTipNotFoundException extends BaseException {
 	public HealthTipNotFoundException() {
