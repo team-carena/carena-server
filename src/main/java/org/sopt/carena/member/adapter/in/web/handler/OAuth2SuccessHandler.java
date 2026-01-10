@@ -16,7 +16,6 @@ import java.io.IOException;
 
 /**
  * OAuth2 로그인 성공 후 처리
- *
  * HTTP 응답 처리 (쿠키, 리다이렉트)
  */
 @Slf4j
@@ -95,12 +94,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         cookie.setPath("/");
         cookie.setMaxAge(maxAge);
         cookie.setHttpOnly(true);
-        cookie.setSecure(false);  //  로컬 개발 시 false (HTTPS에서는 true)
+        cookie.setSecure(false);  //  로컬에서만
         response.addCookie(cookie);
-
-        log.debug("쿠키 설정 - {}: {}... ({}초)",
-                name,
-                value.substring(0, Math.min(10, value.length())),
-                maxAge);
     }
 }

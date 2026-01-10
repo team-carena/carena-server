@@ -33,4 +33,9 @@ public class MemberPersistenceAdapter implements MemberRepository {
     public boolean existsByAuthIdAndAuthType(String authId, AuthType authType) {
         return memberJpaRepository.existsByAuthIdAndAuthType(authId, authType);
     }
+
+    @Override
+    public Optional<Member> findByAuthTypeAndProviderUserId(AuthType authType, String providerUserId) {
+        return memberJpaRepository.findByAuthIdAndAuthType(providerUserId,authType).map(MemberJpaEntity::toDomain);
+    }
 }

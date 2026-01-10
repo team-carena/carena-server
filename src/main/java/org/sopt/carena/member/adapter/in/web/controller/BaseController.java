@@ -27,5 +27,10 @@ public abstract class BaseController {
     /**
      * 쿠키 삭제
      */
-
+    public static void deleteTempTokenCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("tempToken", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
 }

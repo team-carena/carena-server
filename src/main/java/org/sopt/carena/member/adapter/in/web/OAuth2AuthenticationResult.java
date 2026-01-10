@@ -3,43 +3,40 @@ package org.sopt.carena.member.adapter.in.web;
 import lombok.Getter;
 import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginView;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 /**
  * Spring Security와 애플리케이션 결과를 연결하는 DTO
  */
-@Getter
-public class OAuth2AuthenticationResult implements OAuth2User {
+public class OAuth2AuthenticationResult implements OidcUser {
 
+    private final OidcUser delegate;
     private final OAuth2LoginView loginResult;
-    private final Map<String, Object> attributes;
 
-    public OAuth2AuthenticationResult(
-            OAuth2LoginView loginResult,
-            Map<String, Object> attributes
-    ) {
+    public OAuth2AuthenticationResult(OidcUser delegate, OAuth2LoginView loginResult) {
+        this.delegate = delegate;
         this.loginResult = loginResult;
-        this.attributes = attributes;
+    }
+
+    public OAuth2LoginView getLoginResult() {
+        return loginResult;
     }
 
     @Override
     public Map<String, Object> getAttributes() {
-        return attributes;
+        return delegate.getAttributes();
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public String getName() {
-        return loginResult.member() != null
-                ? loginResult.member().id().toString()
-                : "anonymous";
-    }
+    // OidcUser 위임
+    @Override public Map<String, Object> getClaims() { return delegate.getClaims(); }
+    @Override public OidcUserInfo getUserInfo() { return delegate.getUserInfo(); }
+    @Override public OidcIdToken getIdToken() { return delegate.getIdToken(); }
+    @Override public Collection<? extends GrantedAuthority> getAuthorities() { return delegate.getAuthorities(); }
+    @Override public String getName() { return delegate.getName(); }
 }
+

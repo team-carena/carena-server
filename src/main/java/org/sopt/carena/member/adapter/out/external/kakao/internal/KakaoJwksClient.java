@@ -1,4 +1,3 @@
-/*
 package org.sopt.carena.member.adapter.out.external.kakao.internal;
 
 import lombok.RequiredArgsConstructor;
@@ -28,11 +27,9 @@ public class KakaoJwksClient {
     private static final String KAKAO_JWKS_URL =
             "https://kauth.kakao.com/.well-known/jwks.json";
 
-    */
-/**
+    /**
      * 카카오 공개키 조회
-     *//*
-
+     */
     @Cacheable(value = "kakaoJwks", key = "#kid")
     public RSAPublicKey getPublicKey(String kid) {
         log.debug("카카오 JWKS 조회 - kid: {}", kid);
@@ -110,4 +107,4 @@ public class KakaoJwksClient {
             throw new PublicKeyConversionException();
         }
     }
-}*/
+}

@@ -9,14 +9,11 @@ import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
 import org.sopt.carena.member.appliacation.port.out.OAuth2UserInfoProvider;
 import org.sopt.carena.member.appliacation.port.out.RefreshTokenStore;
-import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Member;
-import org.sopt.carena.member.domain.OAuth2UserInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -38,29 +35,14 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
     public OAuth2LoginView processLogin(OAuth2LoginCommand command) {
 
         log.info("OAuth2 로그인 처리 시작 - Provider: {}", command.authType());
-
-        // 1. OAuth2 속성을 도메인 객체로 변환
-        OAuth2UserInfo userInfo = oauth2UserInfoProvider.getUserInfo(
-                command.authType(),
-                command.attributes()
-        );
-
-        String authId = userInfo.getProviderId();
-        AuthType authType = userInfo.getAuthType();
-
-        log.info("사용자 정보 추출 완료 - AuthId: {}", authId);
-
-        // 2. 회원 조회
-        Optional<Member> memberOpt = memberRepository
-                .findByAuthIdAndAuthType(authId, authType);
-
-        if (memberOpt.isPresent()) {
-            // 기존 회원
-            return handleExistingMember(memberOpt.get());
-        } else {
-            // 신규 회원
-            return handleNewMember(authId);
-        }
+        // 1provider + providerUserId 기준 회원 조회
+        return memberRepository
+                .findByAuthTypeAndProviderUserId(
+                        command.authType(),
+                        command.providerUserId()
+                )
+                .map(member -> handleExistingMember(member))
+                .orElseGet(() -> handleNewMember(command));
     }
 
     private OAuth2LoginView handleExistingMember(Member member) {
@@ -84,13 +66,23 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
         );
     }
 
-    private OAuth2LoginView handleNewMember(String authId) {
+    private OAuth2LoginView handleNewMember(OAuth2LoginCommand command) {
         log.info("신규 회원 - 회원가입 필요");
 
         // 임시 토큰 생성 및 저장
         String tempToken = UUID.randomUUID().toString();
-        joinTokenStore.save(tempToken, authId, Duration.ofMinutes(10));
 
+        String authInfo = String.join("|",
+                command.authType().name(),
+                command.providerUserId(),
+                command.email() == null ? "" : command.email()
+        );
+
+        joinTokenStore.save(
+                tempToken,
+                authInfo,
+                Duration.ofMinutes(10)
+        );
         return OAuth2LoginView.forNewMember(tempToken);
     }
 }
