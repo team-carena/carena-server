@@ -1,8 +1,5 @@
 package org.sopt.carena.member.domain;
 
-
-import java.util.Map;
-
 /**
  * OAuth2 제공자별 사용자 정보 추상화
  * 카카오, 네이버 등 제공자마다 응답 구조가 다르므로 인터페이스로 통일
