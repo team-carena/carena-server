@@ -1,3 +1,4 @@
+/*
 package org.sopt.carena.member.adapter.out.external.oauth;
 
 import lombok.Getter;
@@ -12,4 +13,4 @@ import org.springframework.context.annotation.Configuration;
 public class KakaoOAuthProperties {
     private String clientId;
     private String redirectUri;
-}
+}*/

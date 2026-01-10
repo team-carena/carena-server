@@ -1,3 +1,4 @@
+/*
 package org.sopt.carena.member.adapter.in.web.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,12 +24,14 @@ public class OAuthController extends BaseController {
     @Value("${frontend.url}")
     private String frontendUrl;
 
-    /**
+    */
+/**
      * 카카오 콜백 엔드포인트
      * - 카카오가 인가코드를 이 엔드포인트로 전달
      * - 서버에서 ID Token 처리 후 프론트엔드로 리다이렉트
      * - 이 API는 공통 응답 구조 사용하지 않음(브라우저 직접 호출 + 리다이렉트 응답)
-     */
+     *//*
+
     @GetMapping("/kakao/callback")
     // 콜백 인자는 카카오 서버에서 보내는 단순한 쿼리 파라미터이기 때문에 dto나 command가아닌 단순하게 처리함.
     public ResponseEntity<Void> kakaoCallback(
@@ -53,9 +56,11 @@ public class OAuthController extends BaseController {
         }
     }
 
-    /**
+    */
+/**
      * 신규 회원 처리
-     */
+     *//*
+
     private ResponseEntity<Void> handleNewMember(
             KakaoLoginView result,
             HttpServletResponse response
@@ -68,9 +73,11 @@ public class OAuthController extends BaseController {
         return redirect(frontendUrl + "/signup");
     }
 
-    /**
+    */
+/**
      * 기존 회원 처리
-     */
+     *//*
+
     private ResponseEntity<Void> handleExistingMember(
             KakaoLoginView result,
             HttpServletResponse response
@@ -91,11 +98,13 @@ public class OAuthController extends BaseController {
         return redirect(redirectUrl + "/");
     }
 
-    /**
+    */
+/**
      * 리다이렉트 응답 생성 헬퍼 메서드
      * @param url 리다이렉트 URL
      * @return 302 리다이렉트 응답
-     */
+     *//*
+
     private ResponseEntity<Void> redirect(String url) {
         log.debug("리다이렉트 - url: {}", url);
         return ResponseEntity
@@ -104,3 +113,4 @@ public class OAuthController extends BaseController {
                 .build();
     }
 }
+*/

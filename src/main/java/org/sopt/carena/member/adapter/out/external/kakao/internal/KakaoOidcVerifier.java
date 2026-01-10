@@ -1,3 +1,4 @@
+/*
 package org.sopt.carena.member.adapter.out.external.kakao.internal;
 
 import com.auth0.jwt.algorithms.Algorithm;
@@ -25,9 +26,11 @@ public class KakaoOidcVerifier {
     @Value("${oauth.kakao.client-id}")
     private String clientId;
 
-    /**
+    */
+/**
      * 카카오 ID Token 검증
-     */
+     *//*
+
     public KakaoOAuthInfo verify(String idToken) {
         try {
             // 1. kid 추출 (검증 없이)
@@ -81,3 +84,4 @@ public class KakaoOidcVerifier {
         return new KakaoOAuthInfo(sub, email);
     }
 }
+*/

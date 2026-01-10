@@ -8,7 +8,7 @@ public abstract class BaseController {
     private static final int TEMP_TOKEN_MAX_AGE = 600;
     private static final int REFRESH_TOKEN_MAX_AGE = 1209600; // 14일
 
-    protected void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+    public static void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setPath("/");
         cookie.setMaxAge(REFRESH_TOKEN_MAX_AGE);
@@ -16,7 +16,7 @@ public abstract class BaseController {
         response.addCookie(cookie);
     }
 
-    protected void addTempTokenCookie(HttpServletResponse response, String tempToken) {
+    public static void addTempTokenCookie(HttpServletResponse response, String tempToken) {
         Cookie cookie = new Cookie("tempToken", tempToken);
         cookie.setPath("/");
         cookie.setMaxAge(TEMP_TOKEN_MAX_AGE);

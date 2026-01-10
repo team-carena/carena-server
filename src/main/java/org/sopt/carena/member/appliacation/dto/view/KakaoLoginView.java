@@ -1,3 +1,4 @@
+/*
 package org.sopt.carena.member.appliacation.dto.view;
 
 public record KakaoLoginView(
@@ -26,4 +27,4 @@ public record KakaoLoginView(
                 member
         );
     }
-}
+}*/

@@ -1,3 +1,4 @@
+/*
 package org.sopt.carena.member.adapter.out.external.oauth;
 
 import lombok.RequiredArgsConstructor;
@@ -5,9 +6,11 @@ import org.sopt.carena.member.appliacation.port.out.OAuthUrlProviderPort;
 import org.sopt.carena.member.domain.AuthType;
 import org.springframework.stereotype.Component;
 
+*/
 /**
  * 카카오 로그인 url생성
- */
+ *//*
+
 @Component
 @RequiredArgsConstructor
 public class KakaoOauthUrlAdapter implements OAuthUrlProviderPort {
@@ -24,4 +27,4 @@ public class KakaoOauthUrlAdapter implements OAuthUrlProviderPort {
                 properties.getRedirectUri()
         );
     }
-}
+}*/

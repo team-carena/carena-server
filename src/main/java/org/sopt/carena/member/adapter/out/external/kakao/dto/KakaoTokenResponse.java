@@ -1,3 +1,4 @@
+/*
 package org.sopt.carena.member.adapter.out.external.kakao.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,4 +25,4 @@ public class KakaoTokenResponse {
 
     @JsonProperty("refresh_token_expires_in")
     private Integer refreshTokenExpiresIn;
-}
+}*/

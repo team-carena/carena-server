@@ -1,3 +1,4 @@
+/*
 package org.sopt.carena.member.adapter.out.external.kakao;
 
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,11 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 
+*/
 /**
  * 카카오 ID Token 발급 + 검증
- */
+ *//*
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -87,3 +90,4 @@ public class KakaoOauthAdapter implements KakaoOAuthPort {
         return kakaoOidcVerifier.verify(idToken);
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package org.sopt.carena.member.appliacation.service;
 
 import lombok.RequiredArgsConstructor;
@@ -20,4 +21,4 @@ public class OAuthLoginService implements OAuthLoginUseCase {
         AuthType authType = AuthType.from(provider);
         return oAuthUrlProvider.getAuthorizationUrl(authType);
     }
-}
+}*/

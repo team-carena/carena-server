@@ -15,7 +15,7 @@ import org.sopt.carena.member.appliacation.code.MemberSuccessCode;
 import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
 import org.sopt.carena.member.appliacation.dto.view.SignupView;
 import org.sopt.carena.member.appliacation.dto.view.TokenRefreshView;
-import org.sopt.carena.member.appliacation.port.in.OAuthLoginUseCase;
+//import org.sopt.carena.member.appliacation.port.in.OAuthLoginUseCase;
 import org.sopt.carena.member.appliacation.port.in.RefreshTokenUseCase;
 import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +27,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController extends BaseController {
 
-    private final OAuthLoginUseCase oAuthLoginUseCase;
+    //private final OAuthLoginUseCase oAuthLoginUseCase;
     private final SignupUseCase signupUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
+    /*
 
     @PostMapping("/login/{oauthProvider}")
     public ResponseEntity<SuccessResponse<OAuthLoginResponse>> login(@PathVariable String oauthProvider) {
@@ -46,6 +47,8 @@ public class MemberController extends BaseController {
                         responseData
                 ));
     }
+
+     */
 
     @PostMapping("/signup")
     public SuccessResponse<SignupResponse> signup(

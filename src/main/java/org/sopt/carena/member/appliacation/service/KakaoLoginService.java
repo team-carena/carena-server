@@ -1,3 +1,4 @@
+/*
 package org.sopt.carena.member.appliacation.service;
 
 import lombok.RequiredArgsConstructor;
@@ -79,3 +80,4 @@ public class KakaoLoginService implements KakaoLoginUseCase {
         }
     }
 }
+*/
