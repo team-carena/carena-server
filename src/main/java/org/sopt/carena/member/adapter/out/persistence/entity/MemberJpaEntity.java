@@ -7,6 +7,7 @@ import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Gender;
 import org.sopt.carena.member.domain.Member;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,7 +24,7 @@ public class MemberJpaEntity {
     private String name;
 
     @Column(nullable = false)
-    private String birthdate;
+    private LocalDate birthdate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

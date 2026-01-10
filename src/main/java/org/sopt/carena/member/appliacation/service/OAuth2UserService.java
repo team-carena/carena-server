@@ -2,7 +2,7 @@ package org.sopt.carena.member.appliacation.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.appliacation.dto.OAuth2UserInfo;
+import org.sopt.carena.member.domain.OAuth2UserInfo;
 import org.sopt.carena.member.appliacation.dto.OAuth2UserInfoFactory;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
 import org.sopt.carena.member.domain.AuthType;
@@ -24,6 +24,7 @@ import java.util.Optional;
  * 2. 회원 존재 여부 확인
  * 3. CustomOAuth2User로 반환 (신규/기존 회원 정보 포함)
  */
+/*
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -70,3 +71,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         );
     }
 }
+
+ */
+
