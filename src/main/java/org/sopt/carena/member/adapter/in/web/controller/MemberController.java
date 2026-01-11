@@ -29,7 +29,7 @@ public class MemberController extends BaseController {
     private final RefreshTokenUseCase refreshTokenUseCase;
 
     @PostMapping("/signup")
-    public SuccessResponse<SignupResponse> signup(
+    public ResponseEntity<SuccessResponse<SignupResponse>> signup(
             @CookieValue(name = "tempToken") String tempToken,
             @RequestBody @Valid SignUpRequest request,
             HttpServletResponse response
@@ -41,20 +41,22 @@ public class MemberController extends BaseController {
         addRefreshTokenCookie(response, result.refreshToken());
         deleteTempTokenCookie(response);
         SignupResponse signupResponse = SignupResponse.from(result);
-        return ApiResponse.success(MemberSuccessCode.SIGNUP_SUCCESS, signupResponse);
+        return ResponseEntity.status(MemberSuccessCode.SIGNUP_SUCCESS.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.SIGNUP_SUCCESS, signupResponse));
     }
 
     /**
      * Access Token 재발급
      */
     @PostMapping("/token/refresh")
-    public ResponseEntity<SuccessResponse<TokenResponse>> refreshToken(
+    public ResponseEntity<SuccessResponse<Void>> refreshToken(
             @CookieValue(name = "refreshToken", required = false) String refreshToken,
             HttpServletResponse response
     ) {
         TokenRefreshView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
         TokenResponse tokenResponse = new TokenResponse(result.accessToken());
         addAccessTokenCookie(response, tokenResponse.accessToken());
-        return null;
+        return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())
+                        .body(ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED));
     }
 }
