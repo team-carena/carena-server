@@ -5,8 +5,8 @@ import org.sopt.carena.member.appliacation.exception.oauth.UnsupportedOAuthProvi
 import java.util.Arrays;
 
 public enum AuthType {
-    KAKAO,
-    NAVER;
+    KAKAO;
+    //NAVER;
 
 
     public static AuthType from(String provider) {
