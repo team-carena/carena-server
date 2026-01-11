@@ -8,5 +8,4 @@ public class DuplicateMemberException extends BaseException {
     public DuplicateMemberException() {
         super(MemberErrorCode.DUPLICATE_MEMBER);
     }
-
 }

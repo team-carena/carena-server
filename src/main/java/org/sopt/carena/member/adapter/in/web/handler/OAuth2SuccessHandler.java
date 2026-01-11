@@ -16,7 +16,6 @@ import java.io.IOException;
 
 /**
  * OAuth2 로그인 성공 후 처리
- * HTTP 응답 처리 (쿠키, 리다이렉트)
  */
 @Slf4j
 @Component
@@ -59,14 +58,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             HttpServletResponse response,
             OAuth2LoginView loginResult
     ) throws IOException {
-
         log.info("신규 회원 - 회원가입 페이지로 리다이렉트");
         // tempToken 쿠키에 저장
         addCookie(response, "tempToken", loginResult.tempToken(), 600);
 
         // 회원가입 페이지로 리다이렉트
-        String redirectUrl = frontendUrl + "/signup.html";
-        log.info("→ {}", redirectUrl);
+        String redirectUrl = frontendUrl + "/signup.html"; //수정예저에
         response.sendRedirect(redirectUrl);
     }
 
@@ -78,17 +75,14 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             OAuth2LoginView loginResult
     ) throws IOException {
         log.info("기존 회원 - 메인 페이지로 리다이렉트");
-
         // JWT 쿠키에 저장
         addCookie(response, "accessToken", loginResult.accessToken(), 3600);
         addCookie(response, "refreshToken", loginResult.refreshToken(), 1209600);
 
         // 메인 페이지로 리다이렉트
-        String redirectUrl = frontendUrl + "/index.html";
-        log.info("→ {}", redirectUrl);
+        String redirectUrl = frontendUrl + "/index.html"; //수정예정
         response.sendRedirect(redirectUrl);
     }
-
     private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");

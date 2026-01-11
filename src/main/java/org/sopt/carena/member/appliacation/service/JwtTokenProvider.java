@@ -30,23 +30,15 @@ public class JwtTokenProvider {
         this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
         this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
     }
-    /**
-     * Access Token 생성
-     */
+
     public String createAccessToken(Long memberId) {
         return createToken(memberId, accessTokenValidityInMilliseconds);
     }
 
-    /**
-     * Refresh Token 생성
-     */
     public String createRefreshToken(Long memberId) {
         return createToken(memberId, refreshTokenValidityInMilliseconds);
     }
 
-    /**
-     * JWT 생성
-     */
     public String createToken(Long memberId,long validityInMilliseconds) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -59,9 +51,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    /**
-     * JWT 검증
-     */
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
@@ -75,9 +64,6 @@ public class JwtTokenProvider {
         }
     }
 
-    /**
-     * JWT에서 memberId 추출
-     */
     public Long getMemberIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(key)

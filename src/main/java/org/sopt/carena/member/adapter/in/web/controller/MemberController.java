@@ -34,9 +34,6 @@ public class MemberController extends BaseController {
             @RequestBody @Valid SignUpRequest request,
             HttpServletResponse response
     ) {
-        log.info("회원가입 요청 - name: {}", request.name());
-        log.info("tempToken (쿠키): {}", tempToken);
-
         SignUpCommand command = SignUpCommand.of(tempToken, request);
         SignupView result = signupUseCase.signup(command);
 
@@ -58,14 +55,6 @@ public class MemberController extends BaseController {
         TokenRefreshView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
         TokenResponse tokenResponse = new TokenResponse(result.accessToken());
         addAccessTokenCookie(response, tokenResponse.accessToken());
-        /*
-        return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())
-                .body(ApiResponse.success(
-                        MemberSuccessCode.TOKEN_REFRESHED,
-                        tokenResponse
-                ));
-    }
-         */
         return null;
     }
 }

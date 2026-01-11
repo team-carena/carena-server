@@ -7,7 +7,6 @@ import org.sopt.carena.member.domain.Gender;
 import java.time.LocalDate;
 
 public record SignUpRequest(
-
         @NotBlank(message = "이름은 필수입니다.")
         String name,
 

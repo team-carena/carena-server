@@ -6,8 +6,6 @@ import java.util.Arrays;
 
 public enum AuthType {
     KAKAO;
-    //NAVER;
-
 
     public static AuthType from(String provider) {
         if (provider == null || provider.isBlank()) {

@@ -6,6 +6,7 @@ import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
 import org.sopt.carena.member.appliacation.dto.view.MemberView;
 import org.sopt.carena.member.appliacation.dto.view.SignupView;
 import org.sopt.carena.member.appliacation.exception.member.DuplicateMemberException;
+import org.sopt.carena.member.appliacation.exception.member.InvalidTempTokenException;
 import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
 import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
@@ -34,19 +35,16 @@ public class SignupService implements SignupUseCase {
 
         // tempToken 검증
         String oauthInfo = joinTokenStore.getAuthId(command.tempToken())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 토큰입니다"));
+                .orElseThrow(InvalidTempTokenException::new);
         log.info("tempToken 검증 완료 - authId: {}", oauthInfo);
 
         // OAuth 정보 파싱
         String[] parts = oauthInfo.split("\\|");
-        AuthType authType = AuthType.valueOf(parts[0]);  // KAKAO
-        String providerUserId = parts[1];                // 4683159314
-        log.info("파싱 결과 - AuthType: {}, ProviderUserId: {}",
-                authType, providerUserId);
+        AuthType authType = AuthType.valueOf(parts[0]);
+        String providerUserId = parts[1];
 
         // 중복 회원 체크
-        if (memberRepository.existsByAuthIdAndAuthType(providerUserId, AuthType.KAKAO)) {
-            log.error("이미 가입된 회원입니다 - authId: {}", providerUserId);
+        if (memberRepository.existsByAuthIdAndAuthType(providerUserId, authType)) {
             throw new DuplicateMemberException();
         }
 
@@ -60,12 +58,9 @@ public class SignupService implements SignupUseCase {
         );
 
         Member savedMember = memberRepository.save(member);
-        log.info("회원 생성 완료 - memberId: {}", savedMember.getId());
 
         // tempToken 삭제
         joinTokenStore.delete(command.tempToken());
-
-        // JWT 발급
         String accessToken = jwtTokenProvider.createAccessToken(savedMember.getId());
         String refreshToken = jwtTokenProvider.createRefreshToken(savedMember.getId());
 
@@ -74,7 +69,6 @@ public class SignupService implements SignupUseCase {
                 refreshToken,
                 Duration.ofDays(14)
         );
-        log.info("Refresh Token Redis 저장 완료 - memberId: {}", savedMember.getId());
 
         return new SignupView(
                 accessToken,

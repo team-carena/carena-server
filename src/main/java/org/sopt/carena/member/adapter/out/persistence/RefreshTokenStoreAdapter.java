@@ -21,7 +21,6 @@ public class RefreshTokenStoreAdapter implements RefreshTokenStore {
     public void save(Long memberId, String refreshToken, Duration ttl) {
         String key = KEY_PREFIX + memberId;
         redisTemplate.opsForValue().set(key, refreshToken, ttl);
-        log.debug("Refresh Token 저장 완료 - memberId: {}, ttl: {}초", memberId, ttl.getSeconds());
     }
 
     @Override
@@ -29,18 +28,5 @@ public class RefreshTokenStoreAdapter implements RefreshTokenStore {
         String key = KEY_PREFIX + memberId;
         String refreshToken = redisTemplate.opsForValue().get(key);
         return Optional.ofNullable(refreshToken);
-    }
-
-    @Override
-    public void delete(Long memberId) {
-        String key = KEY_PREFIX + memberId;
-        redisTemplate.delete(key);
-        log.debug("Refresh Token 삭제 완료 - memberId: {}", memberId);
-    }
-
-    @Override
-    public boolean exists(Long memberId) {
-        String key = KEY_PREFIX + memberId;
-        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
     }
 }

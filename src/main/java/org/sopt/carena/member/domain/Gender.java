@@ -8,5 +8,4 @@ public enum Gender {
     Gender(String code) {
         this.code = code;
     }
-
 }

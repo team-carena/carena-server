@@ -18,11 +18,8 @@ public class MemberPersistenceAdapter implements MemberRepository {
 
     @Override
     public Optional<Member> findByAuthIdAndAuthType(String authId, AuthType authType) {
-        return memberJpaRepository
-                .findByAuthIdAndAuthType(authId, authType)
-                .map(MemberJpaEntity::toDomain);
+        return memberJpaRepository.findByAuthIdAndAuthType(authId, authType).map(MemberJpaEntity::toDomain);
     }
-
     @Override
     public Member save(Member member) {
         MemberJpaEntity entity = MemberJpaEntity.from(member);
@@ -33,7 +30,6 @@ public class MemberPersistenceAdapter implements MemberRepository {
     public boolean existsByAuthIdAndAuthType(String authId, AuthType authType) {
         return memberJpaRepository.existsByAuthIdAndAuthType(authId, authType);
     }
-
     @Override
     public Optional<Member> findByAuthTypeAndProviderUserId(AuthType authType, String providerUserId) {
         return memberJpaRepository.findByAuthIdAndAuthType(providerUserId,authType).map(MemberJpaEntity::toDomain);

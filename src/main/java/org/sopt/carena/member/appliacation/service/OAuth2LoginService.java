@@ -31,9 +31,7 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
 
     @Override
     public OAuth2LoginView processLogin(OAuth2LoginCommand command) {
-
         log.info("OAuth2 로그인 처리 시작 - Provider: {}", command.authType());
-        // provider + providerUserId 기준 회원 조회
         return memberRepository
                 .findByAuthTypeAndProviderUserId(
                         command.authType(),
@@ -46,7 +44,6 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
     private OAuth2LoginView handleExistingMember(Member member) {
         log.info("기존 회원 로그인 - MemberId: {}", member.getId());
 
-        // JWT 발급
         String accessToken = jwtTokenProvider.createAccessToken(member.getId());
         String refreshToken = jwtTokenProvider.createRefreshToken(member.getId());
 
@@ -69,10 +66,7 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
 
         // 임시 토큰 생성 및 저장
         String tempToken = UUID.randomUUID().toString();
-        String authInfo = String.join("|",
-                command.authType().name(),
-                command.providerUserId()
-        );
+        String authInfo = String.join("|", command.authType().name(), command.providerUserId());
 
         joinTokenStore.save(
                 tempToken,

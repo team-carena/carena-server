@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.appliacation.dto.command.OAuth2LoginCommand;
 import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginView;
+import org.sopt.carena.member.appliacation.exception.oauth.UnsupportedOAuthProviderException;
 import org.sopt.carena.member.appliacation.port.in.OAuth2LoginUseCase;
 import org.sopt.carena.member.domain.AuthType;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -29,7 +30,6 @@ public class OAuth2UserServiceAdapter extends OidcUserService {
 
         log.info("=== OIDC 사용자 정보 로드 시작 ===");
         OidcUser oidcUser = super.loadUser(userRequest);
-
         String registrationId = userRequest.getClientRegistration()
                 .getRegistrationId()
                 .toUpperCase();
@@ -38,14 +38,11 @@ public class OAuth2UserServiceAdapter extends OidcUserService {
         try {
             authType = AuthType.valueOf(registrationId);
         } catch (IllegalArgumentException e) {
-            throw new OAuth2AuthenticationException(
-                    "Unsupported provider: " + registrationId
-            );
+            throw new UnsupportedOAuthProviderException();
         }
-        // Provider별 처리
+
         OAuth2LoginCommand command = switch (authType) {
             case KAKAO -> extractKakaoInfo(oidcUser);
-            // 새 provider 추가 시 여기에 case 추가
         };
 
         OAuth2LoginView loginResult = oauth2LoginUseCase.processLogin(command);
@@ -53,14 +50,8 @@ public class OAuth2UserServiceAdapter extends OidcUserService {
         return new OAuth2AuthenticationResult(oidcUser, loginResult);
     }
     private OAuth2LoginCommand extractKakaoInfo(OidcUser oidcUser) {
-
-        log.info("handleKakaoOidc 진입");
-        log.info("Kakao (providerUserId)= {}", oidcUser.getSubject());
-        log.info("Kakao email = {}", oidcUser.getEmail());
-
         // 표준 OIDC subject
         String providerUserId = oidcUser.getSubject();
-        // 카카오는 email이 null일 수도 있음
         String email = oidcUser.getEmail();
         return OAuth2LoginCommand.of(KAKAO, providerUserId, email);
     }

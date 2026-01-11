@@ -21,27 +21,20 @@ public class RefreshTokenService implements RefreshTokenUseCase {
     @Override
     public TokenRefreshView refreshAccessToken(String refreshToken) {
         log.info("Access Token 재발급 요청");
-
-        // 1. Refresh Token 검증
         jwtTokenProvider.validateToken(refreshToken);
 
-        // 2. Refresh Token에서 memberId 추출
         Long memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
         log.debug("Refresh Token에서 memberId 추출: {}", memberId);
 
-        // 3. Redis에 저장된 Refresh Token과 비교
+        // Redis에 저장된 Refresh Token과 비교
         String storedRefreshToken = refreshTokenStore.get(memberId)
                 .orElseThrow(InvalidRefreshTokenException::new);
 
         if (!refreshToken.equals(storedRefreshToken)) {
-            log.error("Refresh Token 불일치 - memberId: {}", memberId);
             throw new InvalidRefreshTokenException();
         }
 
-        // 4. 새로운 Access Token 발급
         String newAccessToken = jwtTokenProvider.createAccessToken(memberId);
-        log.info("Access Token 재발급 완료 - memberId: {}", memberId);
-
         return new TokenRefreshView(newAccessToken);
     }
 }
