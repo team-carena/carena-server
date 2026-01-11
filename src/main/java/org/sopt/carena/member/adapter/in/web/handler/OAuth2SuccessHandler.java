@@ -32,7 +32,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             HttpServletResponse response,
             Authentication authentication
     ) throws IOException {
-        log.info("=== OAuth2 인증 성공 핸들러 실행 ===");
+        log.info("=== OAuth2 인증 성공 후 핸들러 실행 ===");
 
         // OAuth2AuthenticationResult로 캐스팅
         OAuth2AuthenticationResult authResult =

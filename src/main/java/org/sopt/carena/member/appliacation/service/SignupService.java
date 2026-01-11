@@ -32,34 +32,40 @@ public class SignupService implements SignupUseCase {
     public SignupView signup(SignUpCommand command) {
         log.info("회원가입 시작 - name: {}", command.name());
 
-        // 1. tempToken 검증
-        String authId = joinTokenStore.getAuthId(command.tempToken())
+        // tempToken 검증
+        String oauthInfo = joinTokenStore.getAuthId(command.tempToken())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 토큰입니다"));
+        log.info("tempToken 검증 완료 - authId: {}", oauthInfo);
 
-        log.info("tempToken 검증 완료 - authId: {}", authId);
+        // OAuth 정보 파싱
+        String[] parts = oauthInfo.split("\\|");
+        AuthType authType = AuthType.valueOf(parts[0]);  // KAKAO
+        String providerUserId = parts[1];                // 4683159314
+        log.info("파싱 결과 - AuthType: {}, ProviderUserId: {}",
+                authType, providerUserId);
 
-        // 2. 중복 회원 체크
-        if (memberRepository.existsByAuthIdAndAuthType(authId, AuthType.KAKAO)) {
-            log.error("이미 가입된 회원입니다 - authId: {}", authId);
+        // 중복 회원 체크
+        if (memberRepository.existsByAuthIdAndAuthType(providerUserId, AuthType.KAKAO)) {
+            log.error("이미 가입된 회원입니다 - authId: {}", providerUserId);
             throw new DuplicateMemberException();
         }
 
-        // 3. 회원 생성
+        // 회원 생성
         Member member = Member.create(
                 command.name(),
                 command.birthdate(),
                 command.gender(),
-                authId,
+                providerUserId,
                 AuthType.KAKAO
         );
 
         Member savedMember = memberRepository.save(member);
         log.info("회원 생성 완료 - memberId: {}", savedMember.getId());
 
-        // 4. tempToken 삭제
+        // tempToken 삭제
         joinTokenStore.delete(command.tempToken());
 
-        // 5. JWT 발급
+        // JWT 발급
         String accessToken = jwtTokenProvider.createAccessToken(savedMember.getId());
         String refreshToken = jwtTokenProvider.createRefreshToken(savedMember.getId());
 
@@ -68,9 +74,7 @@ public class SignupService implements SignupUseCase {
                 refreshToken,
                 Duration.ofDays(14)
         );
-
         log.info("Refresh Token Redis 저장 완료 - memberId: {}", savedMember.getId());
-
 
         return new SignupView(
                 accessToken,

@@ -4,7 +4,6 @@ package org.sopt.carena.member.appliacation.dto.view;
  * OAuth2 로그인 결과
  */
 public record OAuth2LoginView(
-        boolean needsSignup,
         String accessToken,
         String refreshToken,
         String tempToken,
@@ -16,7 +15,6 @@ public record OAuth2LoginView(
             MemberView member
     ) {
         return new OAuth2LoginView(
-                false,
                 accessToken,
                 refreshToken,
                 null,
@@ -25,10 +23,12 @@ public record OAuth2LoginView(
 
     public static OAuth2LoginView forNewMember(String tempToken) {
         return new OAuth2LoginView(
-                true,
                 null,
                 null,
                 tempToken,
                 null);
+    }
+    public boolean needsSignup() {
+        return tempToken != null;
     }
 }

@@ -9,12 +9,11 @@ public record OAuth2LoginCommand(
         String providerUserId,
         String email
 ) {
-
-    public static OAuth2LoginCommand ofOidc(
+    public static OAuth2LoginCommand of(
             AuthType authType,
-            String sub,
+            String providerUserId,
             String email
     ) {
-        return new OAuth2LoginCommand(authType, sub, email);
+        return new OAuth2LoginCommand(authType, providerUserId, email);
     }
 }

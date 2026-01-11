@@ -2,11 +2,11 @@ package org.sopt.carena.member.appliacation.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.domain.OAuth2UserInfo;
-import org.sopt.carena.member.appliacation.dto.OAuth2UserInfoFactory;
+//import org.sopt.carena.member.domain.OAuth2UserInfo;
+//import org.sopt.carena.member.appliacation.dto.OAuth2UserInfoFactory;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
 import org.sopt.carena.member.domain.AuthType;
-import org.sopt.carena.member.domain.CustomOAuth2User;
+//import org.sopt.carena.member.domain.CustomOAuth2User;
 import org.sopt.carena.member.domain.Member;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

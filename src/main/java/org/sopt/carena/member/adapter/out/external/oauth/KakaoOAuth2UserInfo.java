@@ -1,4 +1,4 @@
-package org.sopt.carena.member.adapter.out.external.oauth;
+/*package org.sopt.carena.member.adapter.out.external.oauth;
 
 import lombok.AllArgsConstructor;
 import org.sopt.carena.member.domain.AuthType;
@@ -6,9 +6,9 @@ import org.sopt.carena.member.domain.OAuth2UserInfo;
 
 import java.util.Map;
 
-/**
+*//**
  * 카카오 OAuth2 사용자 정보
- */
+ *//*
 @AllArgsConstructor
 public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
 
@@ -24,4 +24,4 @@ public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
     public AuthType getAuthType() {
         return AuthType.KAKAO;
     }
-}
+}*/

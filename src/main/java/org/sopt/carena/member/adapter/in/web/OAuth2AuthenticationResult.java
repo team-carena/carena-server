@@ -13,6 +13,7 @@ import java.util.Map;
 /**
  * Spring Security와 애플리케이션 결과를 연결하는 DTO
  */
+@Getter
 public class OAuth2AuthenticationResult implements OidcUser {
 
     private final OidcUser delegate;
@@ -23,16 +24,8 @@ public class OAuth2AuthenticationResult implements OidcUser {
         this.loginResult = loginResult;
     }
 
-    public OAuth2LoginView getLoginResult() {
-        return loginResult;
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return delegate.getAttributes();
-    }
-
-    // OidcUser 위임
+    // === OidcUser 인터페이스 위임 ===
+    @Override public Map<String, Object> getAttributes() { return delegate.getAttributes(); }
     @Override public Map<String, Object> getClaims() { return delegate.getClaims(); }
     @Override public OidcUserInfo getUserInfo() { return delegate.getUserInfo(); }
     @Override public OidcIdToken getIdToken() { return delegate.getIdToken(); }

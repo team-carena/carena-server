@@ -1,3 +1,4 @@
+/*
 package org.sopt.carena.member.adapter.out.external.oauth;
 
 import org.sopt.carena.member.domain.AuthType;
@@ -22,4 +23,4 @@ public class KakaoOidcUserInfo implements OAuth2UserInfo {
     public AuthType getAuthType() {
         return AuthType.KAKAO;
     }
-}
+}*/

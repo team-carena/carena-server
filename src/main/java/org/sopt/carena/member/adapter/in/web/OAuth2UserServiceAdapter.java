@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
+import static org.sopt.carena.member.domain.AuthType.KAKAO;
 
 /**
  * Spring Security OAuth2와 애플리케이션을 연결하는 어댑터
@@ -24,43 +25,43 @@ public class OAuth2UserServiceAdapter extends OidcUserService {
     private final OAuth2LoginUseCase oauth2LoginUseCase;
 
     @Override
-    public OidcUser loadUser(OidcUserRequest userRequest)
-            throws OAuth2AuthenticationException {
+    public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
 
-        log.info("OAuth2UserServiceAdapter 실행");
+        log.info("=== OIDC 사용자 정보 로드 시작 ===");
         OidcUser oidcUser = super.loadUser(userRequest);
-
 
         String registrationId = userRequest.getClientRegistration()
                 .getRegistrationId()
                 .toUpperCase();
-        AuthType authType = AuthType.valueOf(registrationId);
-      return switch (authType) {
-            case KAKAO -> handleKakaoOidc(oidcUser);
-            default -> throw new OAuth2AuthenticationException(
-                    "Unsupported OAuth provider: " + authType
-            );
-        };
-    }
-    private OidcUser handleKakaoOidc(OidcUser oidcUser) {
 
-        log.info("🟡 handleKakaoOidc 진입");
-        log.info("Kakao sub = {}", oidcUser.getSubject());
+        AuthType authType;
+        try {
+            authType = AuthType.valueOf(registrationId);
+        } catch (IllegalArgumentException e) {
+            throw new OAuth2AuthenticationException(
+                    "Unsupported provider: " + registrationId
+            );
+        }
+        // Provider별 처리
+        OAuth2LoginCommand command = switch (authType) {
+            case KAKAO -> extractKakaoInfo(oidcUser);
+            // 새 provider 추가 시 여기에 case 추가
+        };
+
+        OAuth2LoginView loginResult = oauth2LoginUseCase.processLogin(command);
+        // Spring Security 인증 객체로 래핑하여 반환
+        return new OAuth2AuthenticationResult(oidcUser, loginResult);
+    }
+    private OAuth2LoginCommand extractKakaoInfo(OidcUser oidcUser) {
+
+        log.info("handleKakaoOidc 진입");
+        log.info("Kakao (providerUserId)= {}", oidcUser.getSubject());
         log.info("Kakao email = {}", oidcUser.getEmail());
 
         // 표준 OIDC subject
-        String sub = oidcUser.getSubject();
-
+        String providerUserId = oidcUser.getSubject();
         // 카카오는 email이 null일 수도 있음
         String email = oidcUser.getEmail();
-
-        OAuth2LoginCommand command = OAuth2LoginCommand.ofOidc(
-                AuthType.KAKAO,
-                sub,
-                email
-        );
-        OAuth2LoginView result = oauth2LoginUseCase.processLogin(command);
-
-        return new OAuth2AuthenticationResult(oidcUser, result);
+        return OAuth2LoginCommand.of(KAKAO, providerUserId, email);
     }
 }

@@ -7,7 +7,6 @@ import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginView;
 import org.sopt.carena.member.appliacation.port.in.OAuth2LoginUseCase;
 import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
-import org.sopt.carena.member.appliacation.port.out.OAuth2UserInfoProvider;
 import org.sopt.carena.member.appliacation.port.out.RefreshTokenStore;
 import org.sopt.carena.member.domain.Member;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,6 @@ import java.util.UUID;
 public class OAuth2LoginService implements OAuth2LoginUseCase {
 
     private final MemberRepository memberRepository;
-    private final OAuth2UserInfoProvider oauth2UserInfoProvider;
     private final JoinTokenStore joinTokenStore;
     private final RefreshTokenStore refreshTokenStore;
     private final JwtTokenProvider jwtTokenProvider;
@@ -35,7 +33,7 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
     public OAuth2LoginView processLogin(OAuth2LoginCommand command) {
 
         log.info("OAuth2 로그인 처리 시작 - Provider: {}", command.authType());
-        // 1provider + providerUserId 기준 회원 조회
+        // provider + providerUserId 기준 회원 조회
         return memberRepository
                 .findByAuthTypeAndProviderUserId(
                         command.authType(),
@@ -71,11 +69,9 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
 
         // 임시 토큰 생성 및 저장
         String tempToken = UUID.randomUUID().toString();
-
         String authInfo = String.join("|",
                 command.authType().name(),
-                command.providerUserId(),
-                command.email() == null ? "" : command.email()
+                command.providerUserId()
         );
 
         joinTokenStore.save(
