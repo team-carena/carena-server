@@ -54,7 +54,7 @@ public class SignupService implements SignupUseCase {
                 command.birthdate(),
                 command.gender(),
                 providerUserId,
-                AuthType.KAKAO
+                authType
         );
         Member savedMember = memberRepository.save(member);
 
