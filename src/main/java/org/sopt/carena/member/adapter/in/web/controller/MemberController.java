@@ -1,7 +1,6 @@
 package org.sopt.carena.member.adapter.in.web.controller;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,10 +40,8 @@ public class MemberController extends BaseController {
         SignUpCommand command = SignUpCommand.of(tempToken, request);
         SignupView result = signupUseCase.signup(command);
 
-        addRefreshTokenCookie(
-                response,
-                result.refreshToken()
-        );
+        addAccessTokenCookie(response, result.accessToken());
+        addRefreshTokenCookie(response, result.refreshToken());
         deleteTempTokenCookie(response);
         SignupResponse signupResponse = SignupResponse.from(result);
         return ApiResponse.success(MemberSuccessCode.SIGNUP_SUCCESS, signupResponse);
@@ -58,23 +55,17 @@ public class MemberController extends BaseController {
             @CookieValue(name = "refreshToken", required = false) String refreshToken,
             HttpServletResponse response
     ) {
-        log.info("토큰 재발급 요청");
-
         TokenRefreshView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
         TokenResponse tokenResponse = new TokenResponse(result.accessToken());
+        addAccessTokenCookie(response, tokenResponse.accessToken());
+        /*
         return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())
                 .body(ApiResponse.success(
                         MemberSuccessCode.TOKEN_REFRESHED,
                         tokenResponse
                 ));
     }
-    /*
-    private void deleteTempTokenCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie("tempToken", null);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+         */
+        return null;
     }
-
-     */
 }
