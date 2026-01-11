@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
         log.debug("JWT 필터 실행 - URI: {}", uri);
 
-        // OAuth2 로그인 경로는 건너뛰기 (중요!)
+        // OAuth2 로그인 경로는 건너뛰기
         if (shouldSkipFilter(uri)) {
             log.debug("JWT 필터 건너뛰기 - URI: {}", uri);
             filterChain.doFilter(request, response);
@@ -40,10 +40,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
-            // 1순위: 쿠키에서 토큰 추출 (OAuth2 로그인 후)
+            // 쿠키에서 토큰 추출 (OAuth2 로그인 후)
             String token = extractTokenFromCookie(request);
 
-            // 2순위: Authorization 헤더에서 추출 (API 호출 시)
+            // Authorization 헤더에서 추출 (API 호출 시)
             if (token == null) {
                 token = extractTokenFromHeader(request);
             }
@@ -60,7 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         );
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.debug("✅ JWT 인증 성공 - MemberId: {}", memberId);
+                log.debug("JWT 인증 성공 - MemberId: {}", memberId);
             }
         } catch (Exception e) {
             log.error("JWT 인증 실패: {}", e.getMessage());
