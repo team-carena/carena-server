@@ -2,6 +2,7 @@ package org.sopt.carena.member.adapter.in.web;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.carena.member.adapter.in.web.dto.OAuth2AuthenticationResult;
 import org.sopt.carena.member.appliacation.dto.command.OAuth2LoginCommand;
 import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginView;
 import org.sopt.carena.member.appliacation.exception.oauth.UnsupportedOAuthProviderException;

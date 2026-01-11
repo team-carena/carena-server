@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.adapter.in.web.OAuth2AuthenticationResult;
+import org.sopt.carena.member.adapter.in.web.dto.OAuth2AuthenticationResult;
 import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginView;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
