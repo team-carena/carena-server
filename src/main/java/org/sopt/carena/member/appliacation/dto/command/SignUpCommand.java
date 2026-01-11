@@ -23,11 +23,11 @@ public record SignUpCommand(
             LocalDate birthdate,
             Gender gender
     ) {
-        // 1. 이름 정책
+        // 이름 정책
         if (name.length() > 20) {
             throw new InvalidNameException();
         }
-        // 2. 생년월일 정책
+        // 생년월일 정책
         validateBirthdate(birthdate);
     }
 

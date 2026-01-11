@@ -1,8 +1,5 @@
 package org.sopt.carena.member.appliacation.dto.view;
 
-/**
- * OAuth2 로그인 결과
- */
 public record OAuth2LoginView(
         String accessToken,
         String refreshToken,

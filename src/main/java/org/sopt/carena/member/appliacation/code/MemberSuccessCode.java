@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum MemberSuccessCode implements SuccessResultCode {
 
-    LOGIN_URL_CREATED(HttpStatus.OK, "로그인 URL이 생성되었습니다."),
     SIGNUP_SUCCESS(HttpStatus.OK, "회원가입이 완료되었습니다."),
     TOKEN_REFRESHED(HttpStatus.OK, "새 엑세스 토큰이 발급되었습니다.");
 

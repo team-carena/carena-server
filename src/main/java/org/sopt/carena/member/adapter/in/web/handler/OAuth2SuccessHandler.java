@@ -51,9 +51,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         }
     }
 
-    /**
-     * 신규 회원
-     */
     private void handleNewMember(
             HttpServletResponse response,
             OAuth2LoginView loginResult
@@ -67,9 +64,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.sendRedirect(redirectUrl);
     }
 
-    /**
-     * 기존 회원: JWT 발급 + 메인 페이지
-     */
     private void handleExistingMember(
             HttpServletResponse response,
             OAuth2LoginView loginResult
@@ -78,7 +72,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // JWT 쿠키에 저장
         addCookie(response, "accessToken", loginResult.accessToken(), 3600);
         addCookie(response, "refreshToken", loginResult.refreshToken(), 1209600);
-
         // 메인 페이지로 리다이렉트
         String redirectUrl = frontendUrl + "/index.html"; //수정예정
         response.sendRedirect(redirectUrl);

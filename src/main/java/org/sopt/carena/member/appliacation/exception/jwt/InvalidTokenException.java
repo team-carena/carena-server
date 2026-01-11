@@ -3,9 +3,9 @@ package org.sopt.carena.member.appliacation.exception.jwt;
 import org.sopt.carena.global.exception.BaseException;
 import org.sopt.carena.member.appliacation.code.MemberErrorCode;
 
-public class InvalidRefreshTokenException extends BaseException {
+public class InvalidTokenException extends BaseException {
 
-    public InvalidRefreshTokenException() {
-        super(MemberErrorCode.INVALID_REFRESH_TOKEN);
+    public InvalidTokenException() {
+        super(MemberErrorCode.INVALID_TOKEN);
     }
 }

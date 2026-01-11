@@ -3,7 +3,7 @@ package org.sopt.carena.member.appliacation.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.appliacation.dto.view.TokenRefreshView;
-import org.sopt.carena.member.appliacation.exception.jwt.InvalidRefreshTokenException;
+import org.sopt.carena.member.appliacation.exception.jwt.InvalidTokenException;
 import org.sopt.carena.member.appliacation.port.in.RefreshTokenUseCase;
 import org.sopt.carena.member.appliacation.port.out.RefreshTokenStore;
 import org.springframework.stereotype.Service;
@@ -24,16 +24,14 @@ public class RefreshTokenService implements RefreshTokenUseCase {
         jwtTokenProvider.validateToken(refreshToken);
 
         Long memberId = jwtTokenProvider.getMemberIdFromToken(refreshToken);
-        log.debug("Refresh Token에서 memberId 추출: {}", memberId);
 
         // Redis에 저장된 Refresh Token과 비교
         String storedRefreshToken = refreshTokenStore.get(memberId)
-                .orElseThrow(InvalidRefreshTokenException::new);
+                .orElseThrow(InvalidTokenException::new);
 
         if (!refreshToken.equals(storedRefreshToken)) {
-            throw new InvalidRefreshTokenException();
+            throw new InvalidTokenException();
         }
-
         String newAccessToken = jwtTokenProvider.createAccessToken(memberId);
         return new TokenRefreshView(newAccessToken);
     }

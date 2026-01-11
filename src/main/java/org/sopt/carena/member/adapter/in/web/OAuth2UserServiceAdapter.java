@@ -16,7 +16,6 @@ import static org.sopt.carena.member.domain.AuthType.KAKAO;
 
 /**
  * Spring Security OAuth2와 애플리케이션을 연결하는 어댑터
- * Spring 프레임워크에만 의존
  */
 @Slf4j
 @Service

@@ -56,7 +56,6 @@ public class SignupService implements SignupUseCase {
                 providerUserId,
                 AuthType.KAKAO
         );
-
         Member savedMember = memberRepository.save(member);
 
         // tempToken 삭제
