@@ -55,7 +55,12 @@ public class HealthTipController implements HealthTipApiDocs {
 	public ResponseEntity<SuccessResponse<Void>> createHealthTip(
 			@Valid @RequestBody final CreateHealthTipRequest request
 	) {
-		createHealthTipUseCase.createHealthTip(CreateHealthTipCommand.from(request));
+		try{
+			createHealthTipUseCase.createHealthTip(CreateHealthTipCommand.from(request));
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 
 		return ResponseEntity.status(SuccessCode.HEALTH_TIP_CREATED.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_TIP_CREATED));

@@ -42,6 +42,10 @@ public class HealthTip {
 				.build();
 	}
 
+	public void updateHashtags(List<Hashtag> newHashtags) {
+		this.hashtags = newHashtags;
+	}
+
 	// 해시태그 공백 및 중복 제거
 	private static List<Hashtag> normalizeHashtags(List<String> hashtags) {
 		return hashtags.stream()

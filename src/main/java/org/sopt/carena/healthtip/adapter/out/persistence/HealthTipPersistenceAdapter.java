@@ -1,10 +1,7 @@
 package org.sopt.carena.healthtip.adapter.out.persistence;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.sopt.carena.healthtip.adapter.out.persistence.entity.HashtagEntity;
 import org.sopt.carena.healthtip.adapter.out.persistence.entity.HealthTipEntity;
@@ -43,39 +40,45 @@ public class HealthTipPersistenceAdapter implements HealthTipPersistencePort {
 				.map(HealthTipMapper::toDomain);
 	}
 
-	@Transactional
-	public void saveHealthTipWithHashtags(final HealthTip healthTip) {
-
-		// 기존 해시태그 조회
-		List<HashtagEntity> existingHashtags = hashtagEntityRepository.findByNameIn(
-				healthTip.getHashtags().stream().map(Hashtag::name).toList());
-
-		// 이미 존재하는 해시태그 이름 추출
-		Set<String> existingNames = existingHashtags.stream()
-				.map(HashtagEntity::getName)
-				.collect(Collectors.toSet());
-
-		// 새로운 태그의 엔티티 생성
-		List<HashtagEntity> newHashtags = healthTip.getHashtags().stream()
+	// 기존 해시태그 조회
+	public List<Hashtag> getExistingHashtagsByNames(final List<Hashtag> hashtags) {
+		List<String> tagNames = hashtags.stream()
 				.map(Hashtag::name)
-				.filter(name -> !existingNames.contains(name))
-				.map(HashtagEntity::new)
 				.toList();
 
-		// 엔티티 저장
-		if (!newHashtags.isEmpty()) {
-			hashtagEntityRepository.saveAll(newHashtags);
+		return hashtagEntityRepository.findByNameIn(tagNames).stream()
+				.map(entity -> Hashtag.of(entity.getId(), entity.getName()))
+				.toList();
+	}
+
+	// 해시태그 저장
+	@Transactional
+	public List<Hashtag> saveHashtag(final List<Hashtag> hashtags) {
+		List<HashtagEntity> hashtagEntities = hashtags.stream()
+				.map(hashtag -> new HashtagEntity(hashtag.name()))
+				.toList();
+
+		if (!hashtagEntities.isEmpty()) {
+			hashtagEntityRepository.saveAll(hashtagEntities);
 		}
 
-		List<HashtagEntity> allHashtags = new ArrayList<>();
-		allHashtags.addAll(existingHashtags);
-		allHashtags.addAll(newHashtags);
+		return hashtagEntities.stream()
+				.map(entity -> Hashtag.of(entity.getId(), entity.getName()))
+				.toList();
+	}
 
+	@Transactional
+	public void saveHealthTipWithHashtags(final HealthTip healthTip) {
 		// 건강팁 생성
 		HealthTipEntity healthTipEntity = healthTipEntityRepository.save(HealthTipMapper.toEntity(healthTip));
 
+		// 프록시 객체 생성
+		List<HashtagEntity> hashtagEntities = healthTip.getHashtags().stream()
+				.map(hashtag -> hashtagEntityRepository.getReferenceById(hashtag.id()))
+				.toList();
+
 		// 연관관계 생성
-		List<HealthTipHashtagEntity> relations = allHashtags.stream()
+		List<HealthTipHashtagEntity> relations = hashtagEntities.stream()
 				.map(tag -> new HealthTipHashtagEntity(healthTipEntity, tag))
 				.toList();
 
