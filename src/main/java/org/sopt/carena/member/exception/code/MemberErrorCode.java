@@ -1,4 +1,4 @@
-package org.sopt.carena.member.appliacation.code;
+package org.sopt.carena.member.exception.code;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

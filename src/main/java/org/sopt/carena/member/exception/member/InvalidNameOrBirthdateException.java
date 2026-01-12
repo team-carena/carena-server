@@ -1,7 +1,7 @@
-package org.sopt.carena.member.appliacation.exception.member;
+package org.sopt.carena.member.exception.member;
 
 import org.sopt.carena.global.exception.BaseException;
-import org.sopt.carena.member.appliacation.code.MemberErrorCode;
+import org.sopt.carena.member.exception.code.MemberErrorCode;
 
 public class InvalidNameOrBirthdateException extends BaseException {
     public InvalidNameOrBirthdateException() {

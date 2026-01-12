@@ -1,4 +1,4 @@
-package org.sopt.carena.member.appliacation.code;
+package org.sopt.carena.member.adapter.in.web.code;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

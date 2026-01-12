@@ -1,7 +1,7 @@
-package org.sopt.carena.member.appliacation.exception.oauth;
+package org.sopt.carena.member.exception.oauth;
 
 import org.sopt.carena.global.exception.BaseException;
-import org.sopt.carena.member.appliacation.code.MemberErrorCode;
+import org.sopt.carena.member.exception.code.MemberErrorCode;
 
 public class UnsupportedOAuthProviderException extends BaseException {
     public UnsupportedOAuthProviderException() {
