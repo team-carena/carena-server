@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 @Getter
 @RequiredArgsConstructor
-public enum AdminEndpoint {
+public enum AdminEndpoint {;
 
     private final String pattern;
     private final HttpMethod method;
