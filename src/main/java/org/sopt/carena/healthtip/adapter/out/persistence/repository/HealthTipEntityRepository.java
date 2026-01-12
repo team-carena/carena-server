@@ -15,8 +15,8 @@ public interface HealthTipEntityRepository extends JpaRepository<HealthTipEntity
 	@Query("""
 				select distinct ht
 				from HealthTipEntity ht
-				join fetch ht.hashtags hth
-				join fetch hth.hashtag
+				left join fetch ht.hashtags hth
+				left join fetch hth.hashtag
 				where ht.id = :id
 			""")
 	Optional<HealthTipEntity> findByIdWithHashtags(@Param("id") long id);
