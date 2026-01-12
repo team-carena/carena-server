@@ -23,7 +23,7 @@ public class HealthTip {
 	private List<Hashtag> hashtags;
 
 	@Builder
-	public HealthTip(long id, String title, String subTitle, String content, String reference, List<Hashtag> hashtags) {
+	private HealthTip(long id, String title, String subTitle, String content, String reference, List<Hashtag> hashtags) {
 		this.id = id;
 		this.title = title;
 		this.subTitle = subTitle;
