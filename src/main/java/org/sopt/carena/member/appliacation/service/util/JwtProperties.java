@@ -1,6 +1,7 @@
 package org.sopt.carena.member.appliacation.service.util;
 
 import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +9,7 @@ import java.security.Key;
 
 // JWT 설정 관리
 @Component
+@Getter
 public class JwtProperties {
 
     private final Key key;
@@ -22,17 +24,5 @@ public class JwtProperties {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
         this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
-    }
-
-    public Key getKey() {
-        return key;
-    }
-
-    public long getAccessTokenValidityInMilliseconds() {
-        return accessTokenValidityInMilliseconds;
-    }
-
-    public long getRefreshTokenValidityInMilliseconds() {
-        return refreshTokenValidityInMilliseconds;
     }
 }
