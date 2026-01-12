@@ -1,6 +1,8 @@
 package org.sopt.carena.member.adapter.out.persistence.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.carena.member.domain.AuthType;
@@ -14,6 +16,8 @@ import java.time.LocalDateTime;
 @Table(name = "members")
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class MemberJpaEntity {
 
     @Id
@@ -43,23 +47,14 @@ public class MemberJpaEntity {
     @Column(nullable = false)
     private Long score;
 
-    public Member toDomain() {
-        return new Member(
-                id, name, birthdate, gender,
-                createdAt, authType, authId, score
-        );
-    }
-
-    public static MemberJpaEntity from(Member member) {
-        MemberJpaEntity entity = new MemberJpaEntity();
-        entity.id = member.getId();
-        entity.name = member.getName();
-        entity.birthdate = member.getBirthdate();
-        entity.gender = member.getGender();
-        entity.createdAt = member.getCreatedAt();
-        entity.authType = member.getAuthType();
-        entity.authId = member.getAuthId();
-        entity.score = member.getScore();
-        return entity;
+    public MemberJpaEntity(Member member) {
+        this.id = member.getId();
+        this.name = member.getName();
+        this.birthdate = member.getBirthdate();
+        this.gender = member.getGender();
+        this.createdAt = member.getCreatedAt();
+        this.authType = member.getAuthType();
+        this.authId = member.getAuthId();
+        this.score = member.getScore();
     }
 }

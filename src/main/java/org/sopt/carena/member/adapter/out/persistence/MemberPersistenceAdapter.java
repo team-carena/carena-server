@@ -2,6 +2,7 @@ package org.sopt.carena.member.adapter.out.persistence;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.carena.member.adapter.out.persistence.entity.MemberJpaEntity;
+import org.sopt.carena.member.adapter.out.persistence.mapper.MemberMapper;
 import org.sopt.carena.member.adapter.out.persistence.repository.MemberJpaRepository;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
 import org.sopt.carena.member.domain.AuthType;
@@ -18,13 +19,13 @@ public class MemberPersistenceAdapter implements MemberRepository {
 
     @Override
     public Optional<Member> findByAuthIdAndAuthType(String authId, AuthType authType) {
-        return memberJpaRepository.findByAuthIdAndAuthType(authId, authType).map(MemberJpaEntity::toDomain);
+        return memberJpaRepository.findByAuthIdAndAuthType(authId, authType).map(MemberMapper::toDomain);
     }
     @Override
     public Member save(Member member) {
-        MemberJpaEntity entity = MemberJpaEntity.from(member);
+        MemberJpaEntity entity = MemberMapper.toEntity(member);
         MemberJpaEntity saved = memberJpaRepository.save(entity);
-        return saved.toDomain();
+        return MemberMapper.toDomain(saved);
     }
     @Override
     public boolean existsByAuthIdAndAuthType(String authId, AuthType authType) {
@@ -32,6 +33,6 @@ public class MemberPersistenceAdapter implements MemberRepository {
     }
     @Override
     public Optional<Member> findByAuthTypeAndProviderUserId(AuthType authType, String providerUserId) {
-        return memberJpaRepository.findByAuthIdAndAuthType(providerUserId,authType).map(MemberJpaEntity::toDomain);
+        return memberJpaRepository.findByAuthIdAndAuthType(providerUserId,authType).map(MemberMapper::toDomain);
     }
 }
