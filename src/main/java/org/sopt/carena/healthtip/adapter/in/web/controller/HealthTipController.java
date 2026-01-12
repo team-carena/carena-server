@@ -48,19 +48,15 @@ public class HealthTipController implements HealthTipApiDocs {
 			@PathVariable(name = "healthTipId") final long healthTipId
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_TIP_FOUND.getStatus())
-				.body(ApiResponse.success(SuccessCode.HEALTH_TIP_FOUND, readHealthTipDetailUseCase.readHealthTipDetail(healthTipId)));
+				.body(ApiResponse.success(SuccessCode.HEALTH_TIP_FOUND,
+						readHealthTipDetailUseCase.readHealthTipDetail(healthTipId)));
 	}
 
 	@PostMapping
 	public ResponseEntity<SuccessResponse<Void>> createHealthTip(
 			@Valid @RequestBody final CreateHealthTipRequest request
 	) {
-		try{
-			createHealthTipUseCase.createHealthTip(CreateHealthTipCommand.from(request));
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		createHealthTipUseCase.createHealthTip(CreateHealthTipCommand.from(request));
 
 		return ResponseEntity.status(SuccessCode.HEALTH_TIP_CREATED.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_TIP_CREATED));
@@ -69,7 +65,7 @@ public class HealthTipController implements HealthTipApiDocs {
 	@DeleteMapping(path = "/{healthTipId}")
 	public ResponseEntity<SuccessResponse<Void>> deleteHealthTip(
 			@PathVariable(name = "healthTipId") final long healthTipId
-	){
+	) {
 		deleteHealthTipUseCase.deleteHealthTip(healthTipId);
 
 		return ResponseEntity.status(SuccessCode.HEALTH_TIP_DELETED.getStatus())
