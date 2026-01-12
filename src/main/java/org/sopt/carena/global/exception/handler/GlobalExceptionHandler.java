@@ -9,6 +9,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -33,6 +34,11 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	protected ResponseEntity<ApiResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+		return buildErrorResponse(ErrorCode.INVALID_REQUEST_MESSAGE);
+	}
+
+	@ExceptionHandler(HandlerMethodValidationException.class)
+	protected ResponseEntity<ApiResponse> handleMethodValidationException(HandlerMethodValidationException e) {
 		return buildErrorResponse(ErrorCode.INVALID_REQUEST_MESSAGE);
 	}
 
