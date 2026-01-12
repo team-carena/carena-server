@@ -10,7 +10,7 @@ import org.sopt.carena.global.api.response.SuccessResponse;
 import org.sopt.carena.member.adapter.in.web.dto.SignUpRequest;
 import org.sopt.carena.member.adapter.in.web.dto.SignupResponse;
 import org.sopt.carena.member.adapter.in.web.dto.TokenResponse;
-import org.sopt.carena.member.appliacation.code.MemberSuccessCode;
+import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
 import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
 import org.sopt.carena.member.appliacation.dto.view.SignupView;
 import org.sopt.carena.member.appliacation.dto.view.TokenRefreshView;
@@ -37,7 +37,7 @@ public class MemberController extends BaseController {
         SignUpCommand command = SignUpCommand.of(tempToken, request);
         SignupView result = signupUseCase.signup(command);
 
-        addAccessTokenCookie(response, result.accessToken());
+        response.setHeader("Authorization", "Bearer " + result.accessToken());
         addRefreshTokenCookie(response, result.refreshToken());
         deleteTempTokenCookie(response);
         SignupResponse signupResponse = SignupResponse.from(result);
@@ -54,8 +54,7 @@ public class MemberController extends BaseController {
             HttpServletResponse response
     ) {
         TokenRefreshView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
-        TokenResponse tokenResponse = new TokenResponse(result.accessToken());
-        addAccessTokenCookie(response, tokenResponse.accessToken());
+        response.setHeader("Authorization", "Bearer " + result.accessToken());
         return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())
                         .body(ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED));
     }

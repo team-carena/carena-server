@@ -58,7 +58,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("신규 회원 - 회원가입 페이지로 리다이렉트");
         // tempToken 쿠키에 저장
         addCookie(response, "tempToken", loginResult.tempToken(), 600);
-
         // 회원가입 페이지로 리다이렉트
         String redirectUrl = frontendUrl + "/signup.html"; //수정예저에
         response.sendRedirect(redirectUrl);
@@ -70,7 +69,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     ) throws IOException {
         log.info("기존 회원 - 메인 페이지로 리다이렉트");
         // JWT 쿠키에 저장
-        addCookie(response, "accessToken", loginResult.accessToken(), 3600);
+        response.setHeader("Authorization", "Bearer " + loginResult.accessToken());
         addCookie(response, "refreshToken", loginResult.refreshToken(), 1209600);
         // 메인 페이지로 리다이렉트
         String redirectUrl = frontendUrl + "/index.html"; //수정예정
