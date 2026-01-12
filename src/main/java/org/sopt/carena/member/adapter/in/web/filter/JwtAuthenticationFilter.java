@@ -7,7 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.appliacation.service.JwtTokenProvider;
+import org.sopt.carena.member.appliacation.service.util.JwtTokenParser;
+import org.sopt.carena.member.appliacation.service.util.JwtTokenValidator;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,8 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenValidator jwtTokenValidator;
+    private final JwtTokenParser jwtTokenParser;
 
     @Override
     protected void doFilterInternal(
@@ -49,8 +51,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             // JWT 검증 및 인증 설정
-            if (token != null && jwtTokenProvider.validateToken(token)) {
-                Long memberId = jwtTokenProvider.getMemberIdFromToken(token);
+            if (token != null && jwtTokenValidator.validateToken(token)) {
+                Long memberId = jwtTokenParser.getMemberId(token);
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(

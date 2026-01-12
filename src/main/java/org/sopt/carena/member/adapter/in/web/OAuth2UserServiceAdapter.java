@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.adapter.in.web.dto.OAuth2AuthenticationResult;
 import org.sopt.carena.member.appliacation.dto.command.OAuth2LoginCommand;
 import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginView;
-import org.sopt.carena.member.appliacation.exception.oauth.UnsupportedOAuthProviderException;
+import org.sopt.carena.member.exception.oauth.UnsupportedOAuthProviderException;
 import org.sopt.carena.member.appliacation.port.in.OAuth2LoginUseCase;
 import org.sopt.carena.member.domain.AuthType;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;

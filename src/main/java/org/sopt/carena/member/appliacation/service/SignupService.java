@@ -5,8 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
 import org.sopt.carena.member.appliacation.dto.view.MemberView;
 import org.sopt.carena.member.appliacation.dto.view.SignupView;
-import org.sopt.carena.member.appliacation.exception.member.DuplicateMemberException;
-import org.sopt.carena.member.appliacation.exception.member.InvalidTempTokenException;
+import org.sopt.carena.member.appliacation.service.util.JwtTokenGenerator;
+import org.sopt.carena.member.exception.member.DuplicateMemberException;
+import org.sopt.carena.member.exception.member.InvalidTempTokenException;
 import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
 import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
@@ -26,8 +27,8 @@ public class SignupService implements SignupUseCase {
 
     private final JoinTokenStore joinTokenStore;
     private final MemberRepository memberRepository;
-    private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenStore refreshTokenStore;
+    private final JwtTokenGenerator jwtTokenGenerator;
 
     @Override
     public SignupView signup(SignUpCommand command) {
@@ -60,8 +61,8 @@ public class SignupService implements SignupUseCase {
 
         // tempToken 삭제
         joinTokenStore.delete(command.tempToken());
-        String accessToken = jwtTokenProvider.createAccessToken(savedMember.getId());
-        String refreshToken = jwtTokenProvider.createRefreshToken(savedMember.getId());
+        String accessToken = jwtTokenGenerator.createAccessToken(savedMember.getId());
+        String refreshToken = jwtTokenGenerator.createRefreshToken(savedMember.getId());
 
         refreshTokenStore.save(
                 savedMember.getId(),

@@ -8,6 +8,7 @@ import org.sopt.carena.member.appliacation.port.in.OAuth2LoginUseCase;
 import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
 import org.sopt.carena.member.appliacation.port.out.RefreshTokenStore;
+import org.sopt.carena.member.appliacation.service.util.JwtTokenGenerator;
 import org.sopt.carena.member.domain.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
     private final MemberRepository memberRepository;
     private final JoinTokenStore joinTokenStore;
     private final RefreshTokenStore refreshTokenStore;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenGenerator jwtTokenGenerator;
 
     @Override
     public OAuth2LoginView processLogin(OAuth2LoginCommand command) {
@@ -44,8 +45,8 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
     private OAuth2LoginView handleExistingMember(Member member) {
         log.info("기존 회원 로그인 - MemberId: {}", member.getId());
 
-        String accessToken = jwtTokenProvider.createAccessToken(member.getId());
-        String refreshToken = jwtTokenProvider.createRefreshToken(member.getId());
+        String accessToken = jwtTokenGenerator.createAccessToken(member.getId());
+        String refreshToken = jwtTokenGenerator.createRefreshToken(member.getId());
 
         // Refresh Token 저장
         refreshTokenStore.save(
