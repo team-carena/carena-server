@@ -17,6 +17,11 @@ public enum MemberErrorCode implements ErrorResultCode {
     INVALID_TEMP_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 임시 토큰입니다."),
     // Token
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 token입니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
+    MALFORMED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰 형식이 올바르지 않습니다."),
+    UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED, "지원하지 않는 토큰입니다."),
+    TOKEN_SIGNATURE_ERROR(HttpStatus.UNAUTHORIZED, "토큰 서명 검증에 실패했습니다."),
+    EMPTY_TOKEN(HttpStatus.BAD_REQUEST, "토큰이 비어있습니다."),
     // OAuth
     UNSUPPORTED_OAUTH_PROVIDER(HttpStatus.BAD_REQUEST, "지원하지 않는 OAuth 제공자입니다.");
 

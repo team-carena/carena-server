@@ -5,14 +5,14 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 
 // JWT 설정 관리
 @Component
 @Getter
 public class JwtProperties {
 
-    private final Key key;
+    private final SecretKey key;
     private final long accessTokenValidityInMilliseconds;
     private final long refreshTokenValidityInMilliseconds;
 

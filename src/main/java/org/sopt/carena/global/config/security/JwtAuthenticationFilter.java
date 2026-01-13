@@ -1,5 +1,6 @@
 package org.sopt.carena.global.config.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -7,9 +8,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.carena.global.api.response.FailureResponse;
 import org.sopt.carena.global.config.security.util.PublicEndpoint;
 import org.sopt.carena.member.appliacation.service.util.JwtTokenParser;
 import org.sopt.carena.member.appliacation.service.util.JwtTokenValidator;
+import org.sopt.carena.member.exception.code.MemberErrorCode;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -24,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenValidator jwtTokenValidator;
     private final JwtTokenParser jwtTokenParser;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(
@@ -42,34 +46,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        String accessToken = extractTokenFromHeader(request);
 
-        try {
-            // 쿠키에서 토큰 추출 (OAuth2 로그인 후)
-            String token = extractTokenFromCookie(request);
-
-            // Authorization 헤더에서 추출 (API 호출 시)
-            if (token == null) {
-                token = extractTokenFromHeader(request);
-            }
-
-            // JWT 검증 및 인증 설정
-            if (jwtTokenValidator.validateToken(token)) {
-                Long memberId = jwtTokenParser.getMemberId(token);
-
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                memberId,
-                                null,
-                                Collections.emptyList()  // 권한 목록
-                        );
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.debug("JWT 인증 성공 - MemberId: {}", memberId);
-            }
-        } catch (Exception e) {
-            log.error("JWT 인증 실패: {}", e.getMessage());
+        if (accessToken == null || accessToken.isEmpty()) {
+            log.debug("인증이 필요한 경로에 토큰이 없습니다 - URI: {}", uri);
+            sendErrorResponse(response, MemberErrorCode.EMPTY_TOKEN);
+            return;
         }
 
+        if (jwtTokenValidator.isValid(accessToken)) {
+            // 인증 설정
+            Long memberId = jwtTokenParser.getMemberId(accessToken);
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(memberId, null, Collections.emptyList());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.debug("JWT 인증 성공 - MemberId: {}", memberId);
+
+        } else {
+            // 유효하지 않은 토큰 → 401 응답
+            log.warn("유효하지 않은 액세스 토큰");
+            sendErrorResponse(response, MemberErrorCode.INVALID_TOKEN);
+            return;  // 필터 체인 중단
+        }
         filterChain.doFilter(request, response);
     }
 
@@ -91,17 +89,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    /**
-     * Authorization 헤더에서 JWT 추출
-     * "Bearer {token}" 형식
-     */
     private String extractTokenFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
 
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            log.debug("Authorization 헤더에서 토큰 추출 성공");
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    private void sendErrorResponse(HttpServletResponse response, MemberErrorCode errorCode) throws IOException {
+        response.setStatus(errorCode.getStatus().value());
+        response.setContentType("application/json;charset=UTF-8");
+
+        FailureResponse failureResponse = FailureResponse.of(errorCode);
+        String jsonResponse = objectMapper.writeValueAsString(failureResponse);
+        response.getWriter().write(jsonResponse);
     }
 }
