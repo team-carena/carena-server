@@ -70,6 +70,10 @@ server {
   ssl_certificate /etc/letsencrypt/live/api.care-na.com/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/api.care-na.com/privkey.pem;
 
+  location /.well-known/acme-challenge/ {
+          root /var/www/certbot;
+      }
+
   location / {
     proxy_pass http://app;
     proxy_set_header Host $host;
