@@ -61,7 +61,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // tempToken 쿠키에 저장
         addCookie(response, "tempToken", loginResult.tempToken(), 600);
         // 회원가입 페이지로 리다이렉트
-        String redirectUrl = frontendUrl + "/signup.html"; //수정예저에
+        String redirectUrl = frontendUrl + "/login";
         response.sendRedirect(redirectUrl);
     }
 
@@ -74,7 +74,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setHeader("Authorization", "Bearer " + loginResult.accessToken());
         addCookie(response, "refreshToken", loginResult.refreshToken(), 1209600);
         // 메인 페이지로 리다이렉트
-        String redirectUrl = frontendUrl + "/index.html"; //수정예정
+        String redirectUrl = frontendUrl + "/home";
         response.sendRedirect(redirectUrl);
     }
     private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
@@ -82,7 +82,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .path("/")
                 .maxAge(maxAge)
                 .httpOnly(true)
-                .sameSite("strict")
+                .secure(true)
+                .sameSite("None")
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
     }

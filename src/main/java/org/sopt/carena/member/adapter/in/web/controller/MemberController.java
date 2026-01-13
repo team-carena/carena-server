@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/member")
 @RequiredArgsConstructor
-public class MemberController {
+public class MemberController implements MemberApiDocs{
 
     private final SignupUseCase signupUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
