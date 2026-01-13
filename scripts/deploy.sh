@@ -53,6 +53,10 @@ server {
   listen 80;
   server_name api.care-na.com;
 
+  location /.well-known/acme-challenge/ {
+          root /var/www/certbot;
+      }
+
   location / {
     return 308 https://$host$request_uri;
   }
@@ -64,10 +68,6 @@ server {
   # SSL 인증서 경로
   ssl_certificate /etc/letsencrypt/live/api.care-na.com/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/api.care-na.com/privkey.pem;
-
-  location /.well-known/acme-challenge/ {
-          root /var/www/certbot;
-      }
 
   location / {
     proxy_pass http://app;
