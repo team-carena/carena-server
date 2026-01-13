@@ -55,7 +55,7 @@ server {
 
   # 인증서 갱신
   location /.well-known/acme-challenge/ {
-    root root /var/lib/letsencrypt/;
+    root /var/lib/letsencrypt/;
   }
 
   location / {
