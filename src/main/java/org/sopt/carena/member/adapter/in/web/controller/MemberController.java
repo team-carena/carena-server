@@ -10,7 +10,6 @@ import org.sopt.carena.global.api.response.SuccessResponse;
 import org.sopt.carena.member.adapter.in.web.controller.util.CookieUtil;
 import org.sopt.carena.member.adapter.in.web.controller.util.HeaderUtil;
 import org.sopt.carena.member.adapter.in.web.dto.request.SignUpRequest;
-import org.sopt.carena.member.adapter.in.web.dto.response.SignupResponse;
 import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
 import org.sopt.carena.member.application.dto.command.SignUpCommand;
 import org.sopt.carena.member.application.dto.view.TokenRefreshView;
@@ -29,7 +28,7 @@ public class MemberController implements MemberApiDocs{
     private final RefreshTokenUseCase refreshTokenUseCase;
 
     @PostMapping("/signup")
-    public ResponseEntity<SuccessResponse<SignupResponse>> signup(
+    public ResponseEntity<SuccessResponse<Void>> signup(
             @CookieValue(name = "tempToken") final String tempToken,
             @RequestBody @Valid final SignUpRequest request,
             HttpServletResponse response
