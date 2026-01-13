@@ -21,6 +21,12 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: make .yml file
+        run: |
+          mkdir -p ./src/main/resources
+          touch ./src/main/resources/application.yml
+          printf '%s' "${{ secrets.APPLICATIONS }}" > ./src/main/resources/application.yml
+
       # 3. Gradle 빌드
       - name: Build with Gradle
         run: |
