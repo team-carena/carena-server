@@ -7,9 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
+import org.sopt.carena.member.adapter.in.web.controller.util.CookieUtil;
+import org.sopt.carena.member.adapter.in.web.controller.util.HeaderUtil;
 import org.sopt.carena.member.adapter.in.web.dto.SignUpRequest;
 import org.sopt.carena.member.adapter.in.web.dto.SignupResponse;
-import org.sopt.carena.member.adapter.in.web.dto.TokenResponse;
 import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
 import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
 import org.sopt.carena.member.appliacation.dto.view.SignupView;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/member")
 @RequiredArgsConstructor
-public class MemberController extends BaseController {
+public class MemberController {
 
     private final SignupUseCase signupUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
@@ -36,10 +37,9 @@ public class MemberController extends BaseController {
     ) {
         SignUpCommand command = SignUpCommand.of(tempToken, request);
         SignupView result = signupUseCase.signup(command);
-
-        response.setHeader("Authorization", "Bearer " + result.accessToken());
-        addRefreshTokenCookie(response, result.refreshToken());
-        deleteTempTokenCookie(response);
+        HeaderUtil.setAuthorizationHeader(response, result.accessToken());
+        CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
+        CookieUtil.deleteTempTokenCookie(response);
         SignupResponse signupResponse = SignupResponse.from(result);
         return ResponseEntity.status(MemberSuccessCode.SIGNUP_SUCCESS.getStatus())
                 .body(ApiResponse.success(MemberSuccessCode.SIGNUP_SUCCESS, signupResponse));
@@ -54,7 +54,9 @@ public class MemberController extends BaseController {
             HttpServletResponse response
     ) {
         TokenRefreshView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
-        response.setHeader("Authorization", "Bearer " + result.accessToken());
+        HeaderUtil.setAuthorizationHeader(response, result.accessToken());
+        //현재 토큰 삭제
+        CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
         return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())
                         .body(ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED));
     }
