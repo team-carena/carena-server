@@ -4,7 +4,19 @@ set -e
 cd ~/app
 
 # 필수 환경 변수 검증
-REQUIRED_VARS=("DOCKER_USERNAME" "DB_HOST" "DB_NAME" "DB_USERNAME" "DB_PASSWORD")
+REQUIRED_VARS=(
+  "DOCKER_USERNAME"
+  "DB_HOST"
+  "DB_NAME"
+  "DB_USERNAME"
+  "DB_PASSWORD"
+  "KAKAO_CLIENT_ID"
+  "KAKAO_CLIENT_SECRET"
+  "KAKAO_REDIRECT_URI"
+  "JWT_SECRET"
+  "FRONTEND_URL"
+)
+
 for var in "${REQUIRED_VARS[@]}"; do
   if [ -z "${!var}" ]; then
     echo "❌ 오류: $var 환경 변수가 설정되지 않았습니다."
@@ -19,6 +31,14 @@ DB_HOST=${DB_HOST}
 DB_NAME=${DB_NAME}
 DB_USERNAME=${DB_USERNAME}
 DB_PASSWORD=${DB_PASSWORD}
+KAKAO_CLIENT_ID=${KAKAO_CLIENT_ID}
+KAKAO_CLIENT_SECRET=${KAKAO_CLIENT_SECRET}
+KAKAO_REDIRECT_URI=${KAKAO_REDIRECT_URI}
+JWT_SECRET=${JWT_SECRET}
+JWT_EXPIRATION=${JWT_EXPIRATION:-86400000}
+JWT_ACCESS_TOKEN_EXPIRATION=${JWT_ACCESS_TOKEN_EXPIRATION:-3600000}
+JWT_REFRESH_TOKEN_EXPIRATION=${JWT_REFRESH_TOKEN_EXPIRATION:-1209600000}
+FRONTEND_URL=${FRONTEND_URL}
 EOF
 
 # default.conf 초기 생성 (없을 경우만)
@@ -28,16 +48,38 @@ if [ ! -f nginx/conf.d/default.conf ]; then
 upstream app {
   server blue:8080;
 }
+
 server {
   listen 80;
+  server_name api.care-na.com;
+
+  # 인증서 갱신
+  location /.well-known/acme-challenge/ {
+    root /var/lib/letsencrypt/;
+  }
+
   location / {
-  proxy_pass http://app;
-  proxy_set_header Host $host;
-  proxy_set_header X-Real-IP $remote_addr;
-  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    return 308 https://$host$request_uri;
+  }
 }
-location /actuator/health {
-proxy_pass http://app/actuator/health;
+server {
+  listen 443 ssl;
+  server_name api.care-na.com;
+
+  # SSL 인증서 경로
+  ssl_certificate /etc/letsencrypt/live/api.care-na.com/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/api.care-na.com/privkey.pem;
+
+  location / {
+    proxy_pass http://app;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+
+  location /actuator/health {
+    proxy_pass http://app/actuator/health;
   }
 }
 EOFCONF
