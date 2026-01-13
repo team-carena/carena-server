@@ -1,6 +1,7 @@
 package org.sopt.carena.global.config.security;
 
 import lombok.RequiredArgsConstructor;
+import org.sopt.carena.global.config.security.util.PublicEndpoint;
 import org.sopt.carena.member.adapter.out.oauth.OAuth2UserServiceAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,18 +48,9 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/",
-                                "/index.html",
-                                "/signup.html",
-                                "/api/oauth/**",
-                                "/api/v1/member/login/**",
-                                "/api/v1/member/signup",
-                                "/api/v1/member/token/refresh",
-                                "/oauth2/**",
-                                "/login/oauth2/**"
-                        ).permitAll()
+                        .requestMatchers(PublicEndpoint.getEndpoints()).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
