@@ -1,7 +1,7 @@
 package org.sopt.carena.member.adapter.out.persistence;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.carena.member.adapter.out.persistence.entity.MemberJpaEntity;
+import org.sopt.carena.member.adapter.out.persistence.entity.MemberEntity;
 import org.sopt.carena.member.adapter.out.persistence.mapper.MemberMapper;
 import org.sopt.carena.member.adapter.out.persistence.repository.MemberJpaRepository;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
@@ -23,8 +23,8 @@ public class MemberPersistenceAdapter implements MemberRepository {
     }
     @Override
     public Member save(Member member) {
-        MemberJpaEntity entity = MemberMapper.toEntity(member);
-        MemberJpaEntity saved = memberJpaRepository.save(entity);
+        MemberEntity entity = MemberMapper.toEntity(member);
+        MemberEntity saved = memberJpaRepository.save(entity);
         return MemberMapper.toDomain(saved);
     }
     @Override

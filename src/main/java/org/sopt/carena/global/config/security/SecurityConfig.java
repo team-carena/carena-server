@@ -1,10 +1,10 @@
 package org.sopt.carena.global.config.security;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.carena.member.adapter.in.web.OAuth2UserServiceAdapter;
+import org.sopt.carena.member.adapter.out.oauth.OAuth2UserServiceAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.sopt.carena.member.adapter.in.web.handler.OAuth2SuccessHandler;
+import org.sopt.carena.member.adapter.out.oauth.handler.OAuth2SuccessHandler;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -48,6 +48,17 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/signup.html",
+                                "/api/oauth/**",
+                                "/api/v1/member/login/**",
+                                "/api/v1/member/signup",
+                                "/api/v1/member/token/refresh",
+                                "/oauth2/**",
+                                "/login/oauth2/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2

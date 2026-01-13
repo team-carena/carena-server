@@ -1,4 +1,4 @@
-package org.sopt.carena.member.adapter.in.web;
+package org.sopt.carena.member.adapter.out.oauth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
