@@ -19,20 +19,20 @@ public class RefreshTokenStoreAdapter implements RefreshTokenStore {
     private static final Duration REFRESH_TOKEN_TTL = Duration.ofDays(14);
 
     @Override
-    public void save(Long memberId, String refreshToken) {
+    public void save(final long memberId, final String refreshToken) {
         String key = KEY_PREFIX + memberId;
         redisTemplate.opsForValue().set(key, refreshToken,REFRESH_TOKEN_TTL);
     }
 
     @Override
-    public Optional<String> get(Long memberId) {
+    public Optional<String> get(final long memberId) {
         String key = KEY_PREFIX + memberId;
         String refreshToken = redisTemplate.opsForValue().get(key);
         return Optional.ofNullable(refreshToken);
     }
 
     @Override
-    public void delete(Long memberId) {
+    public void delete(final long memberId) {
         String key = KEY_PREFIX + memberId;
         Boolean deleted = redisTemplate.delete(key);
         if (Boolean.TRUE.equals(deleted)) {

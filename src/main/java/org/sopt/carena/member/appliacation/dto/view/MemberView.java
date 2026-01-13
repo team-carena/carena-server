@@ -15,7 +15,7 @@ public record MemberView(
         Gender gender,
         Long score
 ) {
-    public static MemberView from(Member member) {
+    public static MemberView from(final Member member) {
         return new MemberView(
                 member.getId(),
                 member.getName(),

@@ -1,15 +1,15 @@
 package org.sopt.carena.member.adapter.out.oauth.handler;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.adapter.in.web.dto.OAuth2AuthenticationResult;
-import org.sopt.carena.member.appliacation.dto.view.ExistingMemberLoginView;
+import org.sopt.carena.member.adapter.in.web.dto.response.OAuth2AuthenticationResult;
+import org.sopt.carena.member.appliacation.dto.view.LoginSuccessView;
 import org.sopt.carena.member.appliacation.dto.view.NewMemberSignupView;
 import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginResult;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -49,7 +49,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         if (loginResult.needsSignup()) {
             handleNewMember(response, (NewMemberSignupView) loginResult);
         } else {
-            handleExistingMember(response, (ExistingMemberLoginView) loginResult);
+            handleExistingMember(response, (LoginSuccessView) loginResult);
         }
     }
 
@@ -67,7 +67,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private void handleExistingMember(
             HttpServletResponse response,
-            ExistingMemberLoginView loginResult
+            LoginSuccessView loginResult
     ) throws IOException {
         log.info("기존 회원 - 메인 페이지로 리다이렉트");
         // JWT 쿠키에 저장
@@ -78,11 +78,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.sendRedirect(redirectUrl);
     }
     private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setMaxAge(maxAge);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);  //  로컬에서만
-        response.addCookie(cookie);
+        ResponseCookie cookie = ResponseCookie.from(name, value)
+                .path("/")
+                .maxAge(maxAge)
+                .httpOnly(true)
+                .sameSite("strict")
+                .build();
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 }

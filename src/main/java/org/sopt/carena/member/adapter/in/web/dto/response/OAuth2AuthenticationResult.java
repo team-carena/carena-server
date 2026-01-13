@@ -1,4 +1,4 @@
-package org.sopt.carena.member.adapter.in.web.dto;
+package org.sopt.carena.member.adapter.in.web.dto.response;
 
 import lombok.Getter;
 import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginResult;

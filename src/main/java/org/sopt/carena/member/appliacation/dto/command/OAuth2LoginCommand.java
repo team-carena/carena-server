@@ -4,14 +4,12 @@ import org.sopt.carena.member.domain.AuthType;
 
 public record OAuth2LoginCommand(
         AuthType authType,
-        String providerUserId,
-        String email
+        String providerUserId
 ) {
     public static OAuth2LoginCommand of(
-            AuthType authType,
-            String providerUserId,
-            String email
+            final AuthType authType,
+            final String providerUserId
     ) {
-        return new OAuth2LoginCommand(authType, providerUserId, email);
+        return new OAuth2LoginCommand(authType, providerUserId);
     }
 }

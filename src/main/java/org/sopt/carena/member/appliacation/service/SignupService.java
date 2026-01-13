@@ -10,7 +10,7 @@ import org.sopt.carena.member.exception.member.DuplicateMemberException;
 import org.sopt.carena.member.exception.member.InvalidTempTokenException;
 import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
 import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
-import org.sopt.carena.member.appliacation.port.out.MemberRepository;
+import org.sopt.carena.member.appliacation.port.out.MemberPersistencePort;
 import org.sopt.carena.member.appliacation.port.out.RefreshTokenStore;
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Member;
@@ -24,12 +24,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class SignupService implements SignupUseCase {
 
     private final JoinTokenStore joinTokenStore;
-    private final MemberRepository memberRepository;
+    private final MemberPersistencePort memberPersistencePort;
     private final RefreshTokenStore refreshTokenStore;
     private final JwtTokenGenerator jwtTokenGenerator;
 
     @Override
-    public SignupView signup(SignUpCommand command) {
+    public SignupView signup(final SignUpCommand command) {
         log.info("회원가입 시작 - name: {}", command.name());
 
         // tempToken 검증
@@ -43,7 +43,7 @@ public class SignupService implements SignupUseCase {
         String providerUserId = parts[1];
 
         // 중복 회원 체크
-        if (memberRepository.existsByAuthIdAndAuthType(providerUserId, authType)) {
+        if (memberPersistencePort.existsByAuthIdAndAuthType(providerUserId, authType)) {
             throw new DuplicateMemberException();
         }
 
@@ -55,7 +55,7 @@ public class SignupService implements SignupUseCase {
                 providerUserId,
                 authType
         );
-        Member savedMember = memberRepository.save(member);
+        Member savedMember = memberPersistencePort.save(member);
 
         // tempToken 삭제
         joinTokenStore.delete(command.tempToken());

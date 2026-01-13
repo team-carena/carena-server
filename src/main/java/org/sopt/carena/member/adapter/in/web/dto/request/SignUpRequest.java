@@ -1,4 +1,4 @@
-package org.sopt.carena.member.adapter.in.web.dto;
+package org.sopt.carena.member.adapter.in.web.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

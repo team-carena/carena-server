@@ -24,7 +24,7 @@ public class RefreshTokenService implements RefreshTokenUseCase {
     private final JwtTokenValidator jwtTokenValidator;
 
     @Override
-    public TokenRefreshView refreshAccessToken(String refreshToken) {
+    public TokenRefreshView refreshAccessToken(final String refreshToken) {
         log.info("Access Token 재발급 요청");
         jwtTokenValidator.validateToken(refreshToken);
 

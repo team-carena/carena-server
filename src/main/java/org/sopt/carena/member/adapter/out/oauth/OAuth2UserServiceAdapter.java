@@ -2,7 +2,7 @@ package org.sopt.carena.member.adapter.out.oauth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.adapter.in.web.dto.OAuth2AuthenticationResult;
+import org.sopt.carena.member.adapter.in.web.dto.response.OAuth2AuthenticationResult;
 import org.sopt.carena.member.appliacation.dto.command.OAuth2LoginCommand;
 import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginResult;
 import org.sopt.carena.member.exception.oauth.UnsupportedOAuthProviderException;
@@ -26,7 +26,7 @@ public class OAuth2UserServiceAdapter extends OidcUserService {
     private final OAuth2LoginUseCase oauth2LoginUseCase;
 
     @Override
-    public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
+    public OidcUser loadUser(final OidcUserRequest userRequest) throws OAuth2AuthenticationException {
 
         log.info("=== OIDC 사용자 정보 로드 시작 ===");
         OidcUser oidcUser = super.loadUser(userRequest);
@@ -49,10 +49,10 @@ public class OAuth2UserServiceAdapter extends OidcUserService {
         // Spring Security 인증 객체로 래핑하여 반환
         return new OAuth2AuthenticationResult(oidcUser, loginResult);
     }
-    private OAuth2LoginCommand extractKakaoInfo(OidcUser oidcUser) {
+
+    private OAuth2LoginCommand extractKakaoInfo(final OidcUser oidcUser) {
         // 표준 OIDC subject
         String providerUserId = oidcUser.getSubject();
-        String email = oidcUser.getEmail();
-        return OAuth2LoginCommand.of(KAKAO, providerUserId, email);
+        return OAuth2LoginCommand.of(KAKAO, providerUserId);
     }
 }

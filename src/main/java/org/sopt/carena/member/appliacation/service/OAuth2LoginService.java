@@ -5,7 +5,7 @@ import org.sopt.carena.member.appliacation.dto.command.OAuth2LoginCommand;
 import org.sopt.carena.member.appliacation.dto.view.*;
 import org.sopt.carena.member.appliacation.port.in.OAuth2LoginUseCase;
 import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
-import org.sopt.carena.member.appliacation.port.out.MemberRepository;
+import org.sopt.carena.member.appliacation.port.out.MemberPersistencePort;
 import org.sopt.carena.member.appliacation.port.out.RefreshTokenStore;
 import org.sopt.carena.member.appliacation.service.util.JwtTokenGenerator;
 import org.sopt.carena.member.domain.Member;
@@ -25,15 +25,15 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class OAuth2LoginService implements OAuth2LoginUseCase {
 
-    private final MemberRepository memberRepository;
+    private final MemberPersistencePort memberPersistencePort;
     private final JoinTokenStore joinTokenStore;
     private final RefreshTokenStore refreshTokenStore;
     private final JwtTokenGenerator jwtTokenGenerator;
 
     @Override
-    public OAuth2LoginResult processLogin(OAuth2LoginCommand command) {
+    public OAuth2LoginResult processLogin(final OAuth2LoginCommand command) {
         log.info("OAuth2 로그인 처리 시작 - Provider: {}", command.authType());
-        Optional<Member> memberOpt = memberRepository.findByAuthTypeAndProviderUserId(
+        Optional<Member> memberOpt = memberPersistencePort.findByAuthTypeAndProviderUserId(
                 command.authType(),
                 command.providerUserId()
         );
@@ -42,9 +42,10 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
         } else {
             return handleNewMember(command);
         }
+
     }
 
-    private ExistingMemberLoginView handleExistingMember(Member member) {
+    private LoginSuccessView handleExistingMember(final Member member) {
         log.info("기존 회원 로그인 - MemberId: {}", member.getId());
 
         String accessToken = jwtTokenGenerator.createAccessToken(member.getId());
@@ -55,15 +56,14 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
                 member.getId(),
                 refreshToken
         );
-
-        return ExistingMemberLoginView.of(
+        return LoginSuccessView.of(
                 accessToken,
                 refreshToken,
                 MemberView.from(member)
         );
     }
 
-    private NewMemberSignupView handleNewMember(OAuth2LoginCommand command) {
+    private NewMemberSignupView handleNewMember(final OAuth2LoginCommand command) {
         log.info("신규 회원 - 회원가입 필요");
 
         // 임시 토큰 생성 및 저장

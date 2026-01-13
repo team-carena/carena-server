@@ -4,7 +4,7 @@ import org.sopt.carena.member.adapter.out.persistence.entity.MemberEntity;
 import org.sopt.carena.member.domain.Member;
 
 public class MemberMapper {
-    public static Member toDomain(MemberEntity memberEntity) {
+    public static Member toDomain(final MemberEntity memberEntity) {
         return Member.builder()
                 .id(memberEntity.getId())
                 .name(memberEntity.getName())
@@ -17,7 +17,7 @@ public class MemberMapper {
                 .build();
     }
 
-    public static MemberEntity toEntity(Member member) {
+    public static MemberEntity toEntity(final Member member) {
         return MemberEntity.builder()
                 .name(member.getName())
                 .birthdate(member.getBirthdate())

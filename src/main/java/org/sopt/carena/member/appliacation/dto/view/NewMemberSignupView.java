@@ -3,7 +3,7 @@ package org.sopt.carena.member.appliacation.dto.view;
 public record NewMemberSignupView(
         String tempToken
 ) implements OAuth2LoginResult {
-    public static NewMemberSignupView of(String tempToken) {
+    public static NewMemberSignupView of(final String tempToken) {
         return new NewMemberSignupView(tempToken);
     }
 }

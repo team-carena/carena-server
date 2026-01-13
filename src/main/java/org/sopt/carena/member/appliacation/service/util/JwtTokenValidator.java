@@ -14,7 +14,7 @@ public class JwtTokenValidator {
 
     private final JwtTokenParser jwtTokenParser;
 
-    public void validateToken(String token) {
+    public void validateToken(final String token) {
         if (token == null || token.trim().isEmpty()) {
             throw new EmptyTokenException();
         }
