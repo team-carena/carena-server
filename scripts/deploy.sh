@@ -108,7 +108,7 @@ echo "현재 active: $ACTIVE"
 echo "새 배포 대상: $NEW"
 
 # 새 컨테이너 기동
-docker compose up -d --no-deps $NEW
+docker compose up -d $NEW
 
 # 헬스체크
 HEALTH_OK=false
