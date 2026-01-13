@@ -101,3 +101,11 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/lib/letsencrypt:/var/lib/letsencrypt
       - ./data/certbot/www:/var/www/certbot
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
