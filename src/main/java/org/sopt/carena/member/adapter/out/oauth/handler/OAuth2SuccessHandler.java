@@ -1,4 +1,4 @@
-package org.sopt.carena.member.adapter.in.web.handler;
+package org.sopt.carena.member.adapter.out.oauth.handler;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
