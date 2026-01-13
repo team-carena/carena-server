@@ -11,6 +11,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum PublicEndpoint {
 
+    HEALTH_CHECK("/actuator/health", HttpMethod.GET),
     OAUTH2_START("/oauth2/**", HttpMethod.GET),
     OAUTH2_CALLBACK("/login/oauth2/**", HttpMethod.GET),
     LOGIN("/login", HttpMethod.GET),

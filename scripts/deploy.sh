@@ -125,7 +125,7 @@ done
 # 헬스체크 실패 시 롤백
 if [ "$HEALTH_OK" = false ]; then
   echo "❌ 헬스체크 실패! 롤백합니다."
-  docker-compose stop $NEW
+  docker compose stop $NEW
   exit 1
 fi
 
