@@ -23,7 +23,9 @@ public enum MemberErrorCode implements ErrorResultCode {
     TOKEN_SIGNATURE_ERROR(HttpStatus.UNAUTHORIZED, "토큰 서명 검증에 실패했습니다."),
     EMPTY_TOKEN(HttpStatus.BAD_REQUEST, "토큰이 비어있습니다."),
     // OAuth
-    UNSUPPORTED_OAUTH_PROVIDER(HttpStatus.BAD_REQUEST, "지원하지 않는 OAuth 제공자입니다.");
+    UNSUPPORTED_OAUTH_PROVIDER(HttpStatus.BAD_REQUEST, "지원하지 않는 OAuth 제공자입니다."),
+    // 회원 조회
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND,"회원을 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String message;

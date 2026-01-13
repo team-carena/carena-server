@@ -9,15 +9,19 @@ import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.sopt.carena.member.adapter.in.web.controller.util.CookieUtil;
 import org.sopt.carena.member.adapter.in.web.controller.util.HeaderUtil;
+import org.sopt.carena.member.adapter.in.web.dto.MemberInfoResponse;
 import org.sopt.carena.member.adapter.in.web.dto.SignUpRequest;
 import org.sopt.carena.member.adapter.in.web.dto.SignupResponse;
 import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
 import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
+import org.sopt.carena.member.appliacation.dto.view.MemberInfoView;
 import org.sopt.carena.member.appliacation.dto.view.SignupView;
 import org.sopt.carena.member.appliacation.dto.view.TokenRefreshView;
+import org.sopt.carena.member.appliacation.port.in.GetMemberInfoUseCase;
 import org.sopt.carena.member.appliacation.port.in.RefreshTokenUseCase;
 import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -28,6 +32,7 @@ public class MemberController {
 
     private final SignupUseCase signupUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
+    private final GetMemberInfoUseCase getMemberInfoUseCase;
 
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<SignupResponse>> signup(
@@ -59,5 +64,17 @@ public class MemberController {
         CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
         return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())
                         .body(ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED));
+    }
+
+    @GetMapping("/my-info")
+    public ResponseEntity<SuccessResponse<MemberInfoResponse>> memberInfo(
+            @AuthenticationPrincipal Long memberId,
+            @RequestParam(required = false, defaultValue = "false") Boolean withScore
+    ) {
+        log.info("memberId: {}, withScore: {}", memberId, withScore);
+        MemberInfoView memberInfo = getMemberInfoUseCase.getMemberInfo(memberId, withScore);
+        MemberInfoResponse response = MemberInfoResponse.from(memberInfo, withScore);
+        return ResponseEntity.status(MemberSuccessCode.MEMBER_IFNO.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.MEMBER_IFNO, response));
     }
 }
