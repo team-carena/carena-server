@@ -23,6 +23,8 @@ services:
   # Blue 환경
   blue:
     image: ${DOCKER_USERNAME}/carena-api:latest
+    env_file:
+      - .env
     container_name: blue
     ports:
       - "8082:8080"
@@ -54,6 +56,8 @@ services:
   # Green 환경
   green:
     image: ${DOCKER_USERNAME}/carena-api:latest
+    env_file:
+      - .env
     container_name: green
     ports:
       - "8081:8080"
