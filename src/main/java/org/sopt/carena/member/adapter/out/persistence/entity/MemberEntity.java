@@ -23,27 +23,27 @@ public class MemberEntity {
     private Long id;
 
     //name 추가하기
-    @Column(nullable = false)
+    @Column(name = "name",nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "birthdate",nullable = false)
     private LocalDate birthdate;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "gender",nullable = false)
     private Gender gender;
 
-    @Column(nullable = false)
+    @Column(name = "created_at",nullable = false)
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "auth_type",nullable = false)
     private AuthType authType;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "auth_id",nullable = false, unique = true)
     private String authId;
 
-    @Column(nullable = false)
+    @Column(name = "score",nullable = false)
     private Long score;
 
     @Builder
