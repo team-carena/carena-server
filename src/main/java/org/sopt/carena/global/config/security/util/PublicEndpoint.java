@@ -43,4 +43,9 @@ public enum PublicEndpoint {
 
         return pathMatches && methodMatches;
     }
+    public static String[] getEndpoints() {
+        return Arrays.stream(values())
+                .map(PublicEndpoint::getPattern)
+                .toArray(String[]::new);
+    }
 }
