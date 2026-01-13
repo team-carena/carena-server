@@ -53,11 +53,6 @@ server {
   listen 80;
   server_name api.care-na.com;
 
-  # 인증서 갱신
-  location /.well-known/acme-challenge/ {
-    root /var/lib/letsencrypt/;
-  }
-
   location / {
     return 308 https://$host$request_uri;
   }
@@ -98,7 +93,7 @@ docker image prune -f
 docker pull ${DOCKER_USERNAME}/carena-api:latest
 
 # 현재 active 판단
-ACTIVE=$(grep "server" nginx/conf.d/default.conf | grep -o "blue\|green" || echo "blue")
+ACTIVE=$(grep -oE 'server (blue|green):8080;' nginx/conf.d/default.conf | head -n 1 | grep -oE 'blue|green')
 
 if [ "$ACTIVE" = "blue" ]; then
   NEW="green"
