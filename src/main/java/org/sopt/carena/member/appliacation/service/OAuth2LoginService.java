@@ -22,7 +22,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class OAuth2LoginService implements OAuth2LoginUseCase {
 
     private final MemberRepository memberRepository;
@@ -51,8 +51,7 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
         // Refresh Token 저장
         refreshTokenStore.save(
                 member.getId(),
-                refreshToken,
-                Duration.ofDays(14)
+                refreshToken
         );
 
         return OAuth2LoginView.forExistingMember(

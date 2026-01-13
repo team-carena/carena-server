@@ -30,7 +30,6 @@ public class RefreshTokenService implements RefreshTokenUseCase {
 
         Long memberId = jwtTokenParser.getMemberId(refreshToken);
 
-        // Redis에 저장된 Refresh Token과 비교
         String storedRefreshToken = refreshTokenStore.get(memberId)
                 .orElseThrow(InvalidTokenException::new);
 
@@ -38,6 +37,10 @@ public class RefreshTokenService implements RefreshTokenUseCase {
             throw new InvalidTokenException();
         }
         String newAccessToken = jwtTokenGenerator.createAccessToken(memberId);
-        return new TokenRefreshView(newAccessToken);
+        String newRefreshToken = jwtTokenGenerator.createRefreshToken(memberId);
+
+        refreshTokenStore.delete(memberId);
+        refreshTokenStore.save(memberId, newRefreshToken);
+        return new TokenRefreshView(newAccessToken,newRefreshToken);
     }
 }

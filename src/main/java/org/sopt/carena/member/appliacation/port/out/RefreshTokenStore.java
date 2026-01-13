@@ -5,6 +5,7 @@ import java.util.Optional;
 
 public interface RefreshTokenStore {
 
-    void save(Long memberId, String refreshToken, Duration ttl);
+    void save(Long memberId, String refreshToken);
     Optional<String> get(Long memberId);
+    void delete(Long memberId);
 }

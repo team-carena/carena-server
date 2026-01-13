@@ -17,8 +17,6 @@ import org.sopt.carena.member.domain.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -66,8 +64,7 @@ public class SignupService implements SignupUseCase {
 
         refreshTokenStore.save(
                 savedMember.getId(),
-                refreshToken,
-                Duration.ofDays(14)
+                refreshToken
         );
 
         return new SignupView(
