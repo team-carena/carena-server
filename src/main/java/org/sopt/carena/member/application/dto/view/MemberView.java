@@ -1,4 +1,4 @@
-package org.sopt.carena.member.appliacation.dto.view;
+package org.sopt.carena.member.application.dto.view;
 
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Gender;

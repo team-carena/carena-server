@@ -1,4 +1,4 @@
-package org.sopt.carena.member.appliacation.port.out;
+package org.sopt.carena.member.application.port.out;
 
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Member;

@@ -1,4 +1,4 @@
-package org.sopt.carena.member.appliacation.dto.command;
+package org.sopt.carena.member.application.dto.command;
 
 import org.sopt.carena.member.adapter.in.web.dto.request.SignUpRequest;
 import org.sopt.carena.member.domain.Gender;

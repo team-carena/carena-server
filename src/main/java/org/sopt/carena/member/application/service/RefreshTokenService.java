@@ -1,14 +1,14 @@
-package org.sopt.carena.member.appliacation.service;
+package org.sopt.carena.member.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.appliacation.dto.view.TokenRefreshView;
-import org.sopt.carena.member.appliacation.service.util.JwtTokenGenerator;
-import org.sopt.carena.member.appliacation.service.util.JwtTokenParser;
-import org.sopt.carena.member.appliacation.service.util.JwtTokenValidator;
+import org.sopt.carena.member.application.dto.view.TokenRefreshView;
+import org.sopt.carena.member.application.service.util.JwtTokenGenerator;
+import org.sopt.carena.member.application.service.util.JwtTokenParser;
+import org.sopt.carena.member.application.service.util.JwtTokenValidator;
 import org.sopt.carena.member.exception.jwt.InvalidTokenException;
-import org.sopt.carena.member.appliacation.port.in.RefreshTokenUseCase;
-import org.sopt.carena.member.appliacation.port.out.RefreshTokenStore;
+import org.sopt.carena.member.application.port.in.RefreshTokenUseCase;
+import org.sopt.carena.member.application.port.out.RefreshTokenStore;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

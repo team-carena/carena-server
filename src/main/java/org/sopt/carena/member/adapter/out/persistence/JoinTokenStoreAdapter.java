@@ -1,7 +1,7 @@
 package org.sopt.carena.member.adapter.out.persistence;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
+import org.sopt.carena.member.application.port.out.JoinTokenStore;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 

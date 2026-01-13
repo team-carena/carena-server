@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.carena.member.adapter.out.persistence.entity.MemberEntity;
 import org.sopt.carena.member.adapter.out.persistence.mapper.MemberMapper;
 import org.sopt.carena.member.adapter.out.persistence.repository.MemberJpaRepository;
-import org.sopt.carena.member.appliacation.port.out.MemberPersistencePort;
+import org.sopt.carena.member.application.port.out.MemberPersistencePort;
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Member;
 import org.springframework.stereotype.Component;

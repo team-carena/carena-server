@@ -2,7 +2,7 @@ package org.sopt.carena.member.adapter.out.persistence;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.appliacation.port.out.RefreshTokenStore;
+import org.sopt.carena.member.application.port.out.RefreshTokenStore;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 

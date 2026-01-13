@@ -1,4 +1,4 @@
-package org.sopt.carena.member.appliacation.service.util;
+package org.sopt.carena.member.application.service.util;
 
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;

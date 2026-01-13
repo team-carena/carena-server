@@ -12,10 +12,10 @@ import org.sopt.carena.member.adapter.in.web.controller.util.HeaderUtil;
 import org.sopt.carena.member.adapter.in.web.dto.request.SignUpRequest;
 import org.sopt.carena.member.adapter.in.web.dto.response.SignupResponse;
 import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
-import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
-import org.sopt.carena.member.appliacation.dto.view.TokenRefreshView;
-import org.sopt.carena.member.appliacation.port.in.RefreshTokenUseCase;
-import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
+import org.sopt.carena.member.application.dto.command.SignUpCommand;
+import org.sopt.carena.member.application.dto.view.TokenRefreshView;
+import org.sopt.carena.member.application.port.in.RefreshTokenUseCase;
+import org.sopt.carena.member.application.port.in.SignupUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

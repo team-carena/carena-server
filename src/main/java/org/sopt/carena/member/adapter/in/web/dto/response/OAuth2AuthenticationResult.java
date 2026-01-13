@@ -1,7 +1,7 @@
 package org.sopt.carena.member.adapter.in.web.dto.response;
 
 import lombok.Getter;
-import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginResult;
+import org.sopt.carena.member.application.dto.view.OAuth2LoginResult;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;

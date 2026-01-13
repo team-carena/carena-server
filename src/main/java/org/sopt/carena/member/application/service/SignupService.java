@@ -1,17 +1,17 @@
-package org.sopt.carena.member.appliacation.service;
+package org.sopt.carena.member.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
-import org.sopt.carena.member.appliacation.dto.view.MemberView;
-import org.sopt.carena.member.appliacation.dto.view.SignupView;
-import org.sopt.carena.member.appliacation.service.util.JwtTokenGenerator;
+import org.sopt.carena.member.application.dto.command.SignUpCommand;
+import org.sopt.carena.member.application.dto.view.MemberView;
+import org.sopt.carena.member.application.dto.view.SignupView;
+import org.sopt.carena.member.application.service.util.JwtTokenGenerator;
 import org.sopt.carena.member.exception.member.DuplicateMemberException;
 import org.sopt.carena.member.exception.member.InvalidTempTokenException;
-import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
-import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
-import org.sopt.carena.member.appliacation.port.out.MemberPersistencePort;
-import org.sopt.carena.member.appliacation.port.out.RefreshTokenStore;
+import org.sopt.carena.member.application.port.in.SignupUseCase;
+import org.sopt.carena.member.application.port.out.JoinTokenStore;
+import org.sopt.carena.member.application.port.out.MemberPersistencePort;
+import org.sopt.carena.member.application.port.out.RefreshTokenStore;
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Member;
 import org.springframework.stereotype.Service;

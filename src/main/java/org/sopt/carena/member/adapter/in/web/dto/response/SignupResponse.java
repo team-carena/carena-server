@@ -1,6 +1,6 @@
 package org.sopt.carena.member.adapter.in.web.dto.response;
 
-import org.sopt.carena.member.appliacation.dto.view.SignupView;
+import org.sopt.carena.member.application.dto.view.SignupView;
 
 public record SignupResponse(
         Long memberId
