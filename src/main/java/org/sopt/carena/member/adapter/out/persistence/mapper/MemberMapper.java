@@ -1,24 +1,24 @@
 package org.sopt.carena.member.adapter.out.persistence.mapper;
 
-import org.sopt.carena.member.adapter.out.persistence.entity.MemberJpaEntity;
+import org.sopt.carena.member.adapter.out.persistence.entity.MemberEntity;
 import org.sopt.carena.member.domain.Member;
 
 public class MemberMapper {
-    public static Member toDomain(MemberJpaEntity memberJpaEntity) {
+    public static Member toDomain(MemberEntity memberEntity) {
         return Member.builder()
-                .id(memberJpaEntity.getId())
-                .name(memberJpaEntity.getName())
-                .birthdate(memberJpaEntity.getBirthdate())
-                .gender(memberJpaEntity.getGender())
-                .createdAt(memberJpaEntity.getCreatedAt())
-                .authType(memberJpaEntity.getAuthType())
-                .authId(memberJpaEntity.getAuthId())
-                .score(memberJpaEntity.getScore())
+                .id(memberEntity.getId())
+                .name(memberEntity.getName())
+                .birthdate(memberEntity.getBirthdate())
+                .gender(memberEntity.getGender())
+                .createdAt(memberEntity.getCreatedAt())
+                .authType(memberEntity.getAuthType())
+                .authId(memberEntity.getAuthId())
+                .score(memberEntity.getScore())
                 .build();
     }
 
-    public static MemberJpaEntity toEntity(Member member) {
-        return MemberJpaEntity.builder()
+    public static MemberEntity toEntity(Member member) {
+        return MemberEntity.builder()
                 .name(member.getName())
                 .birthdate(member.getBirthdate())
                 .gender(member.getGender())
@@ -28,6 +28,4 @@ public class MemberMapper {
                 .score(member.getScore())
                 .build();
     }
-
-
 }

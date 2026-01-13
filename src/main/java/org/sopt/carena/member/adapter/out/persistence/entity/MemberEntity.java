@@ -1,29 +1,28 @@
 package org.sopt.carena.member.adapter.out.persistence.entity;
 
+import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Gender;
-import org.sopt.carena.member.domain.Member;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "members")
+@Table(name = "members",indexes = {
+    @Index(name = "idx_member_auth", columnList = "auth_type, auth_id")
+})
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class MemberJpaEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class MemberEntity {
 
     @Id
+    @Tsid
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //name 추가하기
     @Column(nullable = false)
     private String name;
 
@@ -47,14 +46,16 @@ public class MemberJpaEntity {
     @Column(nullable = false)
     private Long score;
 
-    public MemberJpaEntity(Member member) {
-        this.id = member.getId();
-        this.name = member.getName();
-        this.birthdate = member.getBirthdate();
-        this.gender = member.getGender();
-        this.createdAt = member.getCreatedAt();
-        this.authType = member.getAuthType();
-        this.authId = member.getAuthId();
-        this.score = member.getScore();
+    @Builder
+    private MemberEntity(Long id, String name, LocalDate birthdate, Gender gender,
+                         LocalDateTime createdAt, AuthType authType, String authId, Long score) {
+        this.id = id;
+        this.name = name;
+        this.birthdate = birthdate;
+        this.gender = gender;
+        this.createdAt = createdAt;
+        this.authType = authType;
+        this.authId = authId;
+        this.score = score;
     }
 }
