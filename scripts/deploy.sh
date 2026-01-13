@@ -45,43 +45,41 @@ EOF
 if [ ! -f nginx/conf.d/default.conf ]; then
   echo "초기 설정: default.conf 생성 (Blue로 시작)"
   cat > nginx/conf.d/default.conf << 'EOFCONF'
-http{
-  upstream app {
-    server blue:8080;
+upstream app {
+  server blue:8080;
+}
+
+server {
+  listen 80;
+  server_name api.care-na.com;
+
+  # 인증서 갱신
+  location /.well-known/acme-challenge/ {
+    root root /var/lib/letsencrypt/;
   }
 
-  server {
-    listen 80;
-    server_name api.care-na.com;
-
-    # 인증서 갱신
-    location /.well-known/acme-challenge/ {
-      root root /var/lib/letsencrypt/;
-    }
-
-    location / {
-      return 308 https://$host$request_uri;
-    }
+  location / {
+    return 308 https://$host$request_uri;
   }
-  server {
-    listen 443 ssl;
-    server_name api.care-na.com;
+}
+server {
+  listen 443 ssl;
+  server_name api.care-na.com;
 
-    # SSL 인증서 경로
-    ssl_certificate /etc/letsencrypt/live/api.care-na.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/api.care-na.com/privkey.pem;
+  # SSL 인증서 경로
+  ssl_certificate /etc/letsencrypt/live/api.care-na.com/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/api.care-na.com/privkey.pem;
 
-    location / {
-      proxy_pass http://app;
-      proxy_set_header Host $host;
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header X-Forwarded-Proto $scheme;
-    }
+  location / {
+    proxy_pass http://app;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
 
-    location /actuator/health {
-      proxy_pass http://app/actuator/health;
-    }
+  location /actuator/health {
+    proxy_pass http://app/actuator/health;
   }
 }
 EOFCONF
