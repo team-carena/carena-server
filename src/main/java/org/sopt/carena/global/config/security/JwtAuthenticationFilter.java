@@ -34,11 +34,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     public JwtAuthenticationFilter(JwtTokenValidator jwtTokenValidator,
-                                   JwtTokenParser jwtTokenParser, ObjectMapper objectMapperr,
+                                   JwtTokenParser jwtTokenParser, ObjectMapper objectMapper,
                                    @Qualifier("handlerExceptionResolver") HandlerExceptionResolver handlerExceptionResolver) {
         this.jwtTokenValidator = jwtTokenValidator;
         this.jwtTokenParser = jwtTokenParser;
-        this.objectMapper = objectMapperr;
+        this.objectMapper = objectMapper;
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
@@ -66,22 +66,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             sendErrorResponse(response, MemberErrorCode.EMPTY_TOKEN);
             return;
         }
-        /*
-        if (jwtTokenValidator.isValid(accessToken)) {
-            // 인증 설정
-            Long memberId = jwtTokenParser.getMemberId(accessToken);
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(memberId, null, Collections.emptyList());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.debug("JWT 인증 성공 - MemberId: {}", memberId);
-
-        } else {
-            // 유효하지 않은 토큰 → 401 응답
-            log.warn("유효하지 않은 액세스 토큰");  //resolvehandlerexception으로
-            sendErrorResponse(response, MemberErrorCode.INVALID_TOKEN);
-            return;  // 필터 체인 중단
-        }
-         */
 
         if (!jwtTokenValidator.isValid(accessToken)) {
             log.warn("유효하지 않은 액세스 토큰");
