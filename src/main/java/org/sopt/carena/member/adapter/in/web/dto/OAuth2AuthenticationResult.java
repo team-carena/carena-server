@@ -1,7 +1,7 @@
 package org.sopt.carena.member.adapter.in.web.dto;
 
 import lombok.Getter;
-import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginView;
+import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginResult;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
@@ -17,9 +17,9 @@ import java.util.Map;
 public class OAuth2AuthenticationResult implements OidcUser {
 
     private final OidcUser delegate;
-    private final OAuth2LoginView loginResult;
+    private final OAuth2LoginResult loginResult;
 
-    public OAuth2AuthenticationResult(OidcUser delegate, OAuth2LoginView loginResult) {
+    public OAuth2AuthenticationResult(OidcUser delegate, OAuth2LoginResult loginResult) {
         this.delegate = delegate;
         this.loginResult = loginResult;
     }

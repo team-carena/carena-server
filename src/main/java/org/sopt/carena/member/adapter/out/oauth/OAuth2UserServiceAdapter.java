@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.adapter.in.web.dto.OAuth2AuthenticationResult;
 import org.sopt.carena.member.appliacation.dto.command.OAuth2LoginCommand;
-import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginView;
+import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginResult;
 import org.sopt.carena.member.exception.oauth.UnsupportedOAuthProviderException;
 import org.sopt.carena.member.appliacation.port.in.OAuth2LoginUseCase;
 import org.sopt.carena.member.domain.AuthType;
@@ -45,7 +45,7 @@ public class OAuth2UserServiceAdapter extends OidcUserService {
             case KAKAO -> extractKakaoInfo(oidcUser);
         };
 
-        OAuth2LoginView loginResult = oauth2LoginUseCase.processLogin(command);
+        OAuth2LoginResult loginResult = oauth2LoginUseCase.processLogin(command);
         // Spring Security 인증 객체로 래핑하여 반환
         return new OAuth2AuthenticationResult(oidcUser, loginResult);
     }

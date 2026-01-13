@@ -6,7 +6,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.adapter.in.web.dto.OAuth2AuthenticationResult;
-import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginView;
+import org.sopt.carena.member.appliacation.dto.view.ExistingMemberLoginView;
+import org.sopt.carena.member.appliacation.dto.view.NewMemberSignupView;
+import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -37,23 +39,23 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         OAuth2AuthenticationResult authResult =
                 (OAuth2AuthenticationResult) authentication.getPrincipal();
 
-        // OAuth2LoginView 추출
-        OAuth2LoginView loginResult = authResult.getLoginResult();
+        // OAuth2LoginResult 추출
+        OAuth2LoginResult loginResult = authResult.getLoginResult();
 
         log.info("로그인 결과 - 신규회원: {}, Provider: {}",
                 loginResult.needsSignup());
 
         // 신규/기존 회원 분기
         if (loginResult.needsSignup()) {
-            handleNewMember(response, loginResult);
+            handleNewMember(response, (NewMemberSignupView) loginResult);
         } else {
-            handleExistingMember(response, loginResult);
+            handleExistingMember(response, (ExistingMemberLoginView) loginResult);
         }
     }
 
     private void handleNewMember(
             HttpServletResponse response,
-            OAuth2LoginView loginResult
+            NewMemberSignupView loginResult
     ) throws IOException {
         log.info("신규 회원 - 회원가입 페이지로 리다이렉트");
         // tempToken 쿠키에 저장
@@ -65,7 +67,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private void handleExistingMember(
             HttpServletResponse response,
-            OAuth2LoginView loginResult
+            ExistingMemberLoginView loginResult
     ) throws IOException {
         log.info("기존 회원 - 메인 페이지로 리다이렉트");
         // JWT 쿠키에 저장

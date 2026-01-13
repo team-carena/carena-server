@@ -2,8 +2,7 @@ package org.sopt.carena.member.appliacation.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.appliacation.dto.command.OAuth2LoginCommand;
-import org.sopt.carena.member.appliacation.dto.view.MemberView;
-import org.sopt.carena.member.appliacation.dto.view.OAuth2LoginView;
+import org.sopt.carena.member.appliacation.dto.view.*;
 import org.sopt.carena.member.appliacation.port.in.OAuth2LoginUseCase;
 import org.sopt.carena.member.appliacation.port.out.JoinTokenStore;
 import org.sopt.carena.member.appliacation.port.out.MemberRepository;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -31,18 +31,20 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
     private final JwtTokenGenerator jwtTokenGenerator;
 
     @Override
-    public OAuth2LoginView processLogin(OAuth2LoginCommand command) {
+    public OAuth2LoginResult processLogin(OAuth2LoginCommand command) {
         log.info("OAuth2 로그인 처리 시작 - Provider: {}", command.authType());
-        return memberRepository
-                .findByAuthTypeAndProviderUserId(
-                        command.authType(),
-                        command.providerUserId()
-                )
-                .map(member -> handleExistingMember(member))
-                .orElseGet(() -> handleNewMember(command));
+        Optional<Member> memberOpt = memberRepository.findByAuthTypeAndProviderUserId(
+                command.authType(),
+                command.providerUserId()
+        );
+        if (memberOpt.isPresent()) {
+            return handleExistingMember(memberOpt.get());
+        } else {
+            return handleNewMember(command);
+        }
     }
 
-    private OAuth2LoginView handleExistingMember(Member member) {
+    private ExistingMemberLoginView handleExistingMember(Member member) {
         log.info("기존 회원 로그인 - MemberId: {}", member.getId());
 
         String accessToken = jwtTokenGenerator.createAccessToken(member.getId());
@@ -54,14 +56,14 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
                 refreshToken
         );
 
-        return OAuth2LoginView.forExistingMember(
+        return ExistingMemberLoginView.of(
                 accessToken,
                 refreshToken,
                 MemberView.from(member)
         );
     }
 
-    private OAuth2LoginView handleNewMember(OAuth2LoginCommand command) {
+    private NewMemberSignupView handleNewMember(OAuth2LoginCommand command) {
         log.info("신규 회원 - 회원가입 필요");
 
         // 임시 토큰 생성 및 저장
@@ -73,6 +75,6 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
                 authInfo,
                 Duration.ofMinutes(10)
         );
-        return OAuth2LoginView.forNewMember(tempToken);
+        return NewMemberSignupView.of(tempToken);
     }
 }
