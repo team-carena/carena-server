@@ -3,8 +3,6 @@ package org.sopt.carena.member.application.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.application.dto.command.SignUpCommand;
-import org.sopt.carena.member.application.dto.view.MemberView;
-import org.sopt.carena.member.application.dto.view.SignupView;
 import org.sopt.carena.member.application.service.util.JwtTokenGenerator;
 import org.sopt.carena.member.exception.member.DuplicateMemberException;
 import org.sopt.carena.member.exception.member.InvalidTempTokenException;
@@ -25,11 +23,9 @@ public class SignupService implements SignupUseCase {
 
     private final JoinTokenStore joinTokenStore;
     private final MemberPersistencePort memberPersistencePort;
-    private final RefreshTokenStore refreshTokenStore;
-    private final JwtTokenGenerator jwtTokenGenerator;
 
     @Override
-    public SignupView signup(final SignUpCommand command) {
+    public void signup(final SignUpCommand command) {
         log.info("회원가입 시작 - name: {}", command.name());
 
         // tempToken 검증
@@ -59,18 +55,5 @@ public class SignupService implements SignupUseCase {
 
         // tempToken 삭제
         joinTokenStore.delete(command.tempToken());
-        String accessToken = jwtTokenGenerator.createAccessToken(savedMember.getId());
-        String refreshToken = jwtTokenGenerator.createRefreshToken(savedMember.getId());
-
-        refreshTokenStore.save(
-                savedMember.getId(),
-                refreshToken
-        );
-
-        return new SignupView(
-                accessToken,
-                refreshToken,
-                MemberView.from(savedMember)
-        );
     }
 }
