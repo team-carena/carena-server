@@ -6,8 +6,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.sopt.carena.global.api.response.SuccessResponse;
+import org.sopt.carena.member.adapter.in.web.dto.MemberInfoResponse;
+import org.sopt.carena.member.adapter.in.web.dto.MyPageResponse;
 import org.sopt.carena.member.adapter.in.web.dto.request.SignUpRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CookieValue;
 
 @Tag(name = "멤버 관리",description = "회원가입, 토큰, 조회 관련 API")
@@ -23,4 +26,9 @@ public interface MemberApiDocs {
             @CookieValue(name = "refreshToken") final String refreshToken,
             HttpServletResponse response);
 
+    @Operation(summary = "마이페이지" ,description = "마이페이지에서 멤버를 조회합니다.")
+    ResponseEntity<SuccessResponse<MyPageResponse>> myPage(@AuthenticationPrincipal Long memberId);
+
+    @Operation(summary = "멤버 상세정보",description = "메인페이지에서 멤버 상세 정보를 반환합니다.")
+    ResponseEntity<SuccessResponse<MemberInfoResponse>> memberInfo(@AuthenticationPrincipal Long memberId);
 }
