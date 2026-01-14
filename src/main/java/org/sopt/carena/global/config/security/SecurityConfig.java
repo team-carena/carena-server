@@ -55,7 +55,7 @@ public class SecurityConfig {
 
                     for (AdminEndpoint endpoint : AdminEndpoint.values()) {
                         auth.requestMatchers(endpoint.getMethod(), endpoint.getPattern())
-                            .hasRole("ADMIN");
+                            .hasRole("ROLE_ADMIN");
                     }
                     auth.anyRequest().authenticated();
                  })

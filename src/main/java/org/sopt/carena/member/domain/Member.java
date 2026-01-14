@@ -45,7 +45,7 @@ public class Member {
                 .authId(authId)
                 .authType(authType)
                 .score(0L)
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .createdAt(LocalDateTime.now())
                 .build();
     }
