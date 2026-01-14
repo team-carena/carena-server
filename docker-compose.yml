@@ -23,6 +23,8 @@ services:
   # Blue 환경
   blue:
     image: ${DOCKER_USERNAME}/carena-api:latest
+    env_file:
+      - .env
     container_name: blue
     ports:
       - "8082:8080"
@@ -54,6 +56,8 @@ services:
   # Green 환경
   green:
     image: ${DOCKER_USERNAME}/carena-api:latest
+    env_file:
+      - .env
     container_name: green
     ports:
       - "8081:8080"
@@ -88,8 +92,20 @@ services:
     container_name: nginx
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - app-network
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/conf.d:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+      - ./data/certbot/www:/var/www/certbot

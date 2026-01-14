@@ -48,16 +48,37 @@ if [ ! -f nginx/conf.d/default.conf ]; then
 upstream app {
   server blue:8080;
 }
+
 server {
   listen 80;
+  server_name api.care-na.com;
+
+  location /.well-known/acme-challenge/ {
+          root /var/www/certbot;
+      }
+
   location / {
-  proxy_pass http://app;
-  proxy_set_header Host $host;
-  proxy_set_header X-Real-IP $remote_addr;
-  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    return 308 https://$host$request_uri;
+  }
 }
-location /actuator/health {
-proxy_pass http://app/actuator/health;
+server {
+  listen 443 ssl;
+  server_name api.care-na.com;
+
+  # SSL 인증서 경로
+  ssl_certificate /etc/letsencrypt/live/api.care-na.com/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/api.care-na.com/privkey.pem;
+
+  location / {
+    proxy_pass http://app;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+
+  location /actuator/health {
+    proxy_pass http://app/actuator/health;
   }
 }
 EOFCONF
@@ -72,7 +93,7 @@ docker image prune -f
 docker pull ${DOCKER_USERNAME}/carena-api:latest
 
 # 현재 active 판단
-ACTIVE=$(grep "server" nginx/conf.d/default.conf | grep -o "blue\|green" || echo "blue")
+ACTIVE=$(grep -oE 'server (blue|green):8080;' nginx/conf.d/default.conf | head -n 1 | grep -oE 'blue|green')
 
 if [ "$ACTIVE" = "blue" ]; then
   NEW="green"
@@ -86,7 +107,7 @@ echo "현재 active: $ACTIVE"
 echo "새 배포 대상: $NEW"
 
 # 새 컨테이너 기동
-docker compose up -d --no-deps $NEW
+docker compose up -d $NEW
 
 # 헬스체크
 HEALTH_OK=false
@@ -103,7 +124,7 @@ done
 # 헬스체크 실패 시 롤백
 if [ "$HEALTH_OK" = false ]; then
   echo "❌ 헬스체크 실패! 롤백합니다."
-  docker-compose stop $NEW
+  docker compose stop $NEW
   exit 1
 fi
 

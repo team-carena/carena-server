@@ -13,7 +13,7 @@ public class CookieUtil {
                 .maxAge(REFRESH_TOKEN_MAX_AGE)
                 .httpOnly(true)
                 .secure(true)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
 
         response.addHeader("Set-Cookie", cookie.toString());
@@ -25,7 +25,7 @@ public class CookieUtil {
                 .maxAge(TEMP_TOKEN_MAX_AGE)
                 .httpOnly(true)
                 .secure(true)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
 
         response.addHeader("Set-Cookie", cookie.toString());
@@ -37,7 +37,7 @@ public class CookieUtil {
                 .maxAge(0)
                 .httpOnly(true)
                 .secure(true)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
 
         response.addHeader("Set-Cookie", cookie.toString());

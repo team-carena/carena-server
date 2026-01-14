@@ -6,28 +6,41 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.global.api.response.FailureResponse;
 import org.sopt.carena.global.config.security.util.PublicEndpoint;
-import org.sopt.carena.member.appliacation.service.util.JwtTokenParser;
-import org.sopt.carena.member.appliacation.service.util.JwtTokenValidator;
+import org.sopt.carena.member.application.service.util.JwtTokenParser;
+import org.sopt.carena.member.application.service.util.JwtTokenValidator;
 import org.sopt.carena.member.exception.code.MemberErrorCode;
+import org.sopt.carena.member.exception.jwt.InvalidTokenException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+
 import java.io.IOException;
+
 import java.util.Collections;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenValidator jwtTokenValidator;
     private final JwtTokenParser jwtTokenParser;
     private final ObjectMapper objectMapper;
+    private final HandlerExceptionResolver handlerExceptionResolver;
+
+    public JwtAuthenticationFilter(JwtTokenValidator jwtTokenValidator,
+                                   JwtTokenParser jwtTokenParser, ObjectMapper objectMapper,
+                                   @Qualifier("handlerExceptionResolver") HandlerExceptionResolver handlerExceptionResolver) {
+        this.jwtTokenValidator = jwtTokenValidator;
+        this.jwtTokenParser = jwtTokenParser;
+        this.objectMapper = objectMapper;
+        this.handlerExceptionResolver = handlerExceptionResolver;
+    }
 
     @Override
     protected void doFilterInternal(
@@ -54,20 +67,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        if (jwtTokenValidator.isValid(accessToken)) {
-            // 인증 설정
-            Long memberId = jwtTokenParser.getMemberId(accessToken);
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(memberId, null, Collections.emptyList());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.debug("JWT 인증 성공 - MemberId: {}", memberId);
-
-        } else {
-            // 유효하지 않은 토큰 → 401 응답
+        if (!jwtTokenValidator.isValid(accessToken)) {
             log.warn("유효하지 않은 액세스 토큰");
-            sendErrorResponse(response, MemberErrorCode.INVALID_TOKEN);
+            handlerExceptionResolver.resolveException(request, response, null, new InvalidTokenException());
             return;  // 필터 체인 중단
         }
+        Long memberId = jwtTokenParser.getMemberId(accessToken);
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(memberId, null, Collections.emptyList());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.debug("JWT 인증 성공 - MemberId: {}", memberId);
+
+
         filterChain.doFilter(request, response);
     }
 

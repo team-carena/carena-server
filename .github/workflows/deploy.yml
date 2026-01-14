@@ -21,6 +21,12 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: make .yml file
+        run: |
+          mkdir -p ./src/main/resources
+          touch ./src/main/resources/application.yml
+          printf '%s' "${{ secrets.APPLICATIONS }}" > ./src/main/resources/application.yml
+
       # 3. Gradle 빌드
       - name: Build with Gradle
         run: |
@@ -67,6 +73,9 @@ jobs:
             export KAKAO_CLIENT_SECRET="${{ secrets.KAKAO_CLIENT_SECRET }}"
             export KAKAO_REDIRECT_URI="${{ secrets.KAKAO_REDIRECT_URI }}"
             export JWT_SECRET="${{ secrets.JWT_SECRET }}"
+            export JWT_EXPIRATION="${{ secrets.JWT_EXPIRATION }}"
+            export JWT_ACCESS_TOKEN_EXPIRATION="${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION }}"
+            export JWT_REFRESH_TOKEN_EXPIRATION="${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION }}"
             export FRONTEND_URL="${{ secrets.FRONTEND_URL }}"
             
             ~/app/scripts/deploy.sh
