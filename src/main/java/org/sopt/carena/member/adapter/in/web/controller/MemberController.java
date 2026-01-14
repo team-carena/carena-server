@@ -15,7 +15,6 @@ import org.sopt.carena.member.adapter.in.web.dto.request.SignUpRequest;
 import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
 import org.sopt.carena.member.application.dto.command.SignUpCommand;
 import org.sopt.carena.member.application.dto.view.MyPageInfoView;
-import org.sopt.carena.member.application.dto.view.TokenRefreshView;
 import org.sopt.carena.member.application.dto.view.TokenGeneratedView;
 import org.sopt.carena.member.application.port.in.GenerateTokenUseCase;
 import org.sopt.carena.member.application.port.in.RefreshTokenUseCase;
@@ -83,8 +82,8 @@ public class MemberController implements MemberApiDocs{
         log.info("memberId: {}", memberId);
         MyPageInfoView memberInfo = getMemberInfoUseCase.getMyPageInfo(memberId);
         MyPageResponse response = MyPageResponse.from(memberInfo);
-        return ResponseEntity.status(MemberSuccessCode.MEMBER_IFNO.getStatus())
-                .body(ApiResponse.success(MemberSuccessCode.MEMBER_IFNO, response));
+        return ResponseEntity.status(MemberSuccessCode.MEMBER_INFO.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.MEMBER_INFO, response));
     }
 
     @GetMapping("/my-info")
@@ -94,7 +93,7 @@ public class MemberController implements MemberApiDocs{
         log.info("memberId: {}", memberId);
         MemberInfoView memberInfo = getMemberInfoUseCase.getMemberInfo(memberId);
         MemberInfoResponse response = MemberInfoResponse.from(memberInfo);
-        return ResponseEntity.status(MemberSuccessCode.MEMBER_IFNO.getStatus())
-                .body(ApiResponse.success(MemberSuccessCode.MEMBER_IFNO, response));
+        return ResponseEntity.status(MemberSuccessCode.MEMBER_INFO.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.MEMBER_INFO, response));
     }
 }
