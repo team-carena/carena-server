@@ -10,6 +10,7 @@ import org.sopt.carena.member.application.port.out.RefreshTokenStore;
 import org.sopt.carena.member.application.service.util.JwtTokenGenerator;
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Member;
+import org.sopt.carena.member.exception.jwt.MemberNotFoundException;
 import org.sopt.carena.member.exception.member.InvalidTempTokenException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,7 @@ public class GenerateTokenService implements GenerateTokenUseCase {
         String providerUserId = parts[1];
 
         Optional<Member> member = memberPersistencePort.findByAuthTypeAndProviderUserId(authType,providerUserId);
-        Long memberId = member.get().getId();
+        Long memberId = member.orElseThrow(MemberNotFoundException::new).getId();
         String AccessToken = jwtTokenGenerator.createAccessToken(memberId);
         String RefreshToken = jwtTokenGenerator.createRefreshToken(memberId);
 
