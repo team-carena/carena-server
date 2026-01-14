@@ -11,10 +11,10 @@ public record MemberInfoView(
         Long score
 ) {
     public static MemberInfoView of(
-            String name,
-            int age,
-            Gender gender,
-            Long score
+            final String name,
+            final int age,
+            final Gender gender,
+            final Long score
     ) {
         return new MemberInfoView(name,age ,gender, score);
     }

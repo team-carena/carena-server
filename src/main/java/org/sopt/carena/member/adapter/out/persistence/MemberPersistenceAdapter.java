@@ -18,12 +18,12 @@ public class MemberPersistenceAdapter implements MemberPersistencePort {
     private final MemberJpaRepository memberJpaRepository;
 
     @Override
-    public Optional<Member> getMemberById(Long id) {
+    public Optional<Member> getMemberById(final Long id) {
         return memberJpaRepository.findById(id).map(MemberMapper::toDomain);
     }
 
     @Override
-    public Optional<Member> findByAuthIdAndAuthType(String authId, AuthType authType) {
+    public Optional<Member> findByAuthIdAndAuthType(final String authId, final AuthType authType) {
         return Optional.empty();
     }
 

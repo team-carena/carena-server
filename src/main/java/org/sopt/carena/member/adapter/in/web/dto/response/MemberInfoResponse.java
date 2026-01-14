@@ -1,4 +1,4 @@
-package org.sopt.carena.member.adapter.in.web.dto;
+package org.sopt.carena.member.adapter.in.web.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.sopt.carena.member.application.dto.view.MemberInfoView;
@@ -11,7 +11,7 @@ public record MemberInfoResponse(
         Gender gender,
         Long score
 ) {
-    public static MemberInfoResponse from(MemberInfoView view) {
+    public static MemberInfoResponse from(final MemberInfoView view) {
         return new MemberInfoResponse(
                 view.name(),
                 view.age(),

@@ -20,7 +20,7 @@ public class MemberInfoService implements GetMemberInfoUseCase {
     private final MemberPersistencePort memberRepository;
 
     @Override
-    public MemberInfoView getMemberInfo(Long memberId) {
+    public MemberInfoView getMemberInfo(final Long memberId) {
         Member member = memberRepository.getMemberById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
 
@@ -32,7 +32,7 @@ public class MemberInfoService implements GetMemberInfoUseCase {
         );
     }
     @Override
-    public MyPageInfoView getMyPageInfo(Long memberId) {
+    public MyPageInfoView getMyPageInfo(final Long memberId) {
         Member member = memberRepository.getMemberById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
         return MyPageInfoView.of(
