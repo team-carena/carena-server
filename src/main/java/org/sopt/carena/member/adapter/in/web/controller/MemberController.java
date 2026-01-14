@@ -1,5 +1,7 @@
 package org.sopt.carena.member.adapter.in.web.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.sopt.carena.global.config.security.util.AccessTokenResolver;
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -37,6 +39,7 @@ public class MemberController implements MemberApiDocs{
     private final GetMemberInfoUseCase getMemberInfoUseCase;
     private final GenerateTokenUseCase generateTokenUseCase;
     private final LogoutUseCase logoutUseCase;
+    //private final AccessTokenResolver accessTokenResolver;
 
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<Void>> signup(
@@ -102,9 +105,11 @@ public class MemberController implements MemberApiDocs{
     @PostMapping("/logout")
     public ResponseEntity<SuccessResponse<Void>> logout(
             @AuthenticationPrincipal Long memberId,
+            HttpServletRequest request,
             HttpServletResponse response
     ) {
-        logoutUseCase.logout(memberId);
+        String accessToken = AccessTokenResolver.resolve(request);
+        logoutUseCase.logout(memberId,accessToken);
         CookieUtil.deleteRefreshTokenCookie(response);
         log.info("memberId: {}", memberId);
         return ResponseEntity.status(MemberSuccessCode.LOGOUT_SUCCESS.getStatus())
