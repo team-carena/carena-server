@@ -1,24 +1,22 @@
-
 package org.sopt.carena.member.adapter.in.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.sopt.carena.member.appliacation.dto.view.MemberInfoView;
-
-import java.time.LocalDate;
+import org.sopt.carena.member.application.dto.view.MemberInfoView;
+import org.sopt.carena.member.domain.Gender;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record MemberInfoResponse(
-        Long memberId,
         String name,
-        LocalDate birthdate,
+        int age,
+        Gender gender,
         Long score
 ) {
-    public static MemberInfoResponse from(MemberInfoView view, boolean withScore) {
+    public static MemberInfoResponse from(MemberInfoView view) {
         return new MemberInfoResponse(
-                view.id(),
                 view.name(),
-                view.birthdate(),
-                withScore ? view.score() : null
+                view.age(),
+                view.gender(),
+                view.score()
         );
     }
 }

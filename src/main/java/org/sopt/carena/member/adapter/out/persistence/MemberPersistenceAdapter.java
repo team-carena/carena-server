@@ -23,6 +23,11 @@ public class MemberPersistenceAdapter implements MemberPersistencePort {
     }
 
     @Override
+    public Optional<Member> findByAuthIdAndAuthType(String authId, AuthType authType) {
+        return Optional.empty();
+    }
+
+    @Override
     public Member save(final Member member) {
         MemberEntity entity = MemberMapper.toEntity(member);
         MemberEntity saved = memberJpaRepository.save(entity);

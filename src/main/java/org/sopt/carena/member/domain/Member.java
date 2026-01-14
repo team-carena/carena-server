@@ -7,6 +7,7 @@ import org.sopt.carena.member.exception.member.InvalidNameException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 
 @Getter
 public class Member {
@@ -57,5 +58,9 @@ public class Member {
         if (year < 1960 || year > 2007) {
             throw new InvalidBirthdateException();
         }
+    }
+    //만나이 계산
+    public int getAge() {
+        return Period.between(this.birthdate, LocalDate.now()).getYears();
     }
 }

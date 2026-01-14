@@ -10,19 +10,16 @@ import org.sopt.carena.global.api.response.SuccessResponse;
 import org.sopt.carena.member.adapter.in.web.controller.util.CookieUtil;
 import org.sopt.carena.member.adapter.in.web.controller.util.HeaderUtil;
 import org.sopt.carena.member.adapter.in.web.dto.MemberInfoResponse;
+import org.sopt.carena.member.adapter.in.web.dto.MyPageResponse;
 import org.sopt.carena.member.adapter.in.web.dto.request.SignUpRequest;
 import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
 import org.sopt.carena.member.application.dto.command.SignUpCommand;
+import org.sopt.carena.member.application.dto.view.MyPageInfoView;
 import org.sopt.carena.member.application.dto.view.TokenRefreshView;
 import org.sopt.carena.member.application.port.in.RefreshTokenUseCase;
 import org.sopt.carena.member.application.port.in.SignupUseCase;
-import org.sopt.carena.member.appliacation.dto.command.SignUpCommand;
-import org.sopt.carena.member.appliacation.dto.view.MemberInfoView;
-import org.sopt.carena.member.appliacation.dto.view.SignupView;
-import org.sopt.carena.member.appliacation.dto.view.TokenRefreshView;
-import org.sopt.carena.member.appliacation.port.in.GetMemberInfoUseCase;
-import org.sopt.carena.member.appliacation.port.in.RefreshTokenUseCase;
-import org.sopt.carena.member.appliacation.port.in.SignupUseCase;
+import org.sopt.carena.member.application.dto.view.MemberInfoView;
+import org.sopt.carena.member.application.port.in.GetMemberInfoUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -64,14 +61,24 @@ public class MemberController implements MemberApiDocs{
                         .body(ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED));
     }
 
+    @GetMapping("/my-page")
+    public ResponseEntity<SuccessResponse<MyPageResponse>> myPage(
+            @AuthenticationPrincipal Long memberId
+    ) {
+        log.info("memberId: {}", memberId);
+        MyPageInfoView memberInfo = getMemberInfoUseCase.getMyPageInfo(memberId);
+        MyPageResponse response = MyPageResponse.from(memberInfo);
+        return ResponseEntity.status(MemberSuccessCode.MEMBER_IFNO.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.MEMBER_IFNO, response));
+    }
+
     @GetMapping("/my-info")
     public ResponseEntity<SuccessResponse<MemberInfoResponse>> memberInfo(
-            @AuthenticationPrincipal Long memberId,
-            @RequestParam(required = false, defaultValue = "false") Boolean withScore
+            @AuthenticationPrincipal Long memberId
     ) {
-        log.info("memberId: {}, withScore: {}", memberId, withScore);
-        MemberInfoView memberInfo = getMemberInfoUseCase.getMemberInfo(memberId, withScore);
-        MemberInfoResponse response = MemberInfoResponse.from(memberInfo, withScore);
+        log.info("memberId: {}", memberId);
+        MemberInfoView memberInfo = getMemberInfoUseCase.getMemberInfo(memberId);
+        MemberInfoResponse response = MemberInfoResponse.from(memberInfo);
         return ResponseEntity.status(MemberSuccessCode.MEMBER_IFNO.getStatus())
                 .body(ApiResponse.success(MemberSuccessCode.MEMBER_IFNO, response));
     }

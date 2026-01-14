@@ -1,6 +1,4 @@
-package org.sopt.carena.member.appliacation.dto.view;
-
-import org.sopt.carena.member.domain.Member;
+package org.sopt.carena.member.application.dto.view;
 
 import java.time.LocalDate;
 
@@ -8,10 +6,8 @@ public record MyPageInfoView(
         String name,
         LocalDate birthdate
 ) {
-    public static MyPageInfoView of(Member member) {
-        return new MyPageInfoView(member.getName(), member.getBirthdate());
-
+    public static MyPageInfoView of(String name, LocalDate birthdate) {
+        return new MyPageInfoView(
+                name, birthdate);
     }
-
-
 }
