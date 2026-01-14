@@ -27,8 +27,7 @@ public enum PublicEndpoint {
     API_DOCS("/v3/api-docs/**", HttpMethod.GET),
     API_DOCS_V1("/api-docs/**", HttpMethod.GET),
     WEBJARS("/webjars/**", HttpMethod.GET),
-    GENERATED_TOKEN("/api/v1/member/tokens", HttpMethod.POST),
-    HOME_PAGE("/", HttpMethod.GET);
+    GENERATED_TOKEN("/api/v1/member/tokens", HttpMethod.POST);
 
     private final String pattern;
     private final HttpMethod method;
