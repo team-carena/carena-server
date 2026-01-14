@@ -26,7 +26,7 @@ public class MemberInfoService implements GetMemberInfoUseCase {
 
         return MemberInfoView.of(
                 member.getName(),
-                member.getAge(),
+                member.getBirthdate(),
                 member.getGender(),
                 member.getScore()
         );

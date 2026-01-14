@@ -3,6 +3,7 @@ package org.sopt.carena.member.application.dto.view;
 import org.sopt.carena.member.domain.Gender;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 public record MemberInfoView(
         String name,
@@ -10,12 +11,30 @@ public record MemberInfoView(
         Gender gender,
         Long score
 ) {
-    public static MemberInfoView of(
-            final String name,
-            final int age,
-            final Gender gender,
-            final Long score
+    private MemberInfoView(
+            String name,
+            LocalDate birthdate,
+            Gender gender,
+            Long score
     ) {
-        return new MemberInfoView(name,age ,gender, score);
+        this(
+                name,
+                calculateAge(birthdate),
+                gender,
+                score
+        );
+    }
+
+    public static MemberInfoView of(
+            String name,
+            LocalDate birthdate,
+            Gender gender,
+            Long score
+    ) {
+        return new MemberInfoView(name, birthdate, gender, score);
+    }
+
+    private static int calculateAge(LocalDate birthdate) {
+        return Period.between(birthdate, LocalDate.now()).getYears();
     }
 }
