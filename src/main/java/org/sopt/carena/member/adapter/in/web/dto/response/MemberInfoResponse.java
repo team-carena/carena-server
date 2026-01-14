@@ -1,4 +1,4 @@
-package org.sopt.carena.member.adapter.in.web.dto;
+package org.sopt.carena.member.adapter.in.web.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.sopt.carena.member.application.dto.view.MemberInfoView;

@@ -1,4 +1,4 @@
-package org.sopt.carena.member.adapter.in.web.dto;
+package org.sopt.carena.member.adapter.in.web.dto.response;
 
 import org.sopt.carena.member.application.dto.view.MyPageInfoView;
 
