@@ -44,7 +44,7 @@ public class CookieUtil {
     }
 
     public static void deleteRefreshTokenCookie(HttpServletResponse response) {
-        ResponseCookie cookie = ResponseCookie.from("refreshtoken","")
+        ResponseCookie cookie = ResponseCookie.from("refreshToken","")
                 .path("/")
                 .maxAge(0)
                 .httpOnly(true)
