@@ -6,8 +6,6 @@ import org.sopt.carena.member.application.dto.view.*;
 import org.sopt.carena.member.application.port.in.OAuth2LoginUseCase;
 import org.sopt.carena.member.application.port.out.JoinTokenStore;
 import org.sopt.carena.member.application.port.out.MemberPersistencePort;
-import org.sopt.carena.member.application.port.out.RefreshTokenStore;
-import org.sopt.carena.member.application.service.util.JwtTokenGenerator;
 import org.sopt.carena.member.domain.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +25,6 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
 
     private final MemberPersistencePort memberPersistencePort;
     private final JoinTokenStore joinTokenStore;
-    private final RefreshTokenStore refreshTokenStore;
-    private final JwtTokenGenerator jwtTokenGenerator;
 
     @Override
     public OAuth2LoginResult processLogin(final OAuth2LoginCommand command) {
@@ -48,17 +44,18 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
     private LoginSuccessView handleExistingMember(final Member member) {
         log.info("기존 회원 로그인 - MemberId: {}", member.getId());
 
-        String accessToken = jwtTokenGenerator.createAccessToken(member.getId());
-        String refreshToken = jwtTokenGenerator.createRefreshToken(member.getId());
+        String oneTimeToken = UUID.randomUUID().toString();
+        String authInfo = String.join("|", member.getAuthType().name(), member.getAuthId());
 
-        // Refresh Token 저장
-        refreshTokenStore.save(
-                member.getId(),
-                refreshToken
+        //OTT 저장
+        joinTokenStore.save(
+                oneTimeToken,
+                authInfo,
+                Duration.ofMinutes(5)
         );
+
         return LoginSuccessView.of(
-                accessToken,
-                refreshToken,
+                oneTimeToken,
                 MemberView.from(member)
         );
     }
