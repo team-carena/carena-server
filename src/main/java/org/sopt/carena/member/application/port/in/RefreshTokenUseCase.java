@@ -1,7 +1,7 @@
 package org.sopt.carena.member.application.port.in;
 
-import org.sopt.carena.member.application.dto.view.TokenRefreshView;
+import org.sopt.carena.member.application.dto.view.TokenGeneratedView;
 
 public interface RefreshTokenUseCase {
-    TokenRefreshView refreshAccessToken(String refreshToken);
+    TokenGeneratedView refreshAccessToken(String refreshToken);
 }

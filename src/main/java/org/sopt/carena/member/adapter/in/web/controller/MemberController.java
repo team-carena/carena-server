@@ -13,7 +13,6 @@ import org.sopt.carena.member.adapter.in.web.dto.request.SignUpRequest;
 import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
 import org.sopt.carena.member.application.dto.command.SignUpCommand;
 import org.sopt.carena.member.application.dto.view.TokenGeneratedView;
-import org.sopt.carena.member.application.dto.view.TokenRefreshView;
 import org.sopt.carena.member.application.port.in.GenerateTokenUseCase;
 import org.sopt.carena.member.application.port.in.RefreshTokenUseCase;
 import org.sopt.carena.member.application.port.in.SignupUseCase;
@@ -50,7 +49,7 @@ public class MemberController implements MemberApiDocs{
             @CookieValue(name = "refreshToken") final String refreshToken,
             HttpServletResponse response
     ) {
-        TokenRefreshView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
+        TokenGeneratedView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
         HeaderUtil.setAuthorizationHeader(response, result.accessToken());
         CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
         return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())

@@ -2,7 +2,7 @@ package org.sopt.carena.member.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.application.dto.view.TokenRefreshView;
+import org.sopt.carena.member.application.dto.view.TokenGeneratedView;
 import org.sopt.carena.member.application.service.util.JwtTokenGenerator;
 import org.sopt.carena.member.application.service.util.JwtTokenParser;
 import org.sopt.carena.member.application.service.util.JwtTokenValidator;
@@ -24,7 +24,7 @@ public class RefreshTokenService implements RefreshTokenUseCase {
     private final JwtTokenValidator jwtTokenValidator;
 
     @Override
-    public TokenRefreshView refreshAccessToken(final String refreshToken) {
+    public TokenGeneratedView refreshAccessToken(final String refreshToken) {
         log.info("Access Token 재발급 요청");
         jwtTokenValidator.validateToken(refreshToken);
 
@@ -41,6 +41,6 @@ public class RefreshTokenService implements RefreshTokenUseCase {
 
         refreshTokenStore.delete(memberId);
         refreshTokenStore.save(memberId, newRefreshToken);
-        return new TokenRefreshView(newAccessToken,newRefreshToken);
+        return new TokenGeneratedView(newAccessToken,newRefreshToken);
     }
 }
