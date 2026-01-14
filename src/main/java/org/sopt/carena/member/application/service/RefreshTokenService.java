@@ -2,7 +2,6 @@ package org.sopt.carena.member.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.member.application.dto.view.TokenRefreshView;
 import org.sopt.carena.member.application.port.out.MemberPersistencePort;
 import org.sopt.carena.member.application.dto.view.TokenGeneratedView;
 import org.sopt.carena.member.application.service.util.JwtTokenGenerator;
