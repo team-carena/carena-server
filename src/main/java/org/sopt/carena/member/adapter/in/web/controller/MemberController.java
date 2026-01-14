@@ -12,7 +12,9 @@ import org.sopt.carena.member.adapter.in.web.controller.util.HeaderUtil;
 import org.sopt.carena.member.adapter.in.web.dto.request.SignUpRequest;
 import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
 import org.sopt.carena.member.application.dto.command.SignUpCommand;
+import org.sopt.carena.member.application.dto.view.TokenGeneratedView;
 import org.sopt.carena.member.application.dto.view.TokenRefreshView;
+import org.sopt.carena.member.application.port.in.GenerateTokenUseCase;
 import org.sopt.carena.member.application.port.in.RefreshTokenUseCase;
 import org.sopt.carena.member.application.port.in.SignupUseCase;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ public class MemberController implements MemberApiDocs{
 
     private final SignupUseCase signupUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
+    private final GenerateTokenUseCase generateTokenUseCase;
 
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<Void>> signup(
@@ -52,5 +55,17 @@ public class MemberController implements MemberApiDocs{
         CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
         return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())
                         .body(ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED));
+    }
+
+    @PostMapping("/tokens")
+    public ResponseEntity<SuccessResponse<Void>> afterLogin(
+            @CookieValue(name="oneTimeToken") final String oneTimeToken,
+            HttpServletResponse response
+    ) {
+        TokenGeneratedView result=generateTokenUseCase.generateToken(oneTimeToken);
+        HeaderUtil.setAuthorizationHeader(response, result.accessToken());
+        CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
+        return ResponseEntity.status(MemberSuccessCode.TOKEN_GENERATED.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.TOKEN_GENERATED));
     }
 }

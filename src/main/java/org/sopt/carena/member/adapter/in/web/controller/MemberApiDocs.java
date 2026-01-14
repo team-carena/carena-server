@@ -23,4 +23,9 @@ public interface MemberApiDocs {
             @CookieValue(name = "refreshToken") final String refreshToken,
             HttpServletResponse response);
 
+    @Operation(summary = "토큰 발급", description = "로그인 성공 후 해당 api를 이용하여 엑세스 및 리프레시 토큰을 발급받습니다.")
+    ResponseEntity<SuccessResponse<Void>> afterLogin(
+            @CookieValue(name="oneTimeToken") final String oneTimeToken,
+            HttpServletResponse response);
+
 }
