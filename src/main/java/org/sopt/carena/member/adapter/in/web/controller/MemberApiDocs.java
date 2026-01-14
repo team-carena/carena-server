@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.sopt.carena.global.api.response.SuccessResponse;
-import org.sopt.carena.member.adapter.in.web.dto.MemberInfoResponse;
-import org.sopt.carena.member.adapter.in.web.dto.MyPageResponse;
+import org.sopt.carena.member.adapter.in.web.dto.response.MemberInfoResponse;
+import org.sopt.carena.member.adapter.in.web.dto.response.MyPageResponse;
 import org.sopt.carena.member.adapter.in.web.dto.request.SignUpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,4 +31,10 @@ public interface MemberApiDocs {
 
     @Operation(summary = "멤버 상세정보",description = "메인페이지에서 멤버 상세 정보를 반환합니다.")
     ResponseEntity<SuccessResponse<MemberInfoResponse>> memberInfo(@AuthenticationPrincipal Long memberId);
+
+    @Operation(summary = "로그아웃",description = "로그아웃 처리를 하고 리프레시 토큰을 레디스에서 삭제합니다.")
+    ResponseEntity<SuccessResponse<Void>> logout(
+            @AuthenticationPrincipal Long memberId,
+            HttpServletResponse response
+    );
 }

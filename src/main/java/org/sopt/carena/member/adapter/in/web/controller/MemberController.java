@@ -9,13 +9,14 @@ import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.sopt.carena.member.adapter.in.web.controller.util.CookieUtil;
 import org.sopt.carena.member.adapter.in.web.controller.util.HeaderUtil;
-import org.sopt.carena.member.adapter.in.web.dto.MemberInfoResponse;
-import org.sopt.carena.member.adapter.in.web.dto.MyPageResponse;
+import org.sopt.carena.member.adapter.in.web.dto.response.MemberInfoResponse;
+import org.sopt.carena.member.adapter.in.web.dto.response.MyPageResponse;
 import org.sopt.carena.member.adapter.in.web.dto.request.SignUpRequest;
 import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
 import org.sopt.carena.member.application.dto.command.SignUpCommand;
 import org.sopt.carena.member.application.dto.view.MyPageInfoView;
 import org.sopt.carena.member.application.dto.view.TokenRefreshView;
+import org.sopt.carena.member.application.port.in.LogoutUseCase;
 import org.sopt.carena.member.application.port.in.RefreshTokenUseCase;
 import org.sopt.carena.member.application.port.in.SignupUseCase;
 import org.sopt.carena.member.application.dto.view.MemberInfoView;
@@ -33,6 +34,7 @@ public class MemberController implements MemberApiDocs{
     private final SignupUseCase signupUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
     private final GetMemberInfoUseCase getMemberInfoUseCase;
+    private final LogoutUseCase logoutUseCase;
 
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<Void>> signup(
@@ -81,5 +83,17 @@ public class MemberController implements MemberApiDocs{
         MemberInfoResponse response = MemberInfoResponse.from(memberInfo);
         return ResponseEntity.status(MemberSuccessCode.MEMBER_IFNO.getStatus())
                 .body(ApiResponse.success(MemberSuccessCode.MEMBER_IFNO, response));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<SuccessResponse<Void>> logout(
+            @AuthenticationPrincipal Long memberId,
+            HttpServletResponse response
+    ) {
+        logoutUseCase.logout(memberId);
+        CookieUtil.deleteRefreshTokenCookie(response);
+        log.info("memberId: {}", memberId);
+        return ResponseEntity.status(MemberSuccessCode.LOGOUT_SUCCESS.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.LOGOUT_SUCCESS));
     }
 }
