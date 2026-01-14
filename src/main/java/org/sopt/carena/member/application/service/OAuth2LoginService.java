@@ -48,8 +48,8 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
     private LoginSuccessView handleExistingMember(final Member member) {
         log.info("기존 회원 로그인 - MemberId: {}", member.getId());
 
-        String accessToken = jwtTokenGenerator.createAccessToken(member.getId());
-        String refreshToken = jwtTokenGenerator.createRefreshToken(member.getId());
+        String accessToken = jwtTokenGenerator.createAccessToken(member.getId(),member.getRole());
+        String refreshToken = jwtTokenGenerator.createRefreshToken(member.getId(),member.getRole());
 
         // Refresh Token 저장
         refreshTokenStore.save(

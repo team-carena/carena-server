@@ -14,6 +14,7 @@ public class MemberMapper {
                 .authType(memberEntity.getAuthType())
                 .authId(memberEntity.getAuthId())
                 .score(memberEntity.getScore())
+                .role(memberEntity.getRole())
                 .build();
     }
 
@@ -26,6 +27,7 @@ public class MemberMapper {
                 .authType(member.getAuthType())
                 .authId(member.getAuthId())
                 .score(member.getScore())
+                .role(member.getRole())
                 .build();
     }
 }

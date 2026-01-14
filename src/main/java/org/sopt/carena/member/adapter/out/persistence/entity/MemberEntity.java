@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Gender;
+import org.sopt.carena.member.domain.Role;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,9 +47,13 @@ public class MemberEntity {
     @Column(name = "score",nullable = false)
     private Long score;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
+
     @Builder
     private MemberEntity(Long id, String name, LocalDate birthdate, Gender gender,
-                         LocalDateTime createdAt, AuthType authType, String authId, Long score) {
+                         LocalDateTime createdAt, AuthType authType, String authId, Long score,Role role) {
         this.id = id;
         this.name = name;
         this.birthdate = birthdate;
@@ -57,5 +62,6 @@ public class MemberEntity {
         this.authType = authType;
         this.authId = authId;
         this.score = score;
+        this.role = role;
     }
 }
