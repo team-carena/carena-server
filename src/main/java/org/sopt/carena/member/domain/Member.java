@@ -7,6 +7,7 @@ import org.sopt.carena.member.exception.member.InvalidNameException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 
 @Getter
 public class Member {
@@ -18,10 +19,11 @@ public class Member {
     private AuthType authType;
     private String authId;
     private Long score;
+    private Role role;
 
     @Builder
     private Member(Long id, String name, LocalDate birthdate, Gender gender,
-                   LocalDateTime createdAt, AuthType authType, String authId, Long score) {
+                   LocalDateTime createdAt, AuthType authType, String authId, Long score,Role role) {
         this.id = id;
         this.name = name;
         this.birthdate = birthdate;
@@ -30,6 +32,7 @@ public class Member {
         this.authType = authType;
         this.authId = authId;
         this.score = score;
+        this.role = role;
     }
 
     public static Member create(String name, LocalDate birthdate, Gender gender, String authId, AuthType authType ) {
@@ -42,6 +45,7 @@ public class Member {
                 .authId(authId)
                 .authType(authType)
                 .score(0L)
+                .role(Role.ROLE_USER)
                 .createdAt(LocalDateTime.now())
                 .build();
     }
@@ -54,5 +58,9 @@ public class Member {
         if (year < 1960 || year > 2007) {
             throw new InvalidBirthdateException();
         }
+    }
+    //만나이 계산
+    public int getAge() {
+        return Period.between(this.birthdate, LocalDate.now()).getYears();
     }
 }

@@ -18,6 +18,11 @@ public class MemberPersistenceAdapter implements MemberPersistencePort {
     private final MemberJpaRepository memberJpaRepository;
 
     @Override
+    public Optional<Member> getMemberById(final Long id) {
+        return memberJpaRepository.findById(id).map(MemberMapper::toDomain);
+    }
+
+    @Override
     public Member save(final Member member) {
         MemberEntity entity = MemberMapper.toEntity(member);
         MemberEntity saved = memberJpaRepository.save(entity);

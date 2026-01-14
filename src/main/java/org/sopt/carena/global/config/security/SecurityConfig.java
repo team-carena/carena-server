@@ -1,6 +1,7 @@
 package org.sopt.carena.global.config.security;
 
 import lombok.RequiredArgsConstructor;
+import org.sopt.carena.global.config.security.util.AdminEndpoint;
 import org.sopt.carena.global.config.security.util.PublicEndpoint;
 import org.sopt.carena.member.adapter.out.oauth.OAuth2UserServiceAdapter;
 import org.springframework.context.annotation.Bean;
@@ -49,10 +50,15 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PublicEndpoint.getEndpoints()).permitAll()
-                        .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers(PublicEndpoint.getEndpoints()).permitAll();
+
+                    for (AdminEndpoint endpoint : AdminEndpoint.values()) {
+                        auth.requestMatchers(endpoint.getMethod(), endpoint.getPattern())
+                            .hasAnyAuthority("ROLE_ADMIN");
+                    }
+                    auth.anyRequest().authenticated();
+                 })
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo ->
                                 userInfo.oidcUserService(oAuth2UserServiceAdapter)

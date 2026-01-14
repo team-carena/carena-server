@@ -9,14 +9,20 @@ import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.sopt.carena.member.adapter.in.web.controller.util.CookieUtil;
 import org.sopt.carena.member.adapter.in.web.controller.util.HeaderUtil;
+import org.sopt.carena.member.adapter.in.web.dto.response.MemberInfoResponse;
+import org.sopt.carena.member.adapter.in.web.dto.response.MyPageResponse;
 import org.sopt.carena.member.adapter.in.web.dto.request.SignUpRequest;
 import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
 import org.sopt.carena.member.application.dto.command.SignUpCommand;
+import org.sopt.carena.member.application.dto.view.MyPageInfoView;
 import org.sopt.carena.member.application.dto.view.TokenGeneratedView;
 import org.sopt.carena.member.application.port.in.GenerateTokenUseCase;
 import org.sopt.carena.member.application.port.in.RefreshTokenUseCase;
 import org.sopt.carena.member.application.port.in.SignupUseCase;
+import org.sopt.carena.member.application.dto.view.MemberInfoView;
+import org.sopt.carena.member.application.port.in.GetMemberInfoUseCase;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -27,6 +33,7 @@ public class MemberController implements MemberApiDocs{
 
     private final SignupUseCase signupUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
+    private final GetMemberInfoUseCase getMemberInfoUseCase;
     private final GenerateTokenUseCase generateTokenUseCase;
 
     @PostMapping("/signup")
@@ -66,5 +73,27 @@ public class MemberController implements MemberApiDocs{
         CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
         return ResponseEntity.status(MemberSuccessCode.TOKEN_GENERATED.getStatus())
                 .body(ApiResponse.success(MemberSuccessCode.TOKEN_GENERATED));
+    }
+
+    @GetMapping("/my-page")
+    public ResponseEntity<SuccessResponse<MyPageResponse>> myPage(
+            @AuthenticationPrincipal Long memberId
+    ) {
+        log.info("memberId: {}", memberId);
+        MyPageInfoView memberInfo = getMemberInfoUseCase.getMyPageInfo(memberId);
+        MyPageResponse response = MyPageResponse.from(memberInfo);
+        return ResponseEntity.status(MemberSuccessCode.MEMBER_INFO.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.MEMBER_INFO, response));
+    }
+
+    @GetMapping("/my-info")
+    public ResponseEntity<SuccessResponse<MemberInfoResponse>> memberInfo(
+            @AuthenticationPrincipal Long memberId
+    ) {
+        log.info("memberId: {}", memberId);
+        MemberInfoView memberInfo = getMemberInfoUseCase.getMemberInfo(memberId);
+        MemberInfoResponse response = MemberInfoResponse.from(memberInfo);
+        return ResponseEntity.status(MemberSuccessCode.MEMBER_INFO.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.MEMBER_INFO, response));
     }
 }

@@ -11,10 +11,12 @@ import org.sopt.carena.global.api.response.FailureResponse;
 import org.sopt.carena.global.config.security.util.PublicEndpoint;
 import org.sopt.carena.member.application.service.util.JwtTokenParser;
 import org.sopt.carena.member.application.service.util.JwtTokenValidator;
+import org.sopt.carena.member.domain.Role;
 import org.sopt.carena.member.exception.code.MemberErrorCode;
 import org.sopt.carena.member.exception.jwt.InvalidTokenException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -22,7 +24,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
-import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -73,9 +75,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;  // 필터 체인 중단
         }
         Long memberId = jwtTokenParser.getMemberId(accessToken);
+        Role memberRole = jwtTokenParser.getRole(accessToken);
+
         UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(memberId, null, Collections.emptyList());
+                new UsernamePasswordAuthenticationToken(
+                        memberId,
+                        null,
+                        List.of(new SimpleGrantedAuthority(memberRole.name()))
+                );
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.debug("role- : {}", memberRole);
         log.debug("JWT 인증 성공 - MemberId: {}", memberId);
 
 

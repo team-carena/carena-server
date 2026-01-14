@@ -46,6 +46,11 @@ public class OAuth2LoginService implements OAuth2LoginUseCase {
 
         String oneTimeToken = UUID.randomUUID().toString();
         String authInfo = String.join("|", member.getAuthType().name(), member.getAuthId());
+        /*
+        String accessToken = jwtTokenGenerator.createAccessToken(member.getId(),member.getRole());
+        String refreshToken = jwtTokenGenerator.createRefreshToken(member.getId(),member.getRole());
+
+         */
 
         //OTT 저장
         joinTokenStore.save(
