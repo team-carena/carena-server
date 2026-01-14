@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.sopt.carena.member.exception.jwt.EmptyTokenException;
 import org.sopt.carena.member.exception.jwt.MalformedTokenException;
 
-// 헤더에서 엑세스 토큰을 추출하는 유ㅇ틸
+// 헤더에서 엑세스 토큰을 추출하는 유틸
 public class AccessTokenResolver {
 
     public static String resolve(HttpServletRequest request) {
