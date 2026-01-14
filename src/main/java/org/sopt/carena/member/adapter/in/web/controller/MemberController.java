@@ -16,6 +16,8 @@ import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
 import org.sopt.carena.member.application.dto.command.SignUpCommand;
 import org.sopt.carena.member.application.dto.view.MyPageInfoView;
 import org.sopt.carena.member.application.dto.view.TokenRefreshView;
+import org.sopt.carena.member.application.dto.view.TokenGeneratedView;
+import org.sopt.carena.member.application.port.in.GenerateTokenUseCase;
 import org.sopt.carena.member.application.port.in.RefreshTokenUseCase;
 import org.sopt.carena.member.application.port.in.SignupUseCase;
 import org.sopt.carena.member.application.dto.view.MemberInfoView;
@@ -33,6 +35,7 @@ public class MemberController implements MemberApiDocs{
     private final SignupUseCase signupUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
     private final GetMemberInfoUseCase getMemberInfoUseCase;
+    private final GenerateTokenUseCase generateTokenUseCase;
 
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<Void>> signup(
@@ -54,11 +57,23 @@ public class MemberController implements MemberApiDocs{
             @CookieValue(name = "refreshToken") final String refreshToken,
             HttpServletResponse response
     ) {
-        TokenRefreshView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
+        TokenGeneratedView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
         HeaderUtil.setAuthorizationHeader(response, result.accessToken());
         CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
         return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())
                         .body(ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED));
+    }
+
+    @PostMapping("/tokens")
+    public ResponseEntity<SuccessResponse<Void>> afterLogin(
+            @CookieValue(name="oneTimeToken") final String oneTimeToken,
+            HttpServletResponse response
+    ) {
+        TokenGeneratedView result=generateTokenUseCase.generateToken(oneTimeToken);
+        HeaderUtil.setAuthorizationHeader(response, result.accessToken());
+        CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
+        return ResponseEntity.status(MemberSuccessCode.TOKEN_GENERATED.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.TOKEN_GENERATED));
     }
 
     @GetMapping("/my-page")

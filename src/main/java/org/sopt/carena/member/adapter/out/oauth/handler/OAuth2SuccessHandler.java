@@ -70,9 +70,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             LoginSuccessView loginResult
     ) throws IOException {
         log.info("기존 회원 - 메인 페이지로 리다이렉트");
-        // JWT 쿠키에 저장
-        response.setHeader("Authorization", "Bearer " + loginResult.accessToken());
-        addCookie(response, "refreshToken", loginResult.refreshToken(), 1209600);
+        //response.setHeader("Authorization", "Bearer " + loginResult.accessToken());
+        addCookie(response, "oneTimeToken", loginResult.oneTimeToken(), 1209600);
         // 메인 페이지로 리다이렉트
         String redirectUrl = frontendUrl + "/home";
         response.sendRedirect(redirectUrl);

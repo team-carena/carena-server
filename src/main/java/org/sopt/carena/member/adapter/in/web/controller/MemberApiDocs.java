@@ -31,4 +31,10 @@ public interface MemberApiDocs {
 
     @Operation(summary = "멤버 상세정보",description = "메인페이지에서 멤버 상세 정보를 반환합니다.")
     ResponseEntity<SuccessResponse<MemberInfoResponse>> memberInfo(@AuthenticationPrincipal Long memberId);
+
+    @Operation(summary = "토큰 발급", description = "로그인 성공 후 해당 api를 이용하여 엑세스 및 리프레시 토큰을 발급받습니다.")
+    ResponseEntity<SuccessResponse<Void>> afterLogin(
+            @CookieValue(name="oneTimeToken") final String oneTimeToken,
+            HttpServletResponse response);
+
 }
