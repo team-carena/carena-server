@@ -8,7 +8,7 @@ public record MyPageResponse(
         String name,
         LocalDate birthdate
 ) {
-    public static MyPageResponse from(MyPageInfoView view) {
+    public static MyPageResponse from(final MyPageInfoView view) {
         return new MyPageResponse(
                 view.name(),
                 view.birthdate()

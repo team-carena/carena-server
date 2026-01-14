@@ -11,7 +11,7 @@ public record MemberInfoResponse(
         Gender gender,
         Long score
 ) {
-    public static MemberInfoResponse from(MemberInfoView view) {
+    public static MemberInfoResponse from(final MemberInfoView view) {
         return new MemberInfoResponse(
                 view.name(),
                 view.age(),
