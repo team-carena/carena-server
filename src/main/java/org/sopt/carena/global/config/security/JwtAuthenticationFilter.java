@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.global.api.response.FailureResponse;
 import org.sopt.carena.global.config.security.util.PublicEndpoint;
+import org.sopt.carena.global.config.security.util.AccessTokenResolver;
+import org.sopt.carena.member.application.port.out.AccessTokenBlacklistStore;
 import org.sopt.carena.member.application.service.util.JwtTokenParser;
 import org.sopt.carena.member.application.service.util.JwtTokenValidator;
 import org.sopt.carena.member.domain.Role;
@@ -34,14 +36,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenParser jwtTokenParser;
     private final ObjectMapper objectMapper;
     private final HandlerExceptionResolver handlerExceptionResolver;
+    private final AccessTokenBlacklistStore accessTokenBlacklistStore;
 
     public JwtAuthenticationFilter(JwtTokenValidator jwtTokenValidator,
                                    JwtTokenParser jwtTokenParser, ObjectMapper objectMapper,
-                                   @Qualifier("handlerExceptionResolver") HandlerExceptionResolver handlerExceptionResolver) {
+                                   @Qualifier("handlerExceptionResolver") HandlerExceptionResolver handlerExceptionResolver,
+                                   AccessTokenBlacklistStore accessTokenBlacklistStore) {
         this.jwtTokenValidator = jwtTokenValidator;
         this.jwtTokenParser = jwtTokenParser;
         this.objectMapper = objectMapper;
         this.handlerExceptionResolver = handlerExceptionResolver;
+        this.accessTokenBlacklistStore = accessTokenBlacklistStore;
     }
 
     @Override
@@ -61,11 +66,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String accessToken = extractTokenFromHeader(request);
+        String accessToken = AccessTokenResolver.resolve(request);
 
-        if (accessToken == null || accessToken.isEmpty()) {
+        if (accessToken.isEmpty()) {
             log.debug("인증이 필요한 경로에 토큰이 없습니다 - URI: {}", uri);
             sendErrorResponse(response, MemberErrorCode.EMPTY_TOKEN);
+            return;
+        }
+
+        if (accessTokenBlacklistStore.isBlacklisted(accessToken)) {
+            log.warn("블랙리스트 처리된 액세스 토큰");
+            handlerExceptionResolver.resolveException(
+                    request,
+                    response,
+                    null,
+                    new InvalidTokenException()
+            );
             return;
         }
 
@@ -105,15 +121,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 log.debug("쿠키에서 토큰 추출 성공");
                 return cookie.getValue();
             }
-        }
-        return null;
-    }
-
-    private String extractTokenFromHeader(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
         }
         return null;
     }
