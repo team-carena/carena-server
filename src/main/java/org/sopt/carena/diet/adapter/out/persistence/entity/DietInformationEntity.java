@@ -23,9 +23,6 @@ public class DietInformationEntity {
     @Tsid
     private Long id;
 
-    @Column(name = "document_id", unique = true)
-    private String documentId;
-
     @Column(nullable = false)
     private String title;
 
@@ -43,14 +40,9 @@ public class DietInformationEntity {
             String reference,
             String referenceUrl
     ) {
-        this.documentId = generateDocumentId();
         this.title = title;
         this.reference = reference;
         this.referenceUrl = referenceUrl;
-    }
-
-    private String generateDocumentId() {
-        return "DOC-" + System.currentTimeMillis();
     }
 }
 

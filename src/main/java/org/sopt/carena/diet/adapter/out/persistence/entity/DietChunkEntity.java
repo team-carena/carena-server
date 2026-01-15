@@ -23,15 +23,9 @@ public class DietChunkEntity {
     @Tsid
     private Long id;
 
-    @Column(name = "chunk_id", unique = true,nullable = false)
-    private String chunkId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diet_information_id", nullable = false)
     private DietInformationEntity document;
-
-    @Column(name = "document_id", nullable = false)
-    private String documentId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -42,7 +36,6 @@ public class DietChunkEntity {
 
     @Column(columnDefinition = "text")
     private String embeddingText;
-
 
     @Column(name= "embedding" , columnDefinition = "vector(1536)")
     @Type(FloatArrayType.class)
@@ -62,21 +55,11 @@ public class DietChunkEntity {
             float[] embedding,
             int chunkOrder
     ) {
-        this.chunkId = generateChunkId(document.getDocumentId(),chunkOrder);
         this.document = document;
-        this.documentId = document.getDocumentId();
         this.section = section;
         this.content = content;
         this.embeddingText = embeddingText;
         this.embedding = embedding;
         this.chunkOrder = chunkOrder;
-    }
-
-    private String generateChunkId(String documentId, int chunkOrder) {
-        return String.format("CHUNK-%s-%d-%s",
-                documentId,
-                chunkOrder,
-                UUID.randomUUID().toString().substring(0, 8)
-        );
     }
 }
