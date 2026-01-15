@@ -1,0 +1,16 @@
+package org.sopt.carena.diet.adapter.in.web.code;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.sopt.carena.global.api.code.SuccessResultCode;
+import org.springframework.http.HttpStatus;
+
+@Getter
+@RequiredArgsConstructor
+public enum DietSuccessCode implements SuccessResultCode {
+
+    DIET_CREATED(HttpStatus.CREATED,"식단 정보가 생성되었습니다.");
+
+    private final HttpStatus status;
+    private final String message;
+}

@@ -10,7 +10,8 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum AdminEndpoint {
-    CREATE_HEALTH_TIP("/api/v1/health-tip",HttpMethod.POST);
+    CREATE_HEALTH_TIP("/api/v1/health-tip",HttpMethod.POST),
+    CREATE_DIET("/api/v1/diet",HttpMethod.POST);
 
     private final String pattern;
     private final HttpMethod method;
