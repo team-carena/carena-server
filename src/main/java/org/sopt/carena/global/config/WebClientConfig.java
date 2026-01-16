@@ -23,14 +23,14 @@ public class WebClientConfig {
 						ConnectionProvider.builder("external-api-connection-provider")
 								.maxConnections(20)
 								.maxIdleTime(Duration.ofMillis(5000))
-								.maxLifeTime(Duration.ofMillis(5000))
+								.maxLifeTime(Duration.ofSeconds(5))
 								.build()
 				)
 				.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 500)
-				.responseTimeout(Duration.ofMillis(30000))
+				.responseTimeout(Duration.ofMillis(10000))
 				.doOnConnected(conn -> conn
-						.addHandlerLast(new ReadTimeoutHandler(5000, TimeUnit.MILLISECONDS))
-						.addHandlerLast(new WriteTimeoutHandler(5000, TimeUnit.MILLISECONDS))
+						.addHandlerLast(new ReadTimeoutHandler(10000, TimeUnit.MILLISECONDS))
+						.addHandlerLast(new WriteTimeoutHandler(10000, TimeUnit.MILLISECONDS))
 				);
 
 		return WebClient.builder()
