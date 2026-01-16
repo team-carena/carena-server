@@ -1,6 +1,7 @@
 package org.sopt.carena.diet.application.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
 import org.sopt.carena.diet.application.port.out.EmbeddingClient;
@@ -11,16 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static reactor.netty.http.HttpConnectionLiveness.log;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RegisterDietDocumentService
         implements RegisterDietDocumentUseCase {
 
     private final DietEmbeddingTextService textGenerator;
-    private final DietPersistencePort persistencePort;
+    private final DietPersistencePort dietPersistencePort;
     private final EmbeddingClient embeddingClient;  // 배치용
+    private final DietContentExtractor contentExtractor;
 
     @Override
     @Transactional
@@ -52,10 +53,16 @@ public class RegisterDietDocumentService
                     embeddings.get(i)
             );
         }
-        log.info("Embedding generated: " + embeddings);
-        persistencePort.save(document, chunks);
 
-        log.info("식단 정보 등록 성공t: {} with {} chunks",
-                documentTitle, chunks.size());
+        log.info("Embedding 생성: " + embeddings);
+        String content = contentExtractor.extractContent(chunks);
+        var recommends = contentExtractor.extractRecommends(chunks);
+        List<String> cautionary = contentExtractor.extractCautionary(chunks);
+        log.info("Extracted - Content length: {}, Recommends: {}, Cautionary: {}",
+                content.length(), recommends.size(), cautionary.size());
+
+        dietPersistencePort.save(document, chunks,content, recommends, cautionary);
+
+        log.info("식단 정보 등록 성공t: {} with ", documentTitle);
     }
 }

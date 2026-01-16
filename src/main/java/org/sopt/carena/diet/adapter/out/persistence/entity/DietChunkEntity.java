@@ -11,7 +11,6 @@ import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "diet_chunk")
