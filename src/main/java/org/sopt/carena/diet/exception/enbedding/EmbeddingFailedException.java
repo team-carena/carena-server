@@ -3,9 +3,9 @@ package org.sopt.carena.diet.exception.enbedding;
 import org.sopt.carena.diet.exception.code.DietErrorCode;
 import org.sopt.carena.global.exception.BaseException;
 
-public class EnbeddingFailedException extends BaseException {
+public class EmbeddingFailedException extends BaseException {
 
-    public EnbeddingFailedException() {
+    public EmbeddingFailedException() {
         super(DietErrorCode.EMBEDDING_FAILED);
     }
 }

@@ -1,21 +1,38 @@
 package org.sopt.carena.diet.application.service;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.diet.application.port.in.EmbeddingTextGenerateUseCase;
 import org.sopt.carena.diet.domain.DietChunk;
+import org.sopt.carena.diet.exception.enbedding.CreateEmbeddingTextFailedException;
+import org.sopt.carena.diet.exception.enbedding.EmbeddingTextNullException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
+@Slf4j
 public class DietEmbeddingTextService implements EmbeddingTextGenerateUseCase {
 
     @Override
     public String generate(DietChunk chunk,String documentTitle) {
 
-        StringBuilder sb = new StringBuilder();
-        // 섹션별 자연어 변환
-        sb.append(sectionSentence(chunk));
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append(sectionSentence(chunk));
 
-        return normalize(sb.toString());
+            String result = normalize(sb.toString());
+
+            if (!StringUtils.hasText(result)) {
+                log.error("임베딩 텍스트 생성 결과가 비어있습니다. documentTitle: {}, section: {}",
+                        documentTitle, chunk.getSection());
+                throw new EmbeddingTextNullException();
+            }
+            return result;
+
+        } catch (Exception e) {
+            log.error("임베딩 텍스트 생성 중 예외 발생. {}",e.getMessage());
+            throw new CreateEmbeddingTextFailedException();
+        }
     }
 
     private String sectionSentence(DietChunk chunk) {
