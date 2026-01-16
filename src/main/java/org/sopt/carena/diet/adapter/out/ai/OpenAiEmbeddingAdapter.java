@@ -3,6 +3,7 @@ package org.sopt.carena.diet.adapter.out.ai;
 import lombok.RequiredArgsConstructor;
 import org.sopt.carena.diet.application.port.out.EmbeddingGenerator;
 import org.sopt.carena.diet.application.port.out.EmbeddingClient;
+import org.sopt.carena.diet.exception.embedding.EmbeddingResultNullException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,9 +14,11 @@ public class OpenAiEmbeddingAdapter implements EmbeddingGenerator {
 
     @Override
     public float[] embed(final String text) {
-        return embeddingClient.embed(text)
-                .getResults()
-                .get(0)
-                .getOutput();
+        var response = embeddingClient.embed(text);
+        if (response == null  || response.getResults().isEmpty()
+                || response.getResults().get(0).getOutput() == null) {
+            throw new EmbeddingResultNullException();
+        }
+        return response.getResults().get(0).getOutput();
     }
 }

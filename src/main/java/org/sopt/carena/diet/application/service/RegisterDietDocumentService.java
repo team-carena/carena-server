@@ -69,7 +69,7 @@ public class RegisterDietDocumentService
 
            dietPersistencePort.save(document, chunks, content, recommends, cautionary);
 
-           log.info("식단 정보 등록 성공t: {} with ", documentTitle);
+           log.info("식단 정보 등록 성공: {} with ", documentTitle);
        } catch (Exception e) {
            throw new EmbeddingFailedException();
        }

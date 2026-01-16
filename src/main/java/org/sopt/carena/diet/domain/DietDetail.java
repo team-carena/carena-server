@@ -25,8 +25,8 @@ public class DietDetail {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.recommends = new ArrayList<>(recommends);
-        this.cautionary = new ArrayList<>(cautionary);
+        this.recommends = (recommends == null) ? new ArrayList<>() : new ArrayList<>(recommends);
+        this.cautionary = (cautionary == null) ? new ArrayList<>() : new ArrayList<>(cautionary);
         this.reference = reference;
     }
 }
