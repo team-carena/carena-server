@@ -1,4 +1,4 @@
-package org.sopt.carena.diet.exception.enbedding;
+package org.sopt.carena.diet.exception.embedding;
 
 import org.sopt.carena.diet.exception.code.DietErrorCode;
 import org.sopt.carena.global.exception.BaseException;

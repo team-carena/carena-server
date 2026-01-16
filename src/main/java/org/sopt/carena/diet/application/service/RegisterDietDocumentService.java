@@ -9,7 +9,7 @@ import org.sopt.carena.diet.application.port.out.EmbeddingClient;
 import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
 import org.sopt.carena.diet.domain.DietSection;
-import org.sopt.carena.diet.exception.enbedding.EmbeddingFailedException;
+import org.sopt.carena.diet.exception.embedding.EmbeddingFailedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

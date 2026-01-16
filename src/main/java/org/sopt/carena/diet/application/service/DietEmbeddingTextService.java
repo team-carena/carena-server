@@ -4,8 +4,8 @@ package org.sopt.carena.diet.application.service;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.diet.application.port.in.EmbeddingTextGenerateUseCase;
 import org.sopt.carena.diet.domain.DietChunk;
-import org.sopt.carena.diet.exception.enbedding.CreateEmbeddingTextFailedException;
-import org.sopt.carena.diet.exception.enbedding.EmbeddingTextNullException;
+import org.sopt.carena.diet.exception.embedding.CreateEmbeddingTextFailedException;
+import org.sopt.carena.diet.exception.embedding.EmbeddingTextNullException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
