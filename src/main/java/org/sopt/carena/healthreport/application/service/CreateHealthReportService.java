@@ -29,5 +29,14 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 		HealthReport healthReport = HealthReport.create(commend, member.getGender());
 
 		healthReportPersistencePort.saveHealthReport(healthReport);
+
+		String summary = healthReport.getStatusCarriers().stream()
+				.filter(carrier -> carrier.getRiskLevel() != RiskLevel.NONE)
+				.map(HealthStatusCarrier::getDescription)
+				.collect(Collectors.collectingAndThen(
+						Collectors.joining(", "),
+						s -> s.isEmpty() ? "정상" : s
+				));
+
 	}
 }
