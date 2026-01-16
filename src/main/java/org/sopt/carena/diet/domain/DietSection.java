@@ -8,7 +8,7 @@ public enum DietSection {
     PRACTICE("식사요법의 실제"),
     RECOMMENDED_FOOD("권장 식품"),
     CAUTION_FOOD("주의 식품"),
-    EXTRA_CAUTHION("그 외 주의사항");
+    EXTRA_CAUTION("그 외 주의사항");
 
     private final String description;
 

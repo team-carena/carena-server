@@ -29,6 +29,8 @@ public class DietEmbeddingTextService implements EmbeddingTextGenerateUseCase {
             }
             return result;
 
+        } catch (EmbeddingTextNullException e) {
+            throw e;
         } catch (Exception e) {
             log.error("임베딩 텍스트 생성 중 예외 발생. {}",e.getMessage());
             throw new CreateEmbeddingTextFailedException();
@@ -45,8 +47,8 @@ public class DietEmbeddingTextService implements EmbeddingTextGenerateUseCase {
                     chunk.getContent();
             case PRACTICE ->
                     "식사요법의 실제 내용은 다음과 같습니다. " + chunk.getContent();
-            case EXTRA_CAUTHION ->
-                "그외 주의사항은" + chunk.getContent() ;
+            case EXTRA_CAUTION ->
+                "그외 주의사항은 " + chunk.getContent() ;
         };
     }
 
