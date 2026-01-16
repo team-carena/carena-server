@@ -8,6 +8,7 @@ public class HealthReportMapper {
 	public static HealthReport toDomain(final HealthReportEntity entity){
 		return HealthReport.builder()
 				.id(entity.getId())
+				.memberId(entity.getMemberEntity().getId())
 				.gender(entity.getGender())
 				.healthCheckDate(entity.getHealthCheckDate())
 				.institutionName(entity.getInstitutionName())
