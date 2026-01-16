@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 @Tag(name = "식단 관리",description = "건강검진 결과에 따른 식단 추천을 위한 API")
 public interface DietApiDocs {
     @Operation(summary = "식단 정보 생성 " ,description = "[ADMIN] 식단 정보 생성을 위한 어드민 기능입니다.")
-    ResponseEntity<SuccessResponse<Void>> createDiet(Long memberId, AdminDietRequest request);
+    ResponseEntity<SuccessResponse<Void>> createDiet(AdminDietRequest request);
 
     @Operation(summary = "식단 상세 조회" , description = "해당 식단의 제목, 내용, 추천식품, 비추천식품을 반환해줍니다.")
     ResponseEntity<SuccessResponse<DietDetailResponse>> dietDetail(Long id);

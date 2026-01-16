@@ -31,7 +31,6 @@ public class DietController implements DietApiDocs {
 
     @PostMapping
     public ResponseEntity<SuccessResponse<Void>> createDiet(
-            @AuthenticationPrincipal Long memberId,
             @RequestBody @Valid final AdminDietRequest request
     ) {
         CreateDietCommand command = dietcommandMapper.toCommand(request);
