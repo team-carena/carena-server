@@ -1,6 +1,6 @@
 package org.sopt.carena.healthreport.adapter.out.web.ocr;
 
-import org.sopt.carena.healthreport.adapter.out.web.ocr.response.OcrResponse;
+import org.sopt.carena.healthreport.domain.value.ocr.OcrResponse;
 import org.sopt.carena.healthreport.application.dto.command.ExtractTextCommand;
 import org.sopt.carena.healthreport.application.port.out.OcrPort;
 import org.springframework.stereotype.Component;

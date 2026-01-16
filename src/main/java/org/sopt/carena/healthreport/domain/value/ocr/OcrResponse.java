@@ -1,4 +1,4 @@
-package org.sopt.carena.healthreport.adapter.out.web.ocr.response;
+package org.sopt.carena.healthreport.domain.value.ocr;
 
 import java.util.List;
 
