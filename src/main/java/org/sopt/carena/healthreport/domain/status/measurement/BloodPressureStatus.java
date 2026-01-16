@@ -24,9 +24,18 @@ public enum BloodPressureStatus implements HealthStatusCarrier {
 	 * - 정상: 그 외
 	 */
 	public static BloodPressureStatus of(final Integer systolicBp, final Integer diastolicBp) {
-		if (systolicBp == null || diastolicBp == null) {
+		if (systolicBp == null && diastolicBp == null) {
 			return NONE;
 		}
+
+		if(diastolicBp == null) {
+			return ofSystolicBp(systolicBp);
+		}
+
+		if(systolicBp == null) {
+			return ofDiastolicBp(diastolicBp);
+		}
+
 		if (systolicBp >= 140 || diastolicBp >= 90) {
 			return BloodPressureStatus.HYPERTENSION;
 		}
