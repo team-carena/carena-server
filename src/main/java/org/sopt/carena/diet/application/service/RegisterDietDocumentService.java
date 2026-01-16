@@ -2,11 +2,13 @@ package org.sopt.carena.diet.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.carena.diet.application.dto.command.CreateDietCommand;
 import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
 import org.sopt.carena.diet.application.port.out.EmbeddingClient;
 import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
+import org.sopt.carena.diet.domain.DietSection;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +27,12 @@ public class RegisterDietDocumentService
 
     @Override
     @Transactional
-    public void register(DietInformation document) {
+    public void register(CreateDietCommand command) {
 
-        String documentTitle = document.getTitle();
-        List<DietChunk> chunks = document.getChunks();
+       DietInformation document = toDomain(command);
+       List<DietChunk> chunks = document.getChunks();
+
+        String documentTitle = command.getTitle();
 
         log.info("식단 정보를 등록합니다. " + documentTitle);
 
@@ -64,5 +68,26 @@ public class RegisterDietDocumentService
         dietPersistencePort.save(document, chunks,content, recommends, cautionary);
 
         log.info("식단 정보 등록 성공t: {} with ", documentTitle);
+    }
+
+    private DietInformation toDomain(CreateDietCommand command) {
+        List<DietChunk> chunks = command.getChunks().stream()
+                .map(this::toDomain)
+                .toList();
+
+        return DietInformation.create(
+                command.getTitle(),
+                command.getReference(),
+                command.getReferenceUrl(),
+                chunks
+        );
+    }
+
+    private DietChunk toDomain(CreateDietCommand.DietChunkCommand chunkCommand) {
+        return new DietChunk(
+                DietSection.from(chunkCommand.getSection()),
+                chunkCommand.getContent(),
+                chunkCommand.getChunkOrder()
+        );
     }
 }

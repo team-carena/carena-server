@@ -5,9 +5,7 @@ import lombok.Getter;
 @Getter
 public class DietChunk {
 
-    private String chunkId;
-    //private final String documentId;
-    //private final String documentTitle;
+    private String id;
     private final DietSection section;
     private final String content;
     private final int chunkOrder;
@@ -16,16 +14,10 @@ public class DietChunk {
     private float[] embedding;
 
     public DietChunk(
-            //String chunkId,
-            //String documentId,
-            //String documentTitle,
             DietSection section,
             String content,
             int chunkOrder
     ) {
-        //this.chunkId = chunkId;
-        //this.documentId = documentId;
-        //this.documentTitle = documentTitle;
         this.section = section;
         this.content = content;
         this.chunkOrder = chunkOrder;
@@ -34,13 +26,4 @@ public class DietChunk {
         this.embeddingText = embeddingText;
         this.embedding = embedding;
     }
-
-    public void assignChunkId(String chunkId) {
-        this.chunkId = chunkId;
-    }
-/*
-    public DietSection section() { return section; }
-    public String content() { return content; }
-
- */
 }

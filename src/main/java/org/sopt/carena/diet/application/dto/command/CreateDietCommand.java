@@ -9,7 +9,6 @@ import java.util.List;
 @Builder
 public class CreateDietCommand {
     private final String title;
-    private final String content;
     private final String reference;
     private final String referenceUrl;
     private final List<DietChunkCommand> chunks;

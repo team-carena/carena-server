@@ -24,6 +24,14 @@ public class DietInformation {
         this.referenceUrl = referenceUrl;
         this.chunks = new ArrayList<>(chunks);
     }
+    public static DietInformation create(
+            String title,
+            String reference,
+            String referenceUrl,
+            List<DietChunk> chunks
+    ) {
+        return new DietInformation(title, reference, referenceUrl, chunks);
+    }
 
     public String title() {
         return title;
