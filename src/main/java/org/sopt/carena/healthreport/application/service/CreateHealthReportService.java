@@ -2,7 +2,7 @@ package org.sopt.carena.healthreport.application.service;
 
 import java.util.stream.Collectors;
 
-import org.sopt.carena.healthreport.application.dto.commend.CreateHealthReportCommand;
+import org.sopt.carena.healthreport.application.dto.command.CreateHealthReportCommand;
 import org.sopt.carena.healthreport.application.port.in.CreateHealthReportUseCase;
 import org.sopt.carena.healthreport.application.port.out.HealthReportPersistencePort;
 import org.sopt.carena.healthreport.domain.HealthReport;

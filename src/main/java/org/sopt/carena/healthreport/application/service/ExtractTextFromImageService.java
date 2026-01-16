@@ -1,6 +1,6 @@
 package org.sopt.carena.healthreport.application.service;
 
-import org.sopt.carena.healthreport.application.dto.commend.ExtractTextCommand;
+import org.sopt.carena.healthreport.application.dto.command.ExtractTextCommand;
 import org.sopt.carena.healthreport.application.dto.view.ExtractedTextView;
 import org.sopt.carena.healthreport.application.port.in.ExtractTextFromImageUseCase;
 import org.sopt.carena.healthreport.application.port.out.OcrPort;

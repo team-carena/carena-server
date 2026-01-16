@@ -1,4 +1,4 @@
-package org.sopt.carena.healthreport.application.dto.commend;
+package org.sopt.carena.healthreport.application.dto.command;
 
 import java.time.LocalDate;
 

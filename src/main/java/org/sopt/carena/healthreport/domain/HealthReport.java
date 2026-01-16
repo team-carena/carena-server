@@ -3,7 +3,7 @@ package org.sopt.carena.healthreport.domain;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.sopt.carena.healthreport.application.dto.commend.CreateHealthReportCommand;
+import org.sopt.carena.healthreport.application.dto.command.CreateHealthReportCommand;
 import org.sopt.carena.healthreport.domain.status.HealthStatusCarrier;
 import org.sopt.carena.healthreport.domain.value.liver.Alt;
 import org.sopt.carena.healthreport.domain.value.liver.Ast;
