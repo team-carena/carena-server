@@ -21,7 +21,7 @@ public class DietDetailPersistenceAdapter implements LoadDietDetailPort {
                 .map(this::toDomain);
     }
 
-    private DietDetail toDomain(DietInformationEntity entity) {
+    private DietDetail toDomain(final DietInformationEntity entity) {
 
         List<String> recommends = entity.getRecommends() != null
                 ? entity.getRecommends()

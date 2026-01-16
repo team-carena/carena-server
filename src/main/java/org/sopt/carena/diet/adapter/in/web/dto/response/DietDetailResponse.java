@@ -12,7 +12,7 @@ public record DietDetailResponse(
         List<String> cautionary,
         String reference
 ) {
-    public static DietDetailResponse from(DietDetail dietDetail) {
+    public static DietDetailResponse from(final DietDetail dietDetail) {
 
         return new DietDetailResponse(
                 dietDetail.getId(),

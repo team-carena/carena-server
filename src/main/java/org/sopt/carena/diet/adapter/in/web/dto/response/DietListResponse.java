@@ -9,7 +9,7 @@ public record DietListResponse(
         List<DietItemResponse> result,
         boolean hasNext
 ) {
-    public static DietListResponse from(Slice<DietSummary> dietSlice) {
+    public static DietListResponse from(final Slice<DietSummary> dietSlice) {
         List<DietItemResponse> items = dietSlice.getContent().stream()
                 .map(DietItemResponse::from)
                 .toList();

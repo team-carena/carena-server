@@ -15,7 +15,7 @@ public class DietListPersistenceAdapter implements LoadDietListPort {
     private final DietInformationJpaRepository repository;
 
     @Override
-    public Slice<DietSummary> loadDietList(Pageable pageable) {
+    public Slice<DietSummary> loadDietList(final Pageable pageable) {
         return repository.findAllByOrderByIdDesc(pageable)
                 .map(entity -> new DietSummary(
                         entity.getId(),

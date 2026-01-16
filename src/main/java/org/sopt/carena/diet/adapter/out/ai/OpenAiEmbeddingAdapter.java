@@ -12,7 +12,7 @@ public class OpenAiEmbeddingAdapter implements EmbeddingGenerator {
     private final EmbeddingClient embeddingClient;
 
     @Override
-    public float[] embed(String text) {
+    public float[] embed(final String text) {
         return embeddingClient.embed(text)
                 .getResults()
                 .get(0)

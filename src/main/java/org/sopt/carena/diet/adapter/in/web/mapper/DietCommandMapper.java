@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class DietCommandMapper {
 
     //Request DTO → Command 변환
-    public CreateDietCommand toCommand(AdminDietRequest request) {
+    public CreateDietCommand toCommand(final AdminDietRequest request) {
         return CreateDietCommand.builder()
                 .title(request.title())
                 .reference(request.reference())

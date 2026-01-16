@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 public class DietEmbeddingTextService implements EmbeddingTextGenerateUseCase {
 
     @Override
-    public String generate(DietChunk chunk,String documentTitle) {
+    public String generate(final DietChunk chunk,final String documentTitle) {
 
         try {
             StringBuilder sb = new StringBuilder();
@@ -35,7 +35,7 @@ public class DietEmbeddingTextService implements EmbeddingTextGenerateUseCase {
         }
     }
 
-    private String sectionSentence(DietChunk chunk) {
+    private String sectionSentence(final DietChunk chunk) {
         return switch (chunk.getSection()) {
             case RECOMMENDED_FOOD ->
                     "권장되는 음식으로는 " + chunk.getContent() + " 이 포함됩니다.";
@@ -50,7 +50,7 @@ public class DietEmbeddingTextService implements EmbeddingTextGenerateUseCase {
         };
     }
 
-    private String normalize(String text) {
+    private String normalize(final String text) {
         return text.replaceAll("\\s+", " ").trim();
     }
 }

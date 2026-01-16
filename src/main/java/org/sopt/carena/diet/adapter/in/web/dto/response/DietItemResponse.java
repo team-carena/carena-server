@@ -6,7 +6,7 @@ public record DietItemResponse(
         Long id,
         String title
 ) {
-    public static DietItemResponse from(DietSummary summary) {
+    public static DietItemResponse from(final DietSummary summary) {
         return new DietItemResponse(
                 summary.getId(),
                 summary.getTitle()

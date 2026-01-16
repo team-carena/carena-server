@@ -15,12 +15,12 @@ public class SpringAiEmbeddingClient implements EmbeddingClient {
     private final EmbeddingModel embeddingModel;
 
     @Override
-    public EmbeddingResponse embed(String text) {
+    public EmbeddingResponse embed(final String text) {
         return embeddingModel.embedForResponse(List.of(text));
     }
 
     @Override
-    public EmbeddingResponse embedBatch(List<String> texts) {
+    public EmbeddingResponse embedBatch(final List<String> texts) {
         return embeddingModel.embedForResponse(texts);
     }
 }

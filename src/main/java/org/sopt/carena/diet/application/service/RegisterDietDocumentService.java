@@ -28,7 +28,7 @@ public class RegisterDietDocumentService
 
     @Override
     @Transactional
-    public void register(CreateDietCommand command) {
+    public void register(final CreateDietCommand command) {
 
        try {
            DietInformation document = toDomain(command);
@@ -75,7 +75,7 @@ public class RegisterDietDocumentService
        }
     }
 
-    private DietInformation toDomain(CreateDietCommand command) {
+    private DietInformation toDomain(final CreateDietCommand command) {
         List<DietChunk> chunks = command.getChunks().stream()
                 .map(this::toDomain)
                 .toList();
@@ -88,7 +88,7 @@ public class RegisterDietDocumentService
         );
     }
 
-    private DietChunk toDomain(CreateDietCommand.DietChunkCommand chunkCommand) {
+    private DietChunk toDomain(final CreateDietCommand.DietChunkCommand chunkCommand) {
         return new DietChunk(
                 DietSection.from(chunkCommand.getSection()),
                 chunkCommand.getContent(),

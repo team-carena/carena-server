@@ -20,10 +20,10 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
     private final DietChunkJpaRepository chunkRepository;
 
     @Override
-    public void save(DietInformation info, List<DietChunk> chunks,
-                     String content,
-                     List<String> recommends,
-                     List<String> cautionary) {
+    public void save(final DietInformation info, final List<DietChunk> chunks,
+                     final String content,
+                     final List<String> recommends,
+                     final List<String> cautionary) {
 
         DietInformationEntity infoEntity = new DietInformationEntity(
                 info.getTitle(),

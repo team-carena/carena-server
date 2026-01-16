@@ -16,7 +16,7 @@ public class DietDetailService implements GetDietDetailUseCase {
     private final LoadDietDetailPort loadDietDetailPort;
 
     @Override
-    public DietDetail getDietDetail(Long dietId) {
+    public DietDetail getDietDetail(final Long dietId) {
         return loadDietDetailPort.loadById(dietId)
                 .orElseThrow(DietNotFoundException::new);
     }

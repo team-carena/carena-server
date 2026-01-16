@@ -20,7 +20,7 @@ public class DietListService implements GetDietListUseCase {
     private final LoadDietListPort loadDietListPort;
 
     @Override
-    public Slice<DietSummary> getDietList(int page) {
+    public Slice<DietSummary> getDietList(final int page) {
         Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
         return loadDietListPort.loadDietList(pageable);
     }

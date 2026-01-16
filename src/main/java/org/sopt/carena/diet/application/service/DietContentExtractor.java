@@ -14,7 +14,7 @@ public class DietContentExtractor {
     /**
      * 청크에서 본문(content) 추출
      */
-    public String extractContent(List<DietChunk> chunks) {
+    public String extractContent(final List<DietChunk> chunks) {
         return chunks.stream()
                 .filter(chunk -> chunk.getSection() == DietSection.NECESSITY)
                 .map(DietChunk::getContent)
@@ -24,7 +24,7 @@ public class DietContentExtractor {
     /**
      * 청크에서 추천 식단 추출
      */
-    public List<String> extractRecommends(List<DietChunk> chunks) {
+    public List<String> extractRecommends(final List<DietChunk> chunks) {
 
         return chunks.stream()
                 .filter(chunk -> chunk.getSection() == DietSection.RECOMMENDED_FOOD)
@@ -37,7 +37,7 @@ public class DietContentExtractor {
     /**
      * 청크에서 주의 식품 추출
      */
-    public List<String> extractCautionary(List<DietChunk> chunks) {
+    public List<String> extractCautionary(final List<DietChunk> chunks) {
         return chunks.stream()
                 .filter(chunk -> chunk.getSection() == DietSection.CAUTION_FOOD)
                 .map(DietChunk::getContent)
@@ -48,7 +48,7 @@ public class DietContentExtractor {
     /**
      * 쉼표로 구분된 항목들을 파싱
      */
-    private List<String> parseItems(String content) {
+    private List<String> parseItems(final String content) {
         if (content == null || content.isBlank()) {
             return List.of();
         }

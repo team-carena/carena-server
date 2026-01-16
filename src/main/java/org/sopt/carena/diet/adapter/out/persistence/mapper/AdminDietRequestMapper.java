@@ -10,7 +10,7 @@ import java.util.List;
 
 public class AdminDietRequestMapper {
 
-    public static DietInformation toInformation(AdminDietRequest request) {
+    public static DietInformation toInformation(final AdminDietRequest request) {
         return new DietInformation(
                 request.title(),
                 request.reference(),
@@ -19,13 +19,13 @@ public class AdminDietRequestMapper {
         );
     }
 
-    public static List<DietChunk> toChunks(List<AdminDietChunkRequest> requests) {
+    public static List<DietChunk> toChunks(final List<AdminDietChunkRequest> requests) {
         return requests.stream()
                 .map(AdminDietRequestMapper::toChunk)
                 .toList();
     }
 
-    private static DietChunk toChunk(AdminDietChunkRequest request) {
+    private static DietChunk toChunk(final AdminDietChunkRequest request) {
         return new DietChunk(
                 DietSection.valueOf(request.section()),
                 request.content(),
