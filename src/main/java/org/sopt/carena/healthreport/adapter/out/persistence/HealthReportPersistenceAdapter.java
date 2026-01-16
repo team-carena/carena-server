@@ -31,12 +31,6 @@ public class HealthReportPersistenceAdapter implements HealthReportPersistencePo
 		healthReportRepository.save(HealthReportMapper.toEntity(healthReport, memberEntityProxy));
 	}
 
-	public List<HealthReport> findByMemberId(final long memberId) {
-		return healthReportRepository.findAllByMemberEntity_Id(memberId).stream()
-				.map(HealthReportMapper::toDomain)
-				.toList();
-	}
-
 	public Slice<HealthReport> findAllByMemberIdOrderByHealthCheckDateDesc(final long memberId, final int index) {
 		Pageable pageable = PageRequest.of(index - 1, 10);
 		return healthReportRepository.findAllByMemberEntityIdOrderByHealthCheckDateDesc(memberId, pageable)
