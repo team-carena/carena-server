@@ -1,8 +1,10 @@
 package org.sopt.carena.diet.application.port.out;
 
-import org.springframework.ai.embedding.EmbeddingResponse;
+import org.sopt.carena.diet.application.dto.EmbeddingResult;
+
+import java.util.List;
 
 public interface EmbeddingClient {
-    EmbeddingResponse embed(String text);
-    EmbeddingResponse embedBatch(java.util.List<String> texts);
+    EmbeddingResult embed(String text);
+    EmbeddingResult embedBatch(List<String> texts);
 }

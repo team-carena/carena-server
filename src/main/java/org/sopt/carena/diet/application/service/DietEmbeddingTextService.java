@@ -19,7 +19,6 @@ public class DietEmbeddingTextService implements EmbeddingTextGenerateUseCase {
             String normalizedTitle = removeDietSuffix(documentTitle);
             StringBuilder sb = new StringBuilder();
             sb.append(sectionSentence(chunk,normalizedTitle));
-
             String result = normalize(sb.toString());
 
             if (!StringUtils.hasText(result)) {
@@ -40,9 +39,9 @@ public class DietEmbeddingTextService implements EmbeddingTextGenerateUseCase {
     private String sectionSentence(final DietChunk chunk, final String normalizedTitle) {
         return switch (chunk.getSection()) {
             case NECESSITY ->
-                    normalizedTitle + " 은" + chunk.getContent();
+                    normalizedTitle + "은" + chunk.getContent();
             case PRACTICE ->
-                    normalizedTitle + "식사요법의 실제 내용은 다음과 같습니다. " + chunk.getContent();
+                    normalizedTitle + "의 식사요법 실제 내용은 다음과 같습니다. " + chunk.getContent();
             case EXTRA_CAUTION ->
                     normalizedTitle + "의 그외 주의사항은 " + chunk.getContent() ;
         };

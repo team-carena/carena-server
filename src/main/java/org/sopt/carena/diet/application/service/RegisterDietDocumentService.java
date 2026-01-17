@@ -6,6 +6,7 @@ import org.sopt.carena.diet.application.dto.command.CreateDietCommand;
 import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
 import org.sopt.carena.diet.application.port.out.EmbeddingClient;
+import org.sopt.carena.diet.application.port.out.EmbeddingGenerator;
 import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
 import org.sopt.carena.diet.domain.DietSection;
@@ -25,6 +26,7 @@ public class RegisterDietDocumentService
     private final DietPersistencePort dietPersistencePort;
     private final EmbeddingClient embeddingClient;  // 배치용
     private final DietContentExtractor contentExtractor;
+    private final EmbeddingGenerator embeddingGenerator;
 
     @Override
     @Transactional
@@ -42,22 +44,26 @@ public class RegisterDietDocumentService
            List<String> embeddingTexts = chunks.stream()
                    .map(chunk -> textGenerator.generate(chunk, documentTitle))
                    .toList();
-           log.info("Embedding texts: " + embeddingTexts);
 
+           log.debug("생성된 임베딩 텍스트:");
+           embeddingTexts.forEach(text ->
+                   log.debug("  - {}", text.substring(0, Math.min(100, text.length())) + "...")
+           );
+
+
+           log.info("Step 2: 임베딩 생성 중 (Texts: {}개)", embeddingTexts.size());
+           long startTime = System.currentTimeMillis();
            // 배치로 임베딩
-           List<float[]> embeddings = embeddingClient.embedBatch(embeddingTexts)
-                   .getResults()
-                   .stream()
-                   .map(result -> result.getOutput())
-                   .toList();
-           log.info("Embedding: " + embeddings);
+           List<float[]> embeddings = embeddingGenerator.embedBatch(embeddingTexts);
+           log.info("생성된 임베딩 정보:");
+           log.info("  - 개수: {}", embeddings.size());
+           log.info("  - 차원: {}", embeddings.isEmpty() ? 0 : embeddings.get(0).length);
 
            // 임베딩 할당
            for (int i = 0; i < chunks.size(); i++) {
-               chunks.get(i).assignEmbedding(
-                       embeddingTexts.get(i),
-                       embeddings.get(i)
-               );
+               chunks.get(i).assignEmbedding(embeddingTexts.get(i), embeddings.get(i));
+               log.debug("Chunk {} 임베딩 할당 완료 (섹션: {})",
+                       i + 1, chunks.get(i).getSection());
            }
 
            log.info("Embedding 생성: " + embeddings);
