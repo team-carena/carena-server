@@ -37,15 +37,8 @@ public class SpringAiEmbeddingClient implements EmbeddingClient {
                 ))
                 .toList();
 
-        EmbeddingResult.Usage usage = new EmbeddingResult.Usage(
-                response.getMetadata().getUsage().getPromptTokens(),
-                response.getMetadata().getUsage().getTotalTokens()
-        );
-
         return new EmbeddingResult(
-                data,
-                response.getMetadata().getModel(),
-                usage
+                data
         );
     }
 }

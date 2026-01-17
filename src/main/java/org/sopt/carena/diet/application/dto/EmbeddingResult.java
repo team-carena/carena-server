@@ -4,21 +4,13 @@ package org.sopt.carena.diet.application.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record EmbeddingResult(
-        List<EmbeddingData> data,
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        String model,
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        Usage usage
+        List<EmbeddingData> data
 ) {
     public record EmbeddingData(
             float[] embedding,
             int index
-    ) {}
-
-    public record Usage(
-            int promptTokens,
-            int totalTokens
     ) {}
 
     public float[] getFirstEmbedding() {
