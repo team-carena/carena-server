@@ -3,7 +3,7 @@ package org.sopt.carena.diet.adapter.in.web.dto.request;
 import java.util.List;
 import java.util.Map;
 
-public record AdminDietRequest (
+public record CreateAdminDietRequest (
         String title,
         String reference,
         String referenceUrl,

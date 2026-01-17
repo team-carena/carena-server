@@ -1,9 +1,10 @@
 package org.sopt.carena.diet.adapter.in.web.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.sopt.carena.diet.adapter.in.web.code.DietSuccessCode;
-import org.sopt.carena.diet.adapter.in.web.dto.request.AdminDietRequest;
+import org.sopt.carena.diet.adapter.in.web.dto.request.CreateAdminDietRequest;
 import org.sopt.carena.diet.adapter.in.web.dto.response.DietDetailResponse;
 import org.sopt.carena.diet.adapter.in.web.dto.response.DietListResponse;
 import org.sopt.carena.diet.adapter.in.web.mapper.DietCommandMapper;
@@ -17,7 +18,6 @@ import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,7 +31,7 @@ public class DietController implements DietApiDocs {
 
     @PostMapping
     public ResponseEntity<SuccessResponse<Void>> createDiet(
-            @RequestBody @Valid final AdminDietRequest request
+            @RequestBody @Valid final CreateAdminDietRequest request
     ) {
         CreateDietCommand command = dietcommandMapper.toCommand(request);
         registerDietDocumentUseCase.register(command);
@@ -53,7 +53,7 @@ public class DietController implements DietApiDocs {
 
     @GetMapping
     public ResponseEntity<SuccessResponse<DietListResponse>> getDietList(
-            @RequestParam(defaultValue = "1") int page
+            @RequestParam(defaultValue = "1") @Min(1) int page
     ) {
         Slice<DietSummary> dietSlice = getDietListUseCase.getDietList(page);
         DietListResponse response = DietListResponse.from(dietSlice);
