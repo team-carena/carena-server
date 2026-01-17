@@ -24,8 +24,9 @@ jobs:
       - name: make .yml file
         run: |
           mkdir -p ./src/main/resources
-          touch ./src/main/resources/application.yml
-          printf '%s' "${{ secrets.APPLICATIONS }}" > ./src/main/resources/application.yml
+          cat << 'EOF' > ./src/main/resources/application.yml
+          ${{ secrets.APPLICATIONS }}
+          EOF
 
       # 3. Gradle 빌드
       - name: Build with Gradle
