@@ -3,7 +3,7 @@ package org.sopt.carena.diet.application.service;
 import lombok.RequiredArgsConstructor;
 import org.sopt.carena.diet.application.dto.view.DietListResultView;
 import org.sopt.carena.diet.application.port.in.GetDietListUseCase;
-import org.sopt.carena.diet.application.port.out.LoadDietListPort;
+import org.sopt.carena.diet.application.port.out.DietPersistencePort;
 import org.sopt.carena.diet.domain.DietInformation;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,13 +20,13 @@ public class DietListService implements GetDietListUseCase {
 
     private static final int PAGE_SIZE = 10;
 
-    private final LoadDietListPort loadDietListPort;
+    private final DietPersistencePort dietPersistencePort;
 
     @Override
     public DietListResultView getDietList(final int page) {
         Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
 
-        Slice<DietInformation> slice =loadDietListPort.loadDietList(pageable);
+        Slice<DietInformation> slice =dietPersistencePort.loadDietList(pageable);
         List<DietListResultView.DietItem> items = slice.getContent().stream()
                 .map(summary -> new DietListResultView.DietItem(
                         summary.id(),
