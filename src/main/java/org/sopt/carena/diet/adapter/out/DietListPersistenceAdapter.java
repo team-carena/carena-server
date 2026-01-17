@@ -1,7 +1,7 @@
 package org.sopt.carena.diet.adapter.out;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.carena.diet.adapter.in.web.mapper.DietPersistenceMapper;
+import org.sopt.carena.diet.adapter.out.persistence.mapper.DietPersistenceMapper;
 import org.sopt.carena.diet.adapter.out.persistence.repository.DietInformationJpaRepository;
 import org.sopt.carena.diet.application.port.out.LoadDietListPort;
 import org.sopt.carena.diet.domain.value.DietSummary;
@@ -19,6 +19,6 @@ public class DietListPersistenceAdapter implements LoadDietListPort {
     @Override
     public Slice<DietSummary> loadDietList(final Pageable pageable) {
         return repository.findAllByOrderByIdDesc(pageable)
-                .map(mapper::toDietSummary);
+                .map(mapper::toDomain);
     }
 }
