@@ -9,19 +9,19 @@ public class DietCommandMapper {
 
     //Request DTO → Command 변환
     public CreateDietCommand toCommand(final CreateAdminDietRequest request) {
-        return CreateDietCommand.builder()
-                .title(request.title())
-                .reference(request.reference())
-                .referenceUrl(request.referenceUrl())
-                .chunks(request.chunks().stream()
-                        .map(chunk -> CreateDietCommand.DietChunkCommand.builder()
-                                .section(chunk.section())
-                                .content(chunk.content())
-                                .chunkOrder(chunk.chunkOrder())
-                                .build())
-                        .toList())
-                .recommendedFoods(request.recommendedFoods())
-                .cautionaryFoods(request.cautionaryFoods())
-                .build();
+        return new CreateDietCommand(
+                request.title(),
+                request.reference(),
+                request.referenceUrl(),
+                request.chunks().stream()
+                        .map(chunk -> new CreateDietCommand.DietChunkCommand(
+                                chunk.section(),
+                                chunk.content(),
+                                chunk.chunkOrder()
+                        ))
+                        .toList(),
+                request.recommendedFoods(),
+                request.cautionaryFoods()
+        );
     }
 }

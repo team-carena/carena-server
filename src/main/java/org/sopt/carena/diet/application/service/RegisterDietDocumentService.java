@@ -36,7 +36,7 @@ public class RegisterDietDocumentService
            DietInformation document = toDomain(command);
            List<DietChunk> chunks = document.getChunks();
 
-           String documentTitle = command.getTitle();
+           String documentTitle = command.title();
 
            log.info("식단 정보를 등록합니다. " + documentTitle);
 
@@ -68,7 +68,7 @@ public class RegisterDietDocumentService
 
            log.info("Embedding 생성: " + embeddings);
            String content = contentExtractor.extractContent(chunks);
-           dietPersistencePort.save(document, chunks, content, command.getRecommendedFoods(), command.getCautionaryFoods());
+           dietPersistencePort.save(document, chunks, content, command.recommendedFoods(), command.cautionaryFoods());
 
            log.info("식단 정보 등록 성공: {} with ", documentTitle);
        } catch (Exception e) {
@@ -77,23 +77,23 @@ public class RegisterDietDocumentService
     }
 
     private DietInformation toDomain(final CreateDietCommand command) {
-        List<DietChunk> chunks = command.getChunks().stream()
+        List<DietChunk> chunks = command.chunks().stream()
                 .map(this::toDomain)
                 .toList();
 
         return DietInformation.create(
-                command.getTitle(),
-                command.getReference(),
-                command.getReferenceUrl(),
+                command.title(),
+                command.reference(),
+                command.referenceUrl(),
                 chunks
         );
     }
 
     private DietChunk toDomain(final CreateDietCommand.DietChunkCommand chunkCommand) {
         return new DietChunk(
-                DietSection.from(chunkCommand.getSection()),
-                chunkCommand.getContent(),
-                chunkCommand.getChunkOrder()
+                DietSection.from(chunkCommand.section()),
+                chunkCommand.content(),
+                chunkCommand.chunkOrder()
         );
     }
 }
