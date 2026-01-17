@@ -77,5 +77,6 @@ jobs:
             export JWT_ACCESS_TOKEN_EXPIRATION="${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION }}"
             export JWT_REFRESH_TOKEN_EXPIRATION="${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION }}"
             export FRONTEND_URL="${{ secrets.FRONTEND_URL }}"
+            export OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
             
             ~/app/scripts/deploy.sh
