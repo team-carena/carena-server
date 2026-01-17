@@ -8,7 +8,7 @@ public record DietListResponse(
         List<DietItem> diets,
         boolean hasNext
 ) {
-    public record DietItem(Long id, String title) {}
+    private record DietItem(Long id, String title) {}
 
     // DietListResult -> DietListResponse 변환
     public static DietListResponse from(DietListResultView result) {
