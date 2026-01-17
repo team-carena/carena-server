@@ -10,6 +10,7 @@ import org.sopt.carena.diet.adapter.in.web.dto.response.DietDetailResponse;
 import org.sopt.carena.diet.adapter.in.web.dto.response.DietListResponse;
 import org.sopt.carena.diet.adapter.in.web.mapper.DietCommandMapper;
 import org.sopt.carena.diet.application.dto.command.CreateDietCommand;
+import org.sopt.carena.diet.application.dto.view.DietDetailResultView;
 import org.sopt.carena.diet.application.dto.view.DietListResultView;
 import org.sopt.carena.diet.application.port.in.GetDietListUseCase;
 import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
@@ -46,8 +47,8 @@ public class DietController implements DietApiDocs {
     public ResponseEntity<SuccessResponse<DietDetailResponse>> dietDetail(
             @PathVariable Long id
     ) {
-        DietDetail dietDetail = getDietDetailUseCase.getDietDetail(id);
-        DietDetailResponse response = DietDetailResponse.from(dietDetail);
+        DietDetailResultView result = getDietDetailUseCase.getDietDetail(id);
+        DietDetailResponse response = DietDetailResponse.from(result);
 
         return ResponseEntity.status(DietSuccessCode.DIET_DETAIL.getStatus())
                 .body(ApiResponse.success(DietSuccessCode.DIET_DETAIL,response));
@@ -57,7 +58,6 @@ public class DietController implements DietApiDocs {
     public ResponseEntity<SuccessResponse<DietListResponse>> getDietList(
             @RequestParam(defaultValue = "1") @Min(1) int page
     ) {
-        log.info("시작");
         DietListResultView result = getDietListUseCase.getDietList(page);
         DietListResponse response = DietListResponse.from(result);
 

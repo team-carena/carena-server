@@ -1,9 +1,10 @@
 package org.sopt.carena.diet.application.service;
 
 import lombok.RequiredArgsConstructor;
+import org.sopt.carena.diet.application.dto.view.DietDetailResultView;
 import org.sopt.carena.diet.application.port.in.GetDietDetailUseCase;
 import org.sopt.carena.diet.application.port.out.LoadDietDetailPort;
-import org.sopt.carena.diet.domain.DietDetail;
+import org.sopt.carena.diet.domain.value.DietDetail;
 import org.sopt.carena.diet.exception.diet.DietNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +17,15 @@ public class DietDetailService implements GetDietDetailUseCase {
     private final LoadDietDetailPort loadDietDetailPort;
 
     @Override
-    public DietDetail getDietDetail(final Long dietId) {
-        return loadDietDetailPort.loadById(dietId)
-                .orElseThrow(DietNotFoundException::new);
+    public DietDetailResultView getDietDetail(final Long dietId) {
+        DietDetail dietDetail = loadDietDetailPort.loadById(dietId).orElseThrow(DietNotFoundException::new);
+        return new DietDetailResultView(
+                dietDetail.id(),
+                dietDetail.title(),
+                dietDetail.content(),
+                dietDetail.recommendedCategories(),
+                dietDetail.cautionaryFoods(),
+                dietDetail.reference()
+        );
     }
 }

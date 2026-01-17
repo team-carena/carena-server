@@ -1,7 +1,7 @@
 package org.sopt.carena.diet.application.port.in;
 
-import org.sopt.carena.diet.domain.DietDetail;
+import org.sopt.carena.diet.application.dto.view.DietDetailResultView;
 
 public interface GetDietDetailUseCase {
-    DietDetail getDietDetail(Long dietId);
+    DietDetailResultView getDietDetail(Long dietId);
 }

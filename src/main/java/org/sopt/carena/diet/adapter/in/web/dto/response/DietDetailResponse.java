@@ -1,7 +1,6 @@
 package org.sopt.carena.diet.adapter.in.web.dto.response;
 
-import org.sopt.carena.diet.domain.DietDetail;
-
+import org.sopt.carena.diet.application.dto.view.DietDetailResultView;
 import java.util.List;
 import java.util.Map;
 
@@ -13,15 +12,15 @@ public record DietDetailResponse(
         List<String> cautionary,
         String reference
 ) {
-    public static DietDetailResponse from(final DietDetail dietDetail) {
+    public static DietDetailResponse from(final DietDetailResultView result) {
 
         return new DietDetailResponse(
-                dietDetail.getId(),
-                dietDetail.getTitle(),
-                dietDetail.getContent(),
-                dietDetail.getRecommendedCategories(),
-                dietDetail.getCautionaryFoods(),
-                dietDetail.getReference()
+                result.id(),
+                result.title(),
+                result.content(),
+                result.recommendedCategories(),
+                result.cautionaryFoods(),
+                result.reference()
         );
     }
 }

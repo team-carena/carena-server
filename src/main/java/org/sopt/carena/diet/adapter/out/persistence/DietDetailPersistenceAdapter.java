@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.carena.diet.adapter.out.persistence.entity.DietInformationEntity;
 import org.sopt.carena.diet.adapter.out.persistence.repository.DietInformationJpaRepository;
 import org.sopt.carena.diet.application.port.out.LoadDietDetailPort;
-import org.sopt.carena.diet.domain.DietDetail;
+import org.sopt.carena.diet.domain.value.DietDetail;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,9 @@ public class DietDetailPersistenceAdapter implements LoadDietDetailPort {
                 ? entity.getRecommendedFood().getCategories()
                 : Map.of();
 
-        List<String> cautionaryFoods = (List<String>) entity.getCautionaryFood();
+        List<String> cautionaryFoods = entity.getCautionaryFood() != null
+                ? entity.getCautionaryFood().getCautionary()
+                : List.of();
 
         return new DietDetail(
                 entity.getId(),
