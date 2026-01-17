@@ -22,9 +22,6 @@ public enum DietSection {
     }
 
     public static DietSection from(String rawSection) {
-        if (rawSection == null || rawSection.isBlank()) {
-            throw new SectionNameNullException();
-        }
         return Arrays.stream(values())
                 .filter(section ->
                         section.description.equals(rawSection.trim())
