@@ -1,8 +1,7 @@
 package org.sopt.carena.diet.application.port.in;
 
-import org.sopt.carena.diet.domain.DietSummary;
-import org.springframework.data.domain.Slice;
+import org.sopt.carena.diet.application.dto.view.DietListResultView;
 
 public interface GetDietListUseCase {
-    Slice<DietSummary> getDietList(int page);
+    DietListResultView getDietList(int page);
 }

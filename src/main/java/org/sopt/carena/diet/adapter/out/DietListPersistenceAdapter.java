@@ -3,7 +3,7 @@ package org.sopt.carena.diet.adapter.out;
 import lombok.RequiredArgsConstructor;
 import org.sopt.carena.diet.adapter.out.persistence.repository.DietInformationJpaRepository;
 import org.sopt.carena.diet.application.port.out.LoadDietListPort;
-import org.sopt.carena.diet.domain.DietSummary;
+import org.sopt.carena.diet.domain.value.DietSummary;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
