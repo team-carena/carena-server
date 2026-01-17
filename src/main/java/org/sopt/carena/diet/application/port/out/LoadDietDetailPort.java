@@ -1,8 +1,9 @@
 package org.sopt.carena.diet.application.port.out;
 
-import org.sopt.carena.diet.domain.value.DietDetail;
+import org.sopt.carena.diet.application.dto.view.DietDetailResultView;
+
 import java.util.Optional;
 
 public interface LoadDietDetailPort {
-    Optional<DietDetail> loadById(Long dietId);
+    Optional<DietDetailResultView> loadById(Long dietId);
 }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.carena.diet.adapter.out.persistence.mapper.DietPersistenceMapper;
 import org.sopt.carena.diet.adapter.out.persistence.repository.DietInformationJpaRepository;
 import org.sopt.carena.diet.application.port.out.LoadDietListPort;
-import org.sopt.carena.diet.domain.value.DietSummary;
+import org.sopt.carena.diet.domain.DietInformation;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
@@ -17,8 +17,8 @@ public class DietListPersistenceAdapter implements LoadDietListPort {
     private final DietPersistenceMapper mapper;
 
     @Override
-    public Slice<DietSummary> loadDietList(final Pageable pageable) {
+    public Slice<DietInformation> loadDietList(final Pageable pageable) {
         return repository.findAllByOrderByIdDesc(pageable)
-                .map(mapper::toDomain);
+                .map(mapper::toDomainWithoutChunks);
     }
 }

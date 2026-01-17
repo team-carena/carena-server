@@ -5,9 +5,9 @@ import io.hypersistence.utils.hibernate.type.array.FloatArrayType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
-import org.sopt.carena.diet.domain.DietSection;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.sopt.carena.diet.domain.value.DietSection;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;

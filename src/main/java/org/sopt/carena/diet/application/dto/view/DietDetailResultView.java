@@ -9,4 +9,9 @@ public record DietDetailResultView(
         Map<String, List<String>> recommendedCategories,
         List<String> cautionaryFoods,
         String reference
-) {}
+) {
+    public DietDetailResultView {
+        recommendedCategories = Map.copyOf(recommendedCategories);
+        cautionaryFoods = List.copyOf(cautionaryFoods);
+    }
+}

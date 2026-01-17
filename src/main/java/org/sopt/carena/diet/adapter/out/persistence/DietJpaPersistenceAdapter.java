@@ -6,10 +6,9 @@ import org.sopt.carena.diet.adapter.out.persistence.entity.CautionCategoryEntity
 import org.sopt.carena.diet.adapter.out.persistence.entity.DietChunkEntity;
 import org.sopt.carena.diet.adapter.out.persistence.entity.DietInformationEntity;
 import org.sopt.carena.diet.adapter.out.persistence.entity.RecommendedCategoryEntity;
-import org.sopt.carena.diet.adapter.out.persistence.repository.DietChunkJpaRepository;
 import org.sopt.carena.diet.adapter.out.persistence.repository.DietInformationJpaRepository;
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
-import org.sopt.carena.diet.domain.DietChunk;
+import org.sopt.carena.diet.domain.value.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
 import org.springframework.stereotype.Component;
 

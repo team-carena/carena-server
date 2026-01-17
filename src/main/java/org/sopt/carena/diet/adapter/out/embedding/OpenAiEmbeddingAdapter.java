@@ -1,4 +1,4 @@
-package org.sopt.carena.diet.adapter.out.ai;
+package org.sopt.carena.diet.adapter.out.embedding;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.carena.diet.application.dto.EmbeddingResult;

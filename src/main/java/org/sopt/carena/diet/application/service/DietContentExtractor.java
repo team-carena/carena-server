@@ -1,7 +1,7 @@
 package org.sopt.carena.diet.application.service;
 
-import org.sopt.carena.diet.domain.DietChunk;
-import org.sopt.carena.diet.domain.DietSection;
+import org.sopt.carena.diet.domain.value.DietChunk;
+import org.sopt.carena.diet.domain.value.DietSection;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

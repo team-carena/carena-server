@@ -15,11 +15,10 @@ import org.sopt.carena.diet.application.dto.view.DietListResultView;
 import org.sopt.carena.diet.application.port.in.GetDietListUseCase;
 import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
 import org.sopt.carena.diet.application.port.in.GetDietDetailUseCase;
-import org.sopt.carena.diet.domain.value.DietDetail;
+import org.sopt.carena.diet.domain.DietInformation;
 import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -47,11 +46,16 @@ public class DietController implements DietApiDocs {
     public ResponseEntity<SuccessResponse<DietDetailResponse>> dietDetail(
             @PathVariable Long id
     ) {
-        DietDetailResultView result = getDietDetailUseCase.getDietDetail(id);
-        DietDetailResponse response = DietDetailResponse.from(result);
+        try{
+            DietDetailResultView result = getDietDetailUseCase.getDietDetail(id);
+            DietDetailResponse response = DietDetailResponse.from(result);
 
-        return ResponseEntity.status(DietSuccessCode.DIET_DETAIL.getStatus())
-                .body(ApiResponse.success(DietSuccessCode.DIET_DETAIL,response));
+            return ResponseEntity.status(DietSuccessCode.DIET_DETAIL.getStatus())
+                    .body(ApiResponse.success(DietSuccessCode.DIET_DETAIL,response));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping

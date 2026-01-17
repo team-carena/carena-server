@@ -7,9 +7,9 @@ import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
 import org.sopt.carena.diet.application.port.out.EmbeddingClient;
 import org.sopt.carena.diet.application.port.out.EmbeddingGenerator;
-import org.sopt.carena.diet.domain.DietChunk;
+import org.sopt.carena.diet.domain.value.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
-import org.sopt.carena.diet.domain.DietSection;
+import org.sopt.carena.diet.domain.value.DietSection;
 import org.sopt.carena.diet.exception.embedding.EmbeddingFailedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +68,7 @@ public class RegisterDietDocumentService
 
            log.info("Embedding 생성: " + embeddings);
            String content = contentExtractor.extractContent(chunks);
-           dietPersistencePort.save(document, chunks, content, command.recommendedFoods(), command.cautionaryFoods());
+           dietPersistencePort.save(document, chunks, content, command.recommendedCategories(), command.cautionaryFoods());
 
            log.info("식단 정보 등록 성공: {} with ", documentTitle);
        } catch (Exception e) {
@@ -83,9 +83,12 @@ public class RegisterDietDocumentService
 
         return DietInformation.create(
                 command.title(),
+                null,
                 command.reference(),
                 command.referenceUrl(),
-                chunks
+                chunks,
+                command.recommendedCategories(),
+                command.cautionaryFoods()
         );
     }
 
