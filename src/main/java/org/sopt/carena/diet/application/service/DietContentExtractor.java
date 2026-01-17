@@ -4,7 +4,6 @@ import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.DietSection;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +23,7 @@ public class DietContentExtractor {
     /**
      * 청크에서 추천 식단 추출
      */
+    /*
     public List<String> extractRecommends(final List<DietChunk> chunks) {
 
         return chunks.stream()
@@ -34,9 +34,12 @@ public class DietContentExtractor {
 
     }
 
+     */
+
     /**
      * 청크에서 주의 식품 추출
      */
+    /*
     public List<String> extractCautionary(final List<DietChunk> chunks) {
         return chunks.stream()
                 .filter(chunk -> chunk.getSection() == DietSection.CAUTION_FOOD)
@@ -44,10 +47,11 @@ public class DietContentExtractor {
                 .flatMap(content -> parseItems(content).stream())
                 .toList();
     }
-
+     */
     /**
      * 쉼표로 구분된 항목들을 파싱
      */
+    /*
     private List<String> parseItems(final String content) {
         if (content == null || content.isBlank()) {
             return List.of();
@@ -83,4 +87,6 @@ public class DietContentExtractor {
 
         return items;
     }
+
+     */
 }

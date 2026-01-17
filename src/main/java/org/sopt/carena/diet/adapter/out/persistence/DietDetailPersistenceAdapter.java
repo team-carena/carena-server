@@ -7,6 +7,7 @@ import org.sopt.carena.diet.application.port.out.LoadDietDetailPort;
 import org.sopt.carena.diet.domain.DietDetail;
 import org.springframework.stereotype.Component;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -23,20 +24,18 @@ public class DietDetailPersistenceAdapter implements LoadDietDetailPort {
 
     private DietDetail toDomain(final DietInformationEntity entity) {
 
-        List<String> recommends = entity.getRecommends() != null
-                ? entity.getRecommends()
-                : List.of();
+        Map<String, List<String>> recommendedCategories = entity.getRecommendedFood() != null
+                ? entity.getRecommendedFood().getCategories()
+                : Map.of();
 
-        List<String> cautionary = entity.getCautionary() != null
-                ? entity.getCautionary()
-                : List.of();
+        List<String> cautionaryFoods = (List<String>) entity.getCautionaryFood();
 
         return new DietDetail(
                 entity.getId(),
                 entity.getTitle(),
                 entity.getContent(),
-                recommends,
-                cautionary,
+                recommendedCategories,
+                cautionaryFoods,
                 entity.getReference()
         );
     }

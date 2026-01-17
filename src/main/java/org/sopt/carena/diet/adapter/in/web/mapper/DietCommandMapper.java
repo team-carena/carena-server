@@ -20,6 +20,8 @@ public class DietCommandMapper {
                                 .chunkOrder(chunk.chunkOrder())
                                 .build())
                         .toList())
+                .recommendedFoods(request.recommendedFoods())
+                .cautionaryFoods(request.cautionaryFoods())
                 .build();
     }
 }

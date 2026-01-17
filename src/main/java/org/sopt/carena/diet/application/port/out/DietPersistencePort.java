@@ -4,12 +4,13 @@ import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DietPersistencePort {
     void save(DietInformation info,
               List<DietChunk> chunks,
               String content,
-              List<String> recommends,
+              Map<String, List<String>> recommends,
               List<String> cautionary
     );
 }

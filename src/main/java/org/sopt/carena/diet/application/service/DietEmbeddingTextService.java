@@ -39,10 +39,6 @@ public class DietEmbeddingTextService implements EmbeddingTextGenerateUseCase {
 
     private String sectionSentence(final DietChunk chunk) {
         return switch (chunk.getSection()) {
-            case RECOMMENDED_FOOD ->
-                    "권장되는 음식으로는 " + chunk.getContent() + " 이 포함됩니다.";
-            case CAUTION_FOOD ->
-                    "섭취 시 주의가 필요한 음식으로는 " + chunk.getContent() + " 등이 있습니다.";
             case NECESSITY ->
                     chunk.getContent();
             case PRACTICE ->

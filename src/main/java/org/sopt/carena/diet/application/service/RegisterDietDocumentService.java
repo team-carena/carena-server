@@ -62,12 +62,7 @@ public class RegisterDietDocumentService
 
            log.info("Embedding 생성: " + embeddings);
            String content = contentExtractor.extractContent(chunks);
-           var recommends = contentExtractor.extractRecommends(chunks);
-           List<String> cautionary = contentExtractor.extractCautionary(chunks);
-           log.info("Extracted - Content length: {}, Recommends: {}, Cautionary: {}",
-                   content.length(), recommends.size(), cautionary.size());
-
-           dietPersistencePort.save(document, chunks, content, recommends, cautionary);
+           dietPersistencePort.save(document, chunks, content, command.getRecommendedFoods(), command.getCautionaryFoods());
 
            log.info("식단 정보 등록 성공: {} with ", documentTitle);
        } catch (Exception e) {

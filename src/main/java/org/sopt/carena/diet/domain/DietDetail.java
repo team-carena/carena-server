@@ -4,29 +4,30 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 public class DietDetail {
     private final Long id;
     private final String title;
     private final String content;
-    private final List<String> recommends;
-    private final List<String> cautionary;
+    private final Map<String, List<String>> recommendedCategories;
+    private final List<String> cautionaryFoods;
     private final String reference;
 
     public DietDetail(
             Long id,
             String title,
             String content,
-            List<String> recommends,
-            List<String> cautionary,
+            Map<String, List<String>> recommendedCategories,
+            List<String> cautionaryFoods,
             String reference
     ) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.recommends = (recommends == null) ? new ArrayList<>() : new ArrayList<>(recommends);
-        this.cautionary = (cautionary == null) ? new ArrayList<>() : new ArrayList<>(cautionary);
+        this.recommendedCategories = recommendedCategories;
+        this.cautionaryFoods = cautionaryFoods;
         this.reference = reference;
     }
 }
