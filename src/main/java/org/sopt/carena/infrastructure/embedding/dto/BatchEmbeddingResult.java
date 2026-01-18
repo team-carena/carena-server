@@ -16,7 +16,7 @@ public record BatchEmbeddingResult(
     ) {}
 
     public static BatchEmbeddingResult from(EmbeddingResponse response) {
-        if (response == null || response.getResults().isEmpty()) {
+        if (response == null || response.getResults() == null || response.getResults().isEmpty()) {
             throw new EmbeddingResultNullException();
         }
 
