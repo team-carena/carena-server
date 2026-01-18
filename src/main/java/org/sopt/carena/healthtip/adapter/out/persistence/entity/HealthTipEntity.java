@@ -36,6 +36,9 @@ public class HealthTipEntity {
 	@Column(name = "reference", nullable = false)
 	private String reference;
 
+	@OneToMany(mappedBy = "healthTip", fetch = FetchType.LAZY)
+	List<HealthTipHashtagEntity> hashtags = new ArrayList<>();
+
 	@Builder
 	public HealthTipEntity(String title, String subTitle, String content, String reference) {
 		this.title = title;
@@ -43,7 +46,4 @@ public class HealthTipEntity {
 		this.content = content;
 		this.reference = reference;
 	}
-
-	@OneToMany(mappedBy = "healthTip", fetch = FetchType.LAZY)
-	List<HealthTipHashtagEntity> hashtags = new ArrayList<>();
 }

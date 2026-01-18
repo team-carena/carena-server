@@ -29,10 +29,17 @@ public class HealthTipPersistenceAdapter implements HealthTipPersistencePort {
 	private final HashtagEntityRepository hashtagEntityRepository;
 	private final HealthTipHashtagEntityRepository healthTipHashtagEntityRepository;
 
-	public Slice<HealthTip> getHealthTipList(final int page) {
+	public Slice<HealthTip> getHealthTipList(final String hashtagName, final int page) {
 		Pageable pageable = PageRequest.of(page - 1, 10);
-		return healthTipEntityRepository.findAllByOrderByIdDesc(pageable)
+
+		return healthTipEntityRepository.findHealthTipListWithHashTags(hashtagName, pageable)
 				.map(HealthTipMapper::toDomainWithoutHashtags);
+	}
+
+	public List<HealthTip> getHealthTipTicker(final String hashtagName) {
+		return healthTipEntityRepository.findRandomHealthTipsWithHashtags(hashtagName,3).stream()
+				.map(HealthTipMapper::toDomain)
+				.toList();
 	}
 
 	public Optional<HealthTip> getHealthTipDetail(final long id) {
