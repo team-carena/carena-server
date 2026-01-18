@@ -1,5 +1,6 @@
 package org.sopt.carena.healthreport.adapter.out.persistence;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,10 @@ public class HealthReportPersistenceAdapter implements HealthReportPersistencePo
 		MemberEntity memberEntityProxy = memberJpaRepository.getReferenceById(healthReport.getMemberId());
 
 		return HealthReportMapper.toDomain(healthReportRepository.save(HealthReportMapper.toEntity(healthReport, memberEntityProxy)));
+	}
+
+	public boolean existsByMemberIdAndHealthCheckDate(long memberId, LocalDate healthCheckDate) {
+		return healthReportRepository.existsByMemberEntityIdAndHealthCheckDate(memberId, healthCheckDate);
 	}
 
 	public Slice<HealthReport> findAllByMemberIdOrderByHealthCheckDateDesc(final long memberId, final int index) {

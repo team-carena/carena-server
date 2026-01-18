@@ -12,6 +12,7 @@ import org.sopt.carena.healthreport.domain.HealthReport;
 import org.sopt.carena.healthreport.domain.HealthReportEmbedding;
 import org.sopt.carena.healthreport.domain.status.HealthStatusCarrier;
 import org.sopt.carena.healthreport.domain.status.RiskLevel;
+import org.sopt.carena.healthreport.exception.healthreport.HealthReportAlreadyExistsException;
 import org.sopt.carena.member.application.port.out.MemberPersistencePort;
 import org.sopt.carena.member.domain.Member;
 
@@ -32,6 +33,13 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 	public void createHealthReport(final CreateHealthReportCommand commend) {
 		Member member = memberPersistencePort.getMemberById(commend.memberId())
 				.orElseThrow(MemberNotFoundException::new);
+
+		if (healthReportPersistencePort.existsByMemberIdAndHealthCheckDate(
+				commend.memberId(),
+				commend.healthCheckDate()
+		)) {
+			throw new HealthReportAlreadyExistsException();
+		}
 
 		HealthReport healthReport = healthReportPersistencePort
 				.saveHealthReport(HealthReport.create(commend, member.getGender()));

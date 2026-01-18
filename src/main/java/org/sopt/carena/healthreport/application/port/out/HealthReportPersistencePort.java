@@ -1,5 +1,6 @@
 package org.sopt.carena.healthreport.application.port.out;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,8 @@ import org.springframework.data.domain.Slice;
 
 public interface HealthReportPersistencePort {
 	HealthReport saveHealthReport(HealthReport healthReport);
+
+	boolean existsByMemberIdAndHealthCheckDate(long memberId, LocalDate healthCheckDate);
 
 	Slice<HealthReport> findAllByMemberIdOrderByHealthCheckDateDesc(long memberId, int index);
 
