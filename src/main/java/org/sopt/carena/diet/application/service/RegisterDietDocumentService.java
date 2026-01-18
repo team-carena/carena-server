@@ -5,8 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.diet.application.dto.command.CreateDietCommand;
 import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
-import org.sopt.carena.diet.application.port.out.EmbeddingClient;
-import org.sopt.carena.diet.application.port.out.EmbeddingGenerator;
+import org.sopt.carena.diet.application.port.out.EmbeddingPort;
 import org.sopt.carena.diet.domain.value.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
 import org.sopt.carena.diet.domain.value.DietSection;
@@ -24,9 +23,8 @@ public class RegisterDietDocumentService
 
     private final DietEmbeddingTextService textGenerator;
     private final DietPersistencePort dietPersistencePort;
-    private final EmbeddingClient embeddingClient;  // 배치용
     private final DietContentExtractor contentExtractor;
-    private final EmbeddingGenerator embeddingGenerator;
+    private final EmbeddingPort embeddingPort;
 
     @Override
     @Transactional
@@ -52,9 +50,8 @@ public class RegisterDietDocumentService
 
 
            log.info("Step 2: 임베딩 생성 중 (Texts: {}개)", embeddingTexts.size());
-           long startTime = System.currentTimeMillis();
            // 배치로 임베딩
-           List<float[]> embeddings = embeddingGenerator.embedBatch(embeddingTexts);
+           List<float[]> embeddings = embeddingPort.embedBatch(embeddingTexts);
            log.info("생성된 임베딩 정보:");
            log.info("  - 개수: {}", embeddings.size());
            log.info("  - 차원: {}", embeddings.isEmpty() ? 0 : embeddings.get(0).length);

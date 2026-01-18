@@ -31,9 +31,6 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
 
     private final DietInformationJpaRepository infoRepository;
     private final DietPersistenceMapper mapper;
-    private final RecommendedCategoryRepository recommendedRepository;
-    private final CautionCategoryRepository cautionRepository;
-    private final ObjectMapper objectMapper;
 
     @Override
     public void save(final DietInformation info, final List<DietChunk> chunks,
@@ -82,53 +79,16 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
         infoRepository.save(infoEntity);
     }
 
-/*
     @Override
     @Transactional(readOnly = true)
     public Optional<DietInformation> loadById(Long dietId) {
-        System.out.println("==========================");
-        System.out.println(repository.findById(dietId).get().getId());
-        System.out.println(repository.findById(dietId).get().getCautionaryFood().getCautionary());
-        System.out.println(repository.findById(dietId).get().getRecommendedFood().getCategories());
-        System.out.println("==========================");
-
-        return repository.findById(dietId)
+        return infoRepository.findById(dietId)
                 .map(mapper::toDomain);
-    }
-
- */
-
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<DietDetailResultView> loadById(Long dietId) {
-        Optional<DietDetailResultView> result = infoRepository.findById(dietId)
-                .map(this::toDomain);
-        return result;
-    }
-
-    private DietDetailResultView toDomain(final DietInformationEntity entity) {
-
-        Map<String, List<String>> recommendedCategories = entity.getRecommendedFood() != null
-                ? entity.getRecommendedFood().getCategories()
-                : Map.of();
-
-        List<String> cautionaryFoods = entity.getCautionaryFood() != null
-                ? entity.getCautionaryFood().getCautionary()
-                : List.of();
-
-        return new DietDetailResultView(
-                entity.getId(),
-                entity.getTitle(),
-                entity.getContent(),
-                recommendedCategories,
-                cautionaryFoods,
-                entity.getReference()
-        );
     }
 
     @Override
     public Slice<DietInformation> loadDietList(final Pageable pageable) {
         return infoRepository.findAllByOrderByIdDesc(pageable)
-                .map(mapper::toDomainWithoutChunks);
+                .map(mapper::toDomain);
     }
 }
