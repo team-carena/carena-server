@@ -1,12 +1,12 @@
 package org.sopt.carena.diet.adapter.out.persistence.entity;
 
 import io.hypersistence.utils.hibernate.id.Tsid;
-import io.hypersistence.utils.hibernate.type.array.FloatArrayType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.type.SqlTypes;
 import org.sopt.carena.diet.domain.value.DietSection;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -37,7 +37,8 @@ public class DietChunkEntity {
     private String embeddingText;
 
     @Column(name= "embedding" , columnDefinition = "vector(1536)")
-    @Type(FloatArrayType.class)
+    @JdbcTypeCode(SqlTypes.VECTOR)
+    @Basic(fetch = FetchType.LAZY)
     private float[] embedding;
 
     @Column(nullable = false)
