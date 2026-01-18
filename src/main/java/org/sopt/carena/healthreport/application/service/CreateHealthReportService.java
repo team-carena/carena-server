@@ -18,6 +18,8 @@ import org.sopt.carena.member.domain.Member;
 
 import org.sopt.carena.member.exception.jwt.MemberNotFoundException;
 import org.springframework.stereotype.Service;
+
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,8 +29,7 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 	private final MemberPersistencePort memberPersistencePort;
 	private final HealthReportEmbeddingPersistencePort healthReportEmbeddingPersistencePort;
 	private final EmbeddingGenerator embeddingGenerator;
-
-	private final ExecutorService virtualExecutorService = Executors.newVirtualThreadPerTaskExecutor();
+	private final ExecutorService virtualExecutorService;
 
 	public void createHealthReport(final CreateHealthReportCommand commend) {
 		Member member = memberPersistencePort.getMemberById(commend.memberId())
