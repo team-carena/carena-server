@@ -1,5 +1,6 @@
 package org.sopt.carena.healthreport.adapter.out.persistence.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface HealthReportRepository extends JpaRepository<HealthReportEntity, Long> {
 
 	Optional<HealthReportEntity> findByMemberEntityIdAndId(long memberId, long healthReportId);
+
+	boolean existsByMemberIdAndHealthCheckDate(Long memberId, LocalDate healthCheckDate);
 
 	Slice<HealthReportEntity> findAllByMemberEntityIdOrderByHealthCheckDateDesc(long memberId, Pageable pageable);
 
