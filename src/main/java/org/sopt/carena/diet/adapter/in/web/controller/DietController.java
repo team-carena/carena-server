@@ -8,14 +8,18 @@ import org.sopt.carena.diet.adapter.in.web.code.DietSuccessCode;
 import org.sopt.carena.diet.adapter.in.web.dto.request.CreateAdminDietRequest;
 import org.sopt.carena.diet.adapter.in.web.dto.response.DietDetailResponse;
 import org.sopt.carena.diet.adapter.in.web.dto.response.DietListResponse;
+import org.sopt.carena.diet.adapter.in.web.dto.response.DietRecommendResponse;
 import org.sopt.carena.diet.adapter.in.web.mapper.DietCommandMapper;
 import org.sopt.carena.diet.application.dto.command.CreateDietCommand;
 import org.sopt.carena.diet.application.dto.view.DietDetailResultView;
 import org.sopt.carena.diet.application.dto.view.DietListResultView;
 import org.sopt.carena.diet.application.port.in.GetDietListUseCase;
+import org.sopt.carena.diet.application.port.in.GetDietRecommendUseCase;
 import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
 import org.sopt.carena.diet.application.port.in.GetDietDetailUseCase;
 import org.sopt.carena.diet.domain.DietInformation;
+import org.sopt.carena.diet.domain.DietRecommend;
+import org.sopt.carena.diet.exception.diet.RecommendationNotFoundException;
 import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +34,7 @@ public class DietController implements DietApiDocs {
     private final GetDietDetailUseCase getDietDetailUseCase;
     private final GetDietListUseCase getDietListUseCase;
     private final DietCommandMapper dietcommandMapper;
+    private final GetDietRecommendUseCase getDietRecommendUseCase;
 
     @PostMapping
     public ResponseEntity<SuccessResponse<Void>> createDiet(
@@ -67,5 +72,19 @@ public class DietController implements DietApiDocs {
 
         return ResponseEntity.status(DietSuccessCode.DIET_LIST.getStatus())
                 .body(ApiResponse.success(DietSuccessCode.DIET_LIST,response));
+    }
+
+    @GetMapping("/recommend")
+    public ResponseEntity<SuccessResponse<DietRecommendResponse>> getRecommendation(
+            @RequestParam Long memberId
+    ) {
+        DietRecommend dietRecommend = getDietRecommendUseCase
+                .getLatestRecommendation(memberId)
+                .orElseThrow(RecommendationNotFoundException::new);
+
+        DietRecommendResponse response = DietRecommendResponse.from(dietRecommend);
+
+        return ResponseEntity.status(DietSuccessCode.DIET_RECOMMEND.getStatus())
+                .body(ApiResponse.success(DietSuccessCode.DIET_RECOMMEND,response));
     }
 }

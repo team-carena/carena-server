@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DietInformationJpaRepository extends JpaRepository<DietInformationEntity, Long> {
@@ -27,6 +28,24 @@ public interface DietInformationJpaRepository extends JpaRepository<DietInformat
         WHERE d.id = :id
         """)
     Optional<DietInformationEntity> findByIdWithChunks(@Param(value = "id") Long id);
+
+    // 새로운 메서드: 건강검진 기반 추천 (코사인 유사도)
+    @Query(value = """
+        SELECT DISTINCT d.*,
+               MIN(c.embedding <=> CAST(:healthEmbedding AS vector)) as similarity_score
+        FROM diet_information d
+        INNER JOIN chunk c ON c.diet_information_id = d.id
+        WHERE c.embedding IS NOT NULL
+        GROUP BY d.id
+        ORDER BY similarity_score ASC
+        LIMIT :limit OFFSET :offset
+        """,
+            nativeQuery = true)
+    List<DietInformationEntity> findRecommendedByHealthEmbedding(
+            @Param("healthEmbedding") String healthEmbedding,
+            @Param("limit") int limit,
+            @Param("offset") long offset
+    );
 
 
 }

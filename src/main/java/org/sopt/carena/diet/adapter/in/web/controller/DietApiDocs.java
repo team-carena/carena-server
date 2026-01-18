@@ -7,8 +7,10 @@ import jakarta.validation.constraints.Min;
 import org.sopt.carena.diet.adapter.in.web.dto.request.CreateAdminDietRequest;
 import org.sopt.carena.diet.adapter.in.web.dto.response.DietDetailResponse;
 import org.sopt.carena.diet.adapter.in.web.dto.response.DietListResponse;
+import org.sopt.carena.diet.adapter.in.web.dto.response.DietRecommendResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "식단 관리",description = "건강검진 결과에 따른 식단 추천을 위한 API")
 public interface DietApiDocs {
@@ -20,5 +22,8 @@ public interface DietApiDocs {
 
     @Operation(summary = "식단 리스트 조회" , description = "전체 식단의 리스트를 조회합니다.")
     ResponseEntity<SuccessResponse<DietListResponse>> getDietList(@Min(1) int page);
+
+    @Operation(summary = "추천 식단 조회", description = "사용자의 추천 식단을 조회합니다.")
+    ResponseEntity<SuccessResponse<DietRecommendResponse>> getRecommendation(Long memberId);
 }
 
