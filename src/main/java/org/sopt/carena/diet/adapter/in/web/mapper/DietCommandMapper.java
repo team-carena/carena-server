@@ -11,6 +11,7 @@ public class DietCommandMapper {
     public CreateDietCommand toCommand(final CreateAdminDietRequest request) {
         return new CreateDietCommand(
                 request.title(),
+                request.content(),
                 request.reference(),
                 request.referenceUrl(),
                 request.chunks().stream()
