@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.diet.application.port.out.EmbeddingPort;
 import org.sopt.carena.diet.domain.value.EmbeddingVector;
-import org.sopt.carena.diet.exception.embedding.EmbeddingResultNullException;
+import org.sopt.carena.diet.exception.embedding.EmbeddingFailedException;
 import org.sopt.carena.infrastructure.embedding.client.EmbeddingClient;
 import org.sopt.carena.infrastructure.embedding.dto.BatchEmbeddingResult;
 import org.sopt.carena.infrastructure.embedding.dto.SingleEmbeddingResult;
@@ -25,7 +25,7 @@ public class EmbeddingAdapter implements EmbeddingPort {
             return mapToDomain(result);
         } catch (IllegalArgumentException e) {
             log.error("임베딩실패: {}", text, e);
-            throw new EmbeddingResultNullException();
+            throw new EmbeddingFailedException();
         }
     }
 
@@ -36,7 +36,7 @@ public class EmbeddingAdapter implements EmbeddingPort {
             return mapToDomain(result);
         } catch (IllegalArgumentException e) {
             log.error("배치로 임베딩 실패", e);
-            throw new EmbeddingResultNullException();
+            throw new EmbeddingFailedException();
         }
     }
 
