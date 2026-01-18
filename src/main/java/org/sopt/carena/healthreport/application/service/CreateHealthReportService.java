@@ -47,7 +47,7 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 				.map(HealthStatusCarrier::getDescription)
 				.collect(Collectors.collectingAndThen(
 						Collectors.joining(", "),
-						s -> s.isEmpty() ? "정상" : s  //이거 문구 추가하기
+						s -> s.isEmpty() ? "건강 검진 결과 데이터가 존재하지 않음" : s
 				));
 
 		// 임베딩 호출
