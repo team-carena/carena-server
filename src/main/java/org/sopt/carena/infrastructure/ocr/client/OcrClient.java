@@ -1,4 +1,4 @@
-package org.sopt.carena.infrastructure.ocr.adapter.client;
+package org.sopt.carena.infrastructure.ocr.client;
 
 import java.util.List;
 import java.util.UUID;
