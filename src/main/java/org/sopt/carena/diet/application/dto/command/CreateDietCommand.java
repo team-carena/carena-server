@@ -5,6 +5,7 @@ import java.util.Map;
 
 public record CreateDietCommand(
         String title,
+        String content,
         String reference,
         String referenceUrl,
         List<DietChunkCommand> chunks,

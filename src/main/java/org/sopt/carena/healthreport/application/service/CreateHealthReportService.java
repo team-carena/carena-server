@@ -3,7 +3,7 @@ package org.sopt.carena.healthreport.application.service;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
-import org.sopt.carena.diet.application.port.out.EmbeddingGenerator;
+import org.sopt.carena.diet.application.port.out.EmbeddingPort;
 import org.sopt.carena.healthreport.application.dto.command.CreateHealthReportCommand;
 import org.sopt.carena.healthreport.application.port.in.CreateHealthReportUseCase;
 import org.sopt.carena.healthreport.application.port.out.HealthReportEmbeddingPersistencePort;
@@ -26,7 +26,7 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 	private final HealthReportPersistencePort healthReportPersistencePort;
 	private final MemberPersistencePort memberPersistencePort;
 	private final HealthReportEmbeddingPersistencePort healthReportEmbeddingPersistencePort;
-	private final EmbeddingGenerator embeddingGenerator;
+	private final EmbeddingPort embeddingPort;
 	private final ExecutorService virtualExecutorService;
 
 	public void createHealthReport(final CreateHealthReportCommand commend) {
@@ -49,7 +49,7 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 				));
 
 		// 임베딩 호출
-		float[] embedding = embeddingGenerator.embed(embeddingText);
+		float[] embedding = embeddingPort.embed(embeddingText).vector();
 
 		// 임베딩 결과 엔티티 생성
 		HealthReportEmbedding healthReportEmbedding = HealthReportEmbedding.builder()
