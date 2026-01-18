@@ -1,9 +1,9 @@
-package org.sopt.carena.healthreport.adapter.out.web.ocr;
+package org.sopt.carena.infrastructure.ocr.adapter.client;
 
 import java.util.List;
 import java.util.UUID;
 
-import org.sopt.carena.healthreport.domain.value.ocr.OcrResponse;
+import org.sopt.carena.infrastructure.ocr.dto.OcrResponse;
 import org.sopt.carena.healthreport.exception.ocr.OcrApiFailException;
 import org.sopt.carena.healthreport.exception.ocr.OcrMessageSerializationException;
 import org.springframework.beans.factory.annotation.Value;
