@@ -29,8 +29,8 @@ public class DietListService implements GetDietListUseCase {
         Slice<DietInformation> slice =dietPersistencePort.loadDietList(pageable);
         List<DietListResultView.DietItem> items = slice.getContent().stream()
                 .map(summary -> new DietListResultView.DietItem(
-                        summary.id(),
-                        summary.title()
+                        summary.getId(),
+                        summary.getTitle()
                 ))
                 .toList();
         return new DietListResultView(items, slice.hasNext());

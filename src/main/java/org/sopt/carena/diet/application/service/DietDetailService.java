@@ -18,14 +18,14 @@ public class DietDetailService implements GetDietDetailUseCase {
 
     @Override
     public DietDetailResultView getDietDetail(final Long dietId) {
-        DietInformation dietDetail = dietPersistencePort.loadById(dietId).orElseThrow(DietNotFoundException::new);
+        DietInformation dietInformation = dietPersistencePort.loadById(dietId).orElseThrow(DietNotFoundException::new);
         return new DietDetailResultView(
-                dietDetail.id(),
-                dietDetail.title(),
-                dietDetail.content(),
-                dietDetail.recommendedCategories(),
-                dietDetail.cautionaryFoods(),
-                dietDetail.reference()
+                dietInformation.getId(),
+                dietInformation.getTitle(),
+                dietInformation.getContent(),
+                dietInformation.getRecommendedFoods().categories(),
+                dietInformation.getCautionaryFoods().foods(),
+                dietInformation.getReference()
         );
     }
 }

@@ -1,5 +1,6 @@
 package org.sopt.carena.diet.domain.value;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -13,7 +14,8 @@ public class DietChunk {
     private String embeddingText;
     private float[] embedding;
 
-    public DietChunk(
+    @Builder
+    private DietChunk(
             DietSection section,
             String content,
             int chunkOrder,
@@ -25,13 +27,6 @@ public class DietChunk {
         this.chunkOrder = chunkOrder;
         this.embeddingText = embeddingText;
         this.embedding = embedding;
-    }
-
-    public DietChunk(
-            DietSection section,
-            String content,
-            int chunkOrder) {
-        this(section, content, chunkOrder, null, null);
     }
 
     public void assignEmbedding(String embeddingText, float[] embedding) {
