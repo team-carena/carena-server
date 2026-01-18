@@ -79,7 +79,6 @@ public class HealthTipSearchRepositoryImpl implements HealthTipSearchRepository 
 		// 해시태그 조건을 만족하는 ID 중 랜덤 N개
 		List<Long> ids = queryFactory
 				.select(ht.id)
-				.distinct()
 				.from(ht)
 				.join(ht.hashtags, hth)
 				.join(hth.hashtag, h)
