@@ -23,6 +23,7 @@ public class DietChunk {
             String embeddingText,
             float[] embedding
     ) {
+        this.id = id;
         this.section = section;
         this.content = content;
         this.chunkOrder = chunkOrder;
