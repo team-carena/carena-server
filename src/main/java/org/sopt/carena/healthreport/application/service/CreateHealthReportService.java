@@ -1,7 +1,6 @@
 package org.sopt.carena.healthreport.application.service;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.sopt.carena.diet.application.port.out.EmbeddingGenerator;
@@ -19,7 +18,6 @@ import org.sopt.carena.member.domain.Member;
 import org.sopt.carena.member.exception.jwt.MemberNotFoundException;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 
 @Service
