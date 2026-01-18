@@ -12,33 +12,31 @@ public interface HealthReportRepository extends JpaRepository<HealthReportEntity
 
 	Optional<HealthReportEntity> findByMemberEntityIdAndId(long memberId, long healthReportId);
 
-	List<HealthReportEntity> findAllByMemberEntity_Id(long memberId);
-
 	Slice<HealthReportEntity> findAllByMemberEntityIdOrderByHealthCheckDateDesc(long memberId, Pageable pageable);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndHeightIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndHeightIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndWeightIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndWeightIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndWaistCircumferenceIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndWaistCircumferenceIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndBmiIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndBmiIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndSystolicBpIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndSystolicBpIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndDiastolicBpIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndDiastolicBpIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndHemoglobinIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndHemoglobinIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndFastingGlucoseIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndFastingGlucoseIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndAstIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndAstIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndAltIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndAltIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndGammaGtpIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndGammaGtpIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndSerumCreatinineIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndSerumCreatinineIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndEgfrIsNotNullOrderByHealthCheckDateDesc(Long memberId);
+	List<HealthReportEntity> findTop5ByMemberEntityIdAndEgfrIsNotNullOrderByHealthCheckDateDesc(long memberId);
 }

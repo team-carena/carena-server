@@ -25,17 +25,16 @@ public class HealthReportPersistenceAdapter implements HealthReportPersistencePo
 	private final MemberJpaRepository memberJpaRepository;
 
 	@Transactional
-	public void saveHealthReport(final HealthReport healthReport) {
+	public HealthReport saveHealthReport(final HealthReport healthReport) {
 		MemberEntity memberEntityProxy = memberJpaRepository.getReferenceById(healthReport.getMemberId());
 
-		healthReportRepository.save(HealthReportMapper.toEntity(healthReport, memberEntityProxy));
+		return HealthReportMapper.toDomain(healthReportRepository.save(HealthReportMapper.toEntity(healthReport, memberEntityProxy)));
 	}
 
 	public Slice<HealthReport> findAllByMemberIdOrderByHealthCheckDateDesc(final long memberId, final int index) {
 		Pageable pageable = PageRequest.of(index - 1, 10);
 		return healthReportRepository.findAllByMemberEntityIdOrderByHealthCheckDateDesc(memberId, pageable)
 				.map(HealthReportMapper::toDomain);
-
 	}
 
 	public Optional<HealthReport> findByMemberIdAndHealthReportId(final long memberId, final long healthReportId) {
