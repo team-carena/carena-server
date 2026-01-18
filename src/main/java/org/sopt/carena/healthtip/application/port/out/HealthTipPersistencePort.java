@@ -8,7 +8,9 @@ import org.sopt.carena.healthtip.domain.value.Hashtag;
 import org.springframework.data.domain.Slice;
 
 public interface HealthTipPersistencePort {
-	Slice<HealthTip> getHealthTipList(int page);
+	Slice<HealthTip> getHealthTipList(String hashtagName, int page);
+
+	List<HealthTip> getHealthTipTicker(String hashtagName);
 
 	Optional<HealthTip> getHealthTipDetail(long id);
 

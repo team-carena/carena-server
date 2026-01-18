@@ -7,11 +7,14 @@ import org.sopt.carena.healthtip.adapter.in.web.code.SuccessCode;
 import org.sopt.carena.healthtip.application.dto.command.CreateHealthTipCommand;
 import org.sopt.carena.healthtip.application.dto.view.ReadHealthTipDetailView;
 import org.sopt.carena.healthtip.application.dto.view.ReadHealthTipListView;
+import org.sopt.carena.healthtip.application.dto.view.ReadHealthTipTickerView;
 import org.sopt.carena.healthtip.application.port.in.CreateHealthTipUseCase;
 import org.sopt.carena.healthtip.application.port.in.DeleteHealthTipUseCase;
 import org.sopt.carena.healthtip.application.port.in.ReadHealthTipDetailUseCase;
 import org.sopt.carena.healthtip.application.port.in.ReadHealthTipListUseCase;
+import org.sopt.carena.healthtip.application.port.in.ReadHealthTipTickerUseCase;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,16 +34,27 @@ import lombok.RequiredArgsConstructor;
 public class HealthTipController implements HealthTipApiDocs {
 	private final CreateHealthTipUseCase createHealthTipUseCase;
 	private final ReadHealthTipListUseCase readHealthTipListUseCase;
+	private final ReadHealthTipTickerUseCase readHealthTipTickerUseCase;
 	private final ReadHealthTipDetailUseCase readHealthTipDetailUseCase;
 	private final DeleteHealthTipUseCase deleteHealthTipUseCase;
 
 	@GetMapping
 	public ResponseEntity<SuccessResponse<ReadHealthTipListView>> readHealthTipList(
-			@RequestParam(name = "page", defaultValue = "1") @Min(1) final int page
+			@RequestParam(name = "page", defaultValue = "1") @Min(1) final int page,
+			@RequestParam(name = "hashtagName", required = false) final String hashtagName
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_TIP_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_TIP_FOUND,
-						readHealthTipListUseCase.readHealthTipList(page)));
+						readHealthTipListUseCase.readHealthTipList(hashtagName, page)));
+	}
+
+	@GetMapping(path = "/ticker")
+	public ResponseEntity<SuccessResponse<ReadHealthTipTickerView>> readHealthTipTicker(
+			@AuthenticationPrincipal final long memberId
+	){
+		return ResponseEntity.status(SuccessCode.HEALTH_TIP_FOUND.getStatus())
+				.body(ApiResponse.success(SuccessCode.HEALTH_TIP_FOUND,
+						readHealthTipTickerUseCase.readHealthTipTicker(memberId)));
 	}
 
 	@GetMapping(path = "/{healthTipId}")

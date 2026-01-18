@@ -16,13 +16,4 @@ public record ReadHealthTipListView(
 
 		return new ReadHealthTipListView(elements, healthTipList.hasNext());
 	}
-
-	private record HealthTipListElement(
-			Long id,
-			String title
-	) {
-		private static HealthTipListElement from(final HealthTip healthTip) {
-			return new HealthTipListElement(healthTip.getId(), healthTip.getTitle());
-		}
-	}
 }
