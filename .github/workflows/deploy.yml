@@ -80,6 +80,6 @@ jobs:
             export FRONTEND_URL="${{ secrets.FRONTEND_URL }}"
             export OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
             export NAVER_OCR_URL="${{ secrets.NAVER_OCR_URL }}"
-            export NAVER_OCR_SECRET_KEY"${{ secrets.NAVER_OCR_SECRET_KEY }}"
+            export NAVER_OCR_SECRET_KEY="${{ secrets.NAVER_OCR_SECRET_KEY }}"
             
             ~/app/scripts/deploy.sh
