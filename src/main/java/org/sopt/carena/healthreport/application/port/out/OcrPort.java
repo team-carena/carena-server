@@ -1,4 +1,4 @@
-package org.sopt.carena.infrastructure.ocr.port;
+package org.sopt.carena.healthreport.application.port.out;
 
 import org.sopt.carena.infrastructure.ocr.dto.OcrResponse;
 import org.sopt.carena.healthreport.application.dto.command.ExtractTextCommand;
