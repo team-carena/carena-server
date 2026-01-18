@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class DietChunk {
 
-    private String id;
+    private long id;
     private final DietSection section;
     private final String content;
     private final int chunkOrder;
@@ -16,6 +16,7 @@ public class DietChunk {
 
     @Builder
     private DietChunk(
+            long id,
             DietSection section,
             String content,
             int chunkOrder,

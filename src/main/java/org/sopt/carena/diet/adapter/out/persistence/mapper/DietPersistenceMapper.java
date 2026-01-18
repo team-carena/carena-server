@@ -30,6 +30,7 @@ public class DietPersistenceMapper {
     }
     public DietChunk toDietChunk(DietChunkEntity chunkEntity) {
         return DietChunk.builder()
+                .id(chunkEntity.getId())
                 .section(chunkEntity.getSection())
                 .content(chunkEntity.getContent())
                 .chunkOrder(chunkEntity.getChunkOrder())
