@@ -1,4 +1,4 @@
-package org.sopt.carena.healthreport.domain.value.ocr;
+package org.sopt.carena.infrastructure.ocr.dto;
 
 import java.util.List;
 

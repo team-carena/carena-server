@@ -7,7 +7,7 @@ import org.sopt.carena.healthreport.domain.HealthReport;
 import org.springframework.data.domain.Slice;
 
 public interface HealthReportPersistencePort {
-	void saveHealthReport(HealthReport healthReport);
+	HealthReport saveHealthReport(HealthReport healthReport);
 
 	Slice<HealthReport> findAllByMemberIdOrderByHealthCheckDateDesc(long memberId, int index);
 

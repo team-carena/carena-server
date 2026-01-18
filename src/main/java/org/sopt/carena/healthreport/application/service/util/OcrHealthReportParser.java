@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.sopt.carena.healthreport.domain.value.ocr.OcrResponse;
+import org.sopt.carena.infrastructure.ocr.dto.OcrResponse;
 import org.sopt.carena.healthreport.application.dto.view.ExtractedTextView;
 
 public class OcrHealthReportParser {

@@ -5,7 +5,7 @@ import org.sopt.carena.healthreport.domain.HealthReport;
 import org.sopt.carena.member.adapter.out.persistence.entity.MemberEntity;
 
 public class HealthReportMapper {
-	public static HealthReport toDomain(final HealthReportEntity entity){
+	public static HealthReport toDomain(final HealthReportEntity entity) {
 		return HealthReport.builder()
 				.id(entity.getId())
 				.memberId(entity.getMemberEntity().getId())
@@ -33,7 +33,7 @@ public class HealthReportMapper {
 
 	}
 
-	public static HealthReportEntity toEntity(final HealthReport domain){
+	public static HealthReportEntity toEntity(final HealthReport domain) {
 		return HealthReportEntity.builder()
 				.gender(domain.getGender())
 				.healthCheckDate(domain.getHealthCheckDate())
@@ -58,7 +58,7 @@ public class HealthReportMapper {
 				.build();
 	}
 
-	public static HealthReportEntity toEntity(final HealthReport domain, final MemberEntity memberEntity){
+	public static HealthReportEntity toEntity(final HealthReport domain, final MemberEntity memberEntity) {
 		return HealthReportEntity.builder()
 				.gender(domain.getGender())
 				.healthCheckDate(domain.getHealthCheckDate())
