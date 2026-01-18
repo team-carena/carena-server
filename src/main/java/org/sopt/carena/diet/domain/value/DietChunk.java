@@ -1,5 +1,6 @@
 package org.sopt.carena.diet.domain.value;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -13,6 +14,7 @@ public class DietChunk {
     private String embeddingText;
     private float[] embedding;
 
+    @Builder
     public DietChunk(
             DietSection section,
             String content,

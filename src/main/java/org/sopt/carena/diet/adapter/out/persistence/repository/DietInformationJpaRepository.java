@@ -29,7 +29,7 @@ public interface DietInformationJpaRepository extends JpaRepository<DietInformat
         """)
     Optional<DietInformationEntity> findByIdWithChunks(@Param(value = "id") Long id);
 
-    // 새로운 메서드: 건강검진 기반 추천 (코사인 유사도)
+    // 건강검진 기반 추천 (코사인 유사도)
     @Query(value = """
         SELECT DISTINCT d.*,
                MIN(c.embedding <=> CAST(:healthEmbedding AS vector)) as similarity_score
@@ -45,6 +45,25 @@ public interface DietInformationJpaRepository extends JpaRepository<DietInformat
             @Param("healthEmbedding") String healthEmbedding,
             @Param("limit") int limit,
             @Param("offset") long offset
+    );
+
+
+    /**
+     * 건강검진 기반 유사한 식단 N개 조회 (유사도 점수 포함)
+     */
+    @Query(value = """
+        SELECT d.*, MIN(c.embedding <=> CAST(:healthEmbedding AS vector)) as distance
+        FROM diet_information d
+        INNER JOIN chunk c ON c.diet_information_id = d.id
+        WHERE c.embedding IS NOT NULL
+        GROUP BY d.id
+        ORDER BY distance ASC
+        LIMIT :limit
+        """,
+            nativeQuery = true)
+    List<Object[]> findRecommendedByHealthEmbeddingWithScore(
+            @Param("healthEmbedding") String healthEmbedding,
+            @Param("limit") int limit
     );
 
 

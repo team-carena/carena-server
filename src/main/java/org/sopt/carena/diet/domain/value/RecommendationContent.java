@@ -1,4 +1,3 @@
-/*
 package org.sopt.carena.diet.domain.value;
 
 public record RecommendationContent(
@@ -15,5 +14,3 @@ public record RecommendationContent(
     }
 }
 
-
-*/

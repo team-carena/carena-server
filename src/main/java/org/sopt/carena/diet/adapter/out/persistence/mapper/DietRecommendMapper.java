@@ -1,4 +1,4 @@
-/*
+
 package org.sopt.carena.diet.adapter.out.persistence.mapper;
 
 import org.sopt.carena.diet.adapter.out.persistence.entity.DietRecommendEntity;
@@ -14,8 +14,10 @@ public class DietRecommendMapper {
                 .id(domain.getId())
                 .memberId(domain.getMemberId())
                 .healthReportId(domain.getHealthReportId())
-                .title(domain.getContent().title())
-                .content(domain.getContent().content())
+                .dietInformationId(domain.getDietInformationId())
+                .title(domain.getTitle())
+                .content(domain.getContent())
+                .similarityScore(domain.getSimilarityScore())
                 .createdAt(domain.getCreatedAt())
                 .build();
     }
@@ -30,8 +32,10 @@ public class DietRecommendMapper {
                 .id(entity.getId())
                 .memberId(entity.getMemberId())
                 .healthReportId(entity.getHealthReportId())
-                .content(content)
+                .dietInformationId(entity.getDietInformationId())
+                .content(entity.getContent())
+                .similarityScore(entity.getSimilarityScore())
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
-}*/
+}
