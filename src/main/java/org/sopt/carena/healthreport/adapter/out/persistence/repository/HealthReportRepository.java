@@ -13,7 +13,7 @@ public interface HealthReportRepository extends JpaRepository<HealthReportEntity
 
 	Optional<HealthReportEntity> findByMemberEntityIdAndId(long memberId, long healthReportId);
 
-	boolean existsByMemberIdAndHealthCheckDate(Long memberId, LocalDate healthCheckDate);
+	boolean existsByMemberEntityIdAndHealthCheckDate(Long memberId, LocalDate healthCheckDate);
 
 	Slice<HealthReportEntity> findAllByMemberEntityIdOrderByHealthCheckDateDesc(long memberId, Pageable pageable);
 

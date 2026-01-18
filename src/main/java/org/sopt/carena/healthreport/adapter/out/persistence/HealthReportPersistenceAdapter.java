@@ -33,7 +33,7 @@ public class HealthReportPersistenceAdapter implements HealthReportPersistencePo
 	}
 
 	public boolean existsByMemberIdAndHealthCheckDate(long memberId, LocalDate healthCheckDate) {
-		return healthReportRepository.existsByMemberIdAndHealthCheckDate(memberId, healthCheckDate);
+		return healthReportRepository.existsByMemberEntityIdAndHealthCheckDate(memberId, healthCheckDate);
 	}
 
 	public Slice<HealthReport> findAllByMemberIdOrderByHealthCheckDateDesc(final long memberId, final int index) {
