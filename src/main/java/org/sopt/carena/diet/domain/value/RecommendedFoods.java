@@ -15,4 +15,3 @@ public record RecommendedFoods(Map<String, List<String>> categories) {
         return categories.isEmpty();
     }
 }
-

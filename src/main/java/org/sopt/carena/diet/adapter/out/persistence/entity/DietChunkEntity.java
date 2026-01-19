@@ -11,6 +11,7 @@ import org.sopt.carena.diet.domain.value.DietSection;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Entity
 @Table(name = "diet_chunk")
@@ -41,6 +42,9 @@ public class DietChunkEntity {
     @Basic(fetch = FetchType.LAZY)
     private float[] embedding;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    private Map<String, Object> metadata;
+
     @Column(nullable = false)
     private int chunkOrder;
 
@@ -53,7 +57,8 @@ public class DietChunkEntity {
             String content,
             String embeddingText,
             float[] embedding,
-            int chunkOrder
+            int chunkOrder,
+            Map<String, Object> metadata
     ) {
         this.document = document;
         this.section = section;
@@ -61,5 +66,6 @@ public class DietChunkEntity {
         this.embeddingText = embeddingText;
         this.embedding = embedding;
         this.chunkOrder = chunkOrder;
+        this.metadata = metadata;
     }
 }

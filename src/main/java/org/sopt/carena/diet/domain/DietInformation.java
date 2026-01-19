@@ -17,7 +17,7 @@ import java.util.Map;
 @Getter
 public class DietInformation {
 
-    private final Long id;
+    private Long id;
     private final String title;
     private final String content;
     private final String reference;

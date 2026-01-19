@@ -30,27 +30,16 @@ public class DietInformationEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "document")
     private List<DietChunkEntity> chunks = new ArrayList<>();
 
-    @OneToOne(mappedBy = "dietInformation", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToOne(mappedBy = "dietInformation",cascade = CascadeType.ALL)
     private RecommendedCategoryEntity recommendedFood;
 
-    @OneToOne(mappedBy = "dietInformation", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@OneToOne(mappedBy = "dietInformation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "dietInformation",cascade = CascadeType.ALL)
     private CautionCategoryEntity cautionaryFood;
-
-
-/*
-    @Type(JsonType.class)
-    @Column(columnDefinition = "jsonb")
-    private List<String> recommends;
-
-    @Type(JsonType.class)
-    @Column(columnDefinition = "jsonb")
-    private List<String> cautionary;
-
- */
-
 
     private String reference;
     private String referenceUrl;
