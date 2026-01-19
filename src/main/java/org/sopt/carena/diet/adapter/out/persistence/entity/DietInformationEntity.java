@@ -30,14 +30,14 @@ public class DietInformationEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @OneToMany(mappedBy = "document")
+    @OneToMany(mappedBy = "document",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<DietChunkEntity> chunks = new ArrayList<>();
 
 
-    @OneToOne(mappedBy = "dietInformation",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "dietInformation",cascade = CascadeType.ALL, orphanRemoval = true)
     private RecommendedCategoryEntity recommendedFood;
 
-    @OneToOne(mappedBy = "dietInformation",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "dietInformation",cascade = CascadeType.ALL, orphanRemoval = true)
     private CautionCategoryEntity cautionaryFood;
 
     private String reference;
