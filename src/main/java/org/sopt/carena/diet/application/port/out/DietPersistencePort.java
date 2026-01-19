@@ -21,5 +21,5 @@ public interface DietPersistencePort {
             List<String> cautionary
     );
     Optional<DietInformation> loadById(Long dietId);
-    Slice<DietInformation> loadDietList(Pageable pageable);
+    Map<Long, DietInformation> findAllByIds(List<Long> ids);
 }

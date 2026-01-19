@@ -8,8 +8,12 @@ import org.sopt.carena.diet.domain.value.DietChunk;
 import org.sopt.carena.diet.domain.value.RecommendedFoods;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.LinkedHashMap;
 
 @Component
 public class DietPersistenceMapper {
@@ -51,5 +55,20 @@ public class DietPersistenceMapper {
             return new CautionaryFoods(List.of());
         }
         return new CautionaryFoods(entity.getCautionaryFood().getCautionary());
+    }
+
+    public Map<Long, DietInformation> toMapById(List<DietInformationEntity> entities) {
+        if (entities == null || entities.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        return entities.stream()
+                .map(this::toDomain)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(
+                        DietInformation::getId,
+                        diet -> diet,
+                        (existing, replacement) -> existing,
+                        LinkedHashMap::new
+                ));
     }
 }

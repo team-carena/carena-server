@@ -24,7 +24,6 @@ public class RegisterDietDocumentService
     private final DietEmbeddingTextService dietEmbeddingTextService;
     private final DietPersistencePort dietPersistencePort;
     private final EmbeddingPort embeddingPort;
-
     @Override
     @Transactional
     public void register(final CreateDietCommand command) {
@@ -76,7 +75,6 @@ public class RegisterDietDocumentService
                     command.recommendedCategories(),
                     command.cautionaryFoods()
             );
-
             log.info("식단 정보 등록 성공: {}", documentTitle);
         } catch (Exception e) {
             log.error("식단 정보 등록 실패", e);

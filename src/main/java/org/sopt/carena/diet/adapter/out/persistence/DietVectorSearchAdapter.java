@@ -1,0 +1,93 @@
+package org.sopt.carena.diet.adapter.out.persistence;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sopt.carena.diet.application.port.out.LoadDietChunksByVectorPort;
+import org.sopt.carena.diet.domain.DietChunkSimilarity;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class DietVectorSearchAdapter implements LoadDietChunksByVectorPort {
+
+    private final VectorStore vectorStore;
+
+    @Override
+    public List<DietChunkSimilarity> findSimilarChunks(
+            String embeddingText,
+            int topK
+    ) {
+        List<Document> documents = vectorStore.similaritySearch(
+                SearchRequest.builder()
+                        .query(embeddingText)
+                        .topK(topK)
+                        .build()
+        );
+        documents.forEach(doc -> {
+            log.debug("doc metadata = {}", doc.getMetadata());
+        });
+
+        // Document → DietChunkSimilarity 변환
+        List<DietChunkSimilarity> results = documents.stream()
+                .map(this::toChunkSimilarity)
+                .filter(chunk -> chunk != null)
+                .collect(Collectors.toList());
+
+        log.debug("VectorStore 검색 완료 - 결과: {} 개", results.size());
+
+        return results;
+    }
+
+    /**
+     * Spring AI Document → Domain Value Object 변환
+     */
+    private DietChunkSimilarity toChunkSimilarity(Document doc) {
+        try {
+            Long dietId = extractLong(doc.getMetadata().get("document_id"));
+
+            if (dietId == null) {
+                log.warn("document_id가 없는 Document 발견");
+                return null;
+            }
+
+            // 코사인ㅇ르로 Distance → Similarity 변환
+            double distance = extractDouble(doc.getMetadata().get("distance"));
+            double similarity = 1.0 - distance;
+
+            String section = (String) doc.getMetadata().get("section");
+
+            return new DietChunkSimilarity(dietId, similarity, section);
+        } catch (Exception e) {
+            log.warn("Document 변환 실패", e);
+            return null;
+        }
+    }
+
+    private Long extractLong(Object obj) {
+        if (obj instanceof Number) {
+            return ((Number) obj).longValue();
+        }
+        if (obj instanceof String) {
+            try {
+                return Long.parseLong((String) obj);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    private double extractDouble(Object obj) {
+        if (obj instanceof Number) {
+            return ((Number) obj).doubleValue();
+        }
+        return 0.0;
+    }
+}

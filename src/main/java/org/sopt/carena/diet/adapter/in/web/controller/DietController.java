@@ -12,13 +12,13 @@ import org.sopt.carena.diet.adapter.in.web.mapper.DietCommandMapper;
 import org.sopt.carena.diet.application.dto.command.CreateDietCommand;
 import org.sopt.carena.diet.application.dto.view.DietDetailResultView;
 import org.sopt.carena.diet.application.dto.view.DietListResultView;
-import org.sopt.carena.diet.application.port.in.GetDietListUseCase;
+import org.sopt.carena.diet.application.port.in.GetSimilarDietListUseCase;
 import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
 import org.sopt.carena.diet.application.port.in.GetDietDetailUseCase;
-import org.sopt.carena.diet.domain.DietInformation;
 import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class DietController implements DietApiDocs {
     private final RegisterDietDocumentUseCase registerDietDocumentUseCase;
     private final GetDietDetailUseCase getDietDetailUseCase;
-    private final GetDietListUseCase getDietListUseCase;
+    private final GetSimilarDietListUseCase getSimilarDietListUseCase;
     private final DietCommandMapper dietcommandMapper;
 
     @PostMapping
@@ -60,9 +60,10 @@ public class DietController implements DietApiDocs {
 
     @GetMapping
     public ResponseEntity<SuccessResponse<DietListResponse>> getDietList(
+            @AuthenticationPrincipal final long memberId,
             @RequestParam(defaultValue = "1") @Min(1) int page
     ) {
-        DietListResultView result = getDietListUseCase.getDietList(page);
+        DietListResultView result = getSimilarDietListUseCase.getDietList(page,memberId);
         DietListResponse response = DietListResponse.from(result);
 
         return ResponseEntity.status(DietSuccessCode.DIET_LIST.getStatus())

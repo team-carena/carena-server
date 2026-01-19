@@ -17,9 +17,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -96,9 +95,28 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
                 .map(mapper::toDomain);
     }
 
+    /**
+     * ID 목록으로 식단 정보 조회
+     */
     @Override
-    public Slice<DietInformation> loadDietList(final Pageable pageable) {
-        return infoRepository.findAllByOrderByIdDesc(pageable)
-                .map(mapper::toDomain);
+    @Transactional(readOnly = true)
+    public Map<Long, DietInformation> findAllByIds(List<Long> ids) {
+        // 빈 리스트 처리
+        if (ids == null || ids.isEmpty()) {
+            log.warn("빈 ID 목록으로 조회 시도");
+            return Collections.emptyMap();
+        }
+
+        log.debug("식단 정보 일괄 조회 시작 - IDs: {}", ids);
+
+        // Entity 조회
+        List<DietInformationEntity> entities = infoRepository
+                .findAllByIdInWithDetails(ids);
+        Map<Long, DietInformation> dietMap = mapper.toMapById(entities);
+
+        if (entities.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        return dietMap;
     }
 }

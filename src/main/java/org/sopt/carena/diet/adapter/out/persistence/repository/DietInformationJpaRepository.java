@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface DietInformationJpaRepository extends JpaRepository<DietInformationEntity, Long> {
 
@@ -21,12 +21,15 @@ public interface DietInformationJpaRepository extends JpaRepository<DietInformat
         """)
     Slice<DietInformationEntity> findAllByOrderByIdDesc(Pageable pageable);
 
+
     @Query("""
         SELECT DISTINCT d FROM DietInformationEntity d
         LEFT JOIN FETCH d.chunks
-        WHERE d.id = :id
+        LEFT JOIN FETCH d.recommendedFood
+        LEFT JOIN FETCH d.cautionaryFood
+        WHERE d.id IN :ids
         """)
-    Optional<DietInformationEntity> findByIdWithChunks(@Param(value = "id") Long id);
+    List<DietInformationEntity> findAllByIdInWithDetails(@Param("ids") List<Long> ids);
 
 
 }
