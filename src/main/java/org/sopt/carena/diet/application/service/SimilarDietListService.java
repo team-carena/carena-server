@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.diet.application.dto.view.DietListResultView;
 import org.sopt.carena.diet.application.port.in.GetSimilarDietListUseCase;
 import org.sopt.carena.diet.application.port.out.*;
-import org.sopt.carena.diet.application.service.helper.DietSimilarityDomainService;
+import org.sopt.carena.diet.application.service.helper.AggregateAndPaginate;
 import org.sopt.carena.diet.domain.DietChunkSimilarity;
 import org.sopt.carena.diet.domain.DietInformation;
 import org.sopt.carena.diet.domain.PagedDietSimilarity;
@@ -30,7 +30,7 @@ public class SimilarDietListService implements GetSimilarDietListUseCase {
     private final LoadLatestHealthReportPort loadLatestHealthReportPort;
     private final LoadHealthReportEmbeddingPort loadHealthReportEmbeddingPort;
     private final LoadDietChunksByVectorPort loadDietChunksByVectorPort;
-    private final DietSimilarityDomainService dietSimilarityDomainService;
+    private final AggregateAndPaginate aggregateAndPaginate;
     private static final int PAGE_SIZE = 10;
 
     @Override
@@ -61,7 +61,7 @@ public class SimilarDietListService implements GetSimilarDietListUseCase {
             }
 
             int offset = (page - 1) * PAGE_SIZE;
-            PagedDietSimilarity paged = dietSimilarityDomainService
+            PagedDietSimilarity paged = aggregateAndPaginate
                     .processAndPaginate(similarChunks, offset, PAGE_SIZE);
 
             // 식단 상세 정보 조회

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class DietSimilarityDomainService {
+public class AggregateAndPaginate {
 
     /**
      * 유사도 정렬 + 중복 제거 + 페이징을 한 번에 처리
