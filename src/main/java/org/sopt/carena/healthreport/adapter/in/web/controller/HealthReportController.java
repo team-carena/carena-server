@@ -1,5 +1,7 @@
 package org.sopt.carena.healthreport.adapter.in.web.controller;
 
+import java.time.LocalDate;
+
 import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.sopt.carena.healthreport.adapter.in.web.request.CreateHealthReportRequest;
@@ -81,119 +83,132 @@ public class HealthReportController implements HealthReportApiDocs {
 	}
 
 	@GetMapping(path = "/measurement/height")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getHeightHistory (
-		@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getHeightHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadHeightHistory(memberId)));
+						healthReportItemHistoryUseCase.loadHeightHistory(memberId, healthCheckDate)));
 	}
 
 	@GetMapping(path = "/measurement/weight")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getWeightHistory (
-			@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getWeightHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadWeightHistory(memberId)));
+						healthReportItemHistoryUseCase.loadWeightHistory(memberId, healthCheckDate)));
 	}
 
 	@GetMapping(path = "/measurement/waist-circumference")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getWaistCircumferenceHistory (
-			@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getWaistCircumferenceHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadWaistCircumferenceHistory(memberId)));
+						healthReportItemHistoryUseCase.loadWaistCircumferenceHistory(memberId, healthCheckDate)));
 	}
 
 	@GetMapping(path = "/measurement/bmi")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getBmiHistory (
-			@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getBmiHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadBmiHistory(memberId)));
+						healthReportItemHistoryUseCase.loadBmiHistory(memberId, healthCheckDate)));
 	}
 
 	@GetMapping(path = "/blood-pressure/systolic")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getSystolicBpHistory (
-			@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getSystolicBpHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadSystolicBpHistory(memberId)));
+						healthReportItemHistoryUseCase.loadSystolicBpHistory(memberId, healthCheckDate)));
 	}
 
 	@GetMapping(path = "/blood-pressure/diastolic")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getDiastolicBpHistory (
-			@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getDiastolicBpHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadDiastolicBpHistory(memberId)));
+						healthReportItemHistoryUseCase.loadDiastolicBpHistory(memberId, healthCheckDate)));
 	}
 
 	@GetMapping(path = "/anemia/hemoglobin")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getHemoglobinHistory (
-			@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getHemoglobinHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadHemoglobinHistory(memberId)));
+						healthReportItemHistoryUseCase.loadHemoglobinHistory(memberId, healthCheckDate)));
 	}
 
 	@GetMapping(path = "/diabetes/fasting-glucose")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getFastingGlucoseHistory (
-			@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getFastingGlucoseHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadFastingGlucoseHistory(memberId)));
+						healthReportItemHistoryUseCase.loadFastingGlucoseHistory(memberId, healthCheckDate)));
 	}
 
 	@GetMapping(path = "/liver/ast")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getAstHistory (
-			@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getAstHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadAstHistory(memberId)));
+						healthReportItemHistoryUseCase.loadAstHistory(memberId, healthCheckDate)));
 	}
 
 	@GetMapping(path = "/liver/alt")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getAltHistory (
-			@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getAltHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadAltHistory(memberId)));
+						healthReportItemHistoryUseCase.loadAltHistory(memberId, healthCheckDate)));
 	}
 
 	@GetMapping(path = "/liver/gamma-gtp")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getGammaGtpHistory (
-			@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getGammaGtpHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadGammaGtpHistory(memberId)));
+						healthReportItemHistoryUseCase.loadGammaGtpHistory(memberId, healthCheckDate)));
 	}
 
 	@GetMapping(path = "/kidney/serum-creatinine")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getSerumCreatinineHistory (
-			@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getSerumCreatinineHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadSerumCreatinineHistory(memberId)));
+						healthReportItemHistoryUseCase.loadSerumCreatinineHistory(memberId, healthCheckDate)));
 	}
 
 	@GetMapping(path = "/kidney/egfr")
-	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getEgfrHistory (
-			@AuthenticationPrincipal final long memberId
+	public ResponseEntity<SuccessResponse<HealthReportHistoryView>> getEgfrHistory(
+			@AuthenticationPrincipal final long memberId,
+			@RequestParam(name = "healthCheckDate") final LocalDate healthCheckDate
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						healthReportItemHistoryUseCase.loadEgfrHistory(memberId)));
+						healthReportItemHistoryUseCase.loadEgfrHistory(memberId, healthCheckDate)));
 	}
 }
