@@ -50,7 +50,7 @@ public class SimilarDietListService implements GetSimilarDietListUseCase {
             }
 
             // 벡터 유사도 검색 -> 몇개 가져와야함?
-            int topK=10;
+            int topK= PAGE_SIZE * 10;
             List<DietChunkSimilarity> similarChunks = loadDietChunksByVectorPort
                     .findSimilarChunks(embeddingText, topK);
 
