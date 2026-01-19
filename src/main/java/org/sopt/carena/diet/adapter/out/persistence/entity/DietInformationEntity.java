@@ -37,7 +37,6 @@ public class DietInformationEntity {
     @OneToOne(mappedBy = "dietInformation",cascade = CascadeType.ALL)
     private RecommendedCategoryEntity recommendedFood;
 
-    //@OneToOne(mappedBy = "dietInformation", cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToOne(mappedBy = "dietInformation",cascade = CascadeType.ALL)
     private CautionCategoryEntity cautionaryFood;
 
@@ -53,15 +52,11 @@ public class DietInformationEntity {
     public DietInformationEntity(
             String title,
             String content,
-            //List<String> recommends,
-            //List<String> cautionary,
             String reference,
             String referenceUrl
     ) {
         this.title = title;
         this.content = content;
-        //this.recommends = recommends;
-        //this.cautionary = cautionary;
         this.reference = reference;
         this.referenceUrl = referenceUrl;
     }

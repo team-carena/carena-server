@@ -24,7 +24,7 @@ public class DietChunkEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "diet_information_id", nullable = false)
+    @JoinColumn(name = "diet_information_id", nullable = false,foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private DietInformationEntity document;
 
     @Enumerated(EnumType.STRING)
