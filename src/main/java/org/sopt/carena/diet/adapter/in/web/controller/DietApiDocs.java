@@ -21,7 +21,6 @@ public interface DietApiDocs {
     ResponseEntity<SuccessResponse<DietDetailResponse>> dietDetail(Long id);
 
     @Operation(summary = "추천 식단 리스트 조회" , description = "건강검진 결과를 바탕으로 추천 식단 리스트를 조회합니다.")
-    ResponseEntity<SuccessResponse<DietListResponse>> getDietList(
-           final long memberId, @Min(1) int page) ;
+    ResponseEntity<SuccessResponse<DietListResponse>> getDietList(long memberId, @Min(1) int page) ;
 }
 
