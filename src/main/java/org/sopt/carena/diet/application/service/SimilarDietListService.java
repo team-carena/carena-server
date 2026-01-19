@@ -9,7 +9,7 @@ import org.sopt.carena.diet.application.service.helper.AggregateAndPaginate;
 import org.sopt.carena.diet.domain.DietChunkSimilarity;
 import org.sopt.carena.diet.domain.DietInformation;
 import org.sopt.carena.diet.domain.PagedDietSimilarity;
-
+import org.sopt.carena.healthreport.application.port.out.HealthReportEmbeddingPersistencePort;
 import org.sopt.carena.healthreport.domain.HealthReport;
 import org.sopt.carena.healthreport.domain.HealthReportEmbedding;
 import org.springframework.stereotype.Service;
@@ -27,8 +27,7 @@ import java.util.stream.Collectors;
 public class SimilarDietListService implements GetSimilarDietListUseCase {
 
     private final DietPersistencePort dietPersistencePort;
-    private final LoadLatestHealthReportPort loadLatestHealthReportPort;
-    private final LoadHealthReportEmbeddingPort loadHealthReportEmbeddingPort;
+    private final HealthReportEmbeddingPersistencePort healthReportEmbeddingPersistencePort;
     private final LoadDietChunksByVectorPort loadDietChunksByVectorPort;
     private final AggregateAndPaginate aggregateAndPaginate;
     private static final int PAGE_SIZE = 10;
@@ -37,11 +36,11 @@ public class SimilarDietListService implements GetSimilarDietListUseCase {
     public DietListResultView getDietList(final int page, final long memberId) {
         try {
             // 회원의 최신 건강검진 조회
-            HealthReport healthReport = loadLatestHealthReportPort.findLatestByMemberId(memberId);
+            HealthReport healthReport = healthReportEmbeddingPersistencePort.findLatestByMemberId(memberId);
             log.debug("최신 건강검진 조회 완료 - healthReportId: {}", healthReport.getId());
 
             //임베딩  조회
-            HealthReportEmbedding embedding = loadHealthReportEmbeddingPort
+            HealthReportEmbedding embedding = healthReportEmbeddingPersistencePort
                     .findByHealthReportId(healthReport.getId());
             String embeddingText = embedding.getEmbeddingText();
 
