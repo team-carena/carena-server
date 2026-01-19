@@ -57,9 +57,14 @@ public class DietVectorSearchAdapter implements LoadDietChunksByVectorPort {
                 return null;
             }
 
-            // 코사인ㅇ르로 Distance → Similarity 변환
-            double distance = extractDouble(doc.getMetadata().get("distance"));
+            // 코사인으로 Distance → Similarity 변환
+            Double distance = extractDouble(doc.getMetadata().get("distance"));
+            if (distance == null) {
+                log.warn("distance가 없는 Document 발견");
+                return null;
+            }
             double similarity = 1.0 - distance;
+            similarity = Math.max(0.0, Math.min(1.0, similarity));
 
             String section = (String) doc.getMetadata().get("section");
 
@@ -84,10 +89,10 @@ public class DietVectorSearchAdapter implements LoadDietChunksByVectorPort {
         return null;
     }
 
-    private double extractDouble(Object obj) {
+    private Double extractDouble(Object obj) {
         if (obj instanceof Number) {
             return ((Number) obj).doubleValue();
         }
-        return 0.0;
+        return null;
     }
 }
