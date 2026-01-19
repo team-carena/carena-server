@@ -30,27 +30,15 @@ public class DietInformationEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "document",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<DietChunkEntity> chunks = new ArrayList<>();
 
-    @OneToOne(mappedBy = "dietInformation", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToOne(mappedBy = "dietInformation",cascade = CascadeType.ALL, orphanRemoval = true)
     private RecommendedCategoryEntity recommendedFood;
 
-    @OneToOne(mappedBy = "dietInformation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "dietInformation",cascade = CascadeType.ALL, orphanRemoval = true)
     private CautionCategoryEntity cautionaryFood;
-
-
-/*
-    @Type(JsonType.class)
-    @Column(columnDefinition = "jsonb")
-    private List<String> recommends;
-
-    @Type(JsonType.class)
-    @Column(columnDefinition = "jsonb")
-    private List<String> cautionary;
-
- */
-
 
     private String reference;
     private String referenceUrl;
@@ -64,15 +52,11 @@ public class DietInformationEntity {
     public DietInformationEntity(
             String title,
             String content,
-            //List<String> recommends,
-            //List<String> cautionary,
             String reference,
             String referenceUrl
     ) {
         this.title = title;
         this.content = content;
-        //this.recommends = recommends;
-        //this.cautionary = cautionary;
         this.reference = reference;
         this.referenceUrl = referenceUrl;
     }

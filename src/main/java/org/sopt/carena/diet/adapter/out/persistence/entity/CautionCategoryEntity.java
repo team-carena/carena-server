@@ -21,7 +21,7 @@ public class CautionCategoryEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "diet_information_id", nullable = false)
+    @JoinColumn(name = "diet_information_id", nullable = false,foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private DietInformationEntity dietInformation;
 
     @Type(JsonType.class)

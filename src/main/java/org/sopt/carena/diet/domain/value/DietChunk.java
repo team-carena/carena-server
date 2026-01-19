@@ -3,6 +3,8 @@ package org.sopt.carena.diet.domain.value;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Map;
+
 @Getter
 public class DietChunk {
 
@@ -13,6 +15,7 @@ public class DietChunk {
     // 임베딩 관련
     private String embeddingText;
     private float[] embedding;
+    private Map<String, Object> metadata;
 
     @Builder
     private DietChunk(
@@ -21,7 +24,8 @@ public class DietChunk {
             String content,
             int chunkOrder,
             String embeddingText,
-            float[] embedding
+            float[] embedding,
+            Map<String, Object> metadata
     ) {
         this.id = id;
         this.section = section;
@@ -29,10 +33,14 @@ public class DietChunk {
         this.chunkOrder = chunkOrder;
         this.embeddingText = embeddingText;
         this.embedding = embedding;
+        this.metadata = metadata;
     }
 
     public void assignEmbedding(String embeddingText, float[] embedding) {
         this.embeddingText = embeddingText;
         this.embedding = embedding;
+    }
+    public void assignMetadata(Map<String, Object> metadata) {
+        this.metadata = metadata;
     }
 }
