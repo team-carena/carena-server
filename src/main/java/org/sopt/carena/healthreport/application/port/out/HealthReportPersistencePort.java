@@ -41,4 +41,6 @@ public interface HealthReportPersistencePort {
 	List<HealthReport> findLatestHealthReportsSerumCreatinineIsNotNullByMemberId(long memberId);
 
 	List<HealthReport> findLatestHealthReportsEgfrIsNotNullByMemberId(long memberId);
+
+	Optional<HealthReport> findLatestByMemberId(long memberId);
 }

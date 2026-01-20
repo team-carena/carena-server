@@ -52,4 +52,6 @@ public interface HealthReportRepository extends JpaRepository<HealthReportEntity
 	List<HealthReportEntity> findTop5ByMemberEntityIdAndSerumCreatinineIsNotNullOrderByHealthCheckDateDesc(long memberId);
 
 	List<HealthReportEntity> findTop5ByMemberEntityIdAndEgfrIsNotNullOrderByHealthCheckDateDesc(long memberId);
+
+	Optional<HealthReportEntity> findTopByMemberEntityIdOrderByHealthCheckDateDesc(long memberId);
 }

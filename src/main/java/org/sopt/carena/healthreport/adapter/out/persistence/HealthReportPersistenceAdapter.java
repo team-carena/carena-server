@@ -137,4 +137,10 @@ public class HealthReportPersistenceAdapter implements HealthReportPersistencePo
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
+
+	public Optional<HealthReport> findLatestByMemberId(final long memberId) {
+		return healthReportRepository
+				.findTopByMemberEntityIdOrderByHealthCheckDateDesc(memberId)
+				.map(HealthReportMapper::toDomain);
+	}
 }
