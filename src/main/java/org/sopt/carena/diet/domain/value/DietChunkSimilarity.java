@@ -1,4 +1,4 @@
-package org.sopt.carena.diet.domain;
+package org.sopt.carena.diet.domain.value;
 
 /**
  * 식단 청크의 유사도 정보

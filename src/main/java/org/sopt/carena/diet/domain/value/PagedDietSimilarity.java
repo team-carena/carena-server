@@ -1,4 +1,4 @@
-package org.sopt.carena.diet.domain;
+package org.sopt.carena.diet.domain.value;
 
 import java.util.List;
 
