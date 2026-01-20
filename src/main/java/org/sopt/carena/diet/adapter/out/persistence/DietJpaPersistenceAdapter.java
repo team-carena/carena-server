@@ -12,13 +12,10 @@ import org.sopt.carena.diet.adapter.out.persistence.repository.DietInformationJp
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
 import org.sopt.carena.diet.domain.value.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -37,7 +34,8 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
                 info.getTitle(),
                 info.getContent(),
                 info.getReference(),
-                info.getReferenceUrl()
+                info.getReferenceUrl(),
+                info.getCreatedAt()
         );
 
         infoEntity = infoRepository.save(infoEntity);

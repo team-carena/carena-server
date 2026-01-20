@@ -1,15 +1,12 @@
 package org.sopt.carena.diet.adapter.out.persistence.entity;
 
 import io.hypersistence.utils.hibernate.id.Tsid;
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,22 +40,25 @@ public class DietInformationEntity {
     private String reference;
     private String referenceUrl;
 
-    @CreatedDate
+    @Column(name = "created_at",nullable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    @Builder
     public DietInformationEntity(
             String title,
             String content,
             String reference,
-            String referenceUrl
+            String referenceUrl,
+            LocalDateTime createdAt
     ) {
         this.title = title;
         this.content = content;
         this.reference = reference;
         this.referenceUrl = referenceUrl;
+        this.createdAt = createdAt;
     }
     public void setRecommendedFood(RecommendedCategoryEntity recommendedFood) {
         this.recommendedFood = recommendedFood;

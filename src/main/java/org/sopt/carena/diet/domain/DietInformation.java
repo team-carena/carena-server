@@ -9,6 +9,8 @@ import org.sopt.carena.diet.domain.value.RecommendedFoods;
 import org.sopt.carena.healthtip.application.dto.command.CreateHealthTipCommand;
 import org.sopt.carena.healthtip.domain.HealthTip;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +27,7 @@ public class DietInformation {
     private final List<DietChunk> chunks;
     private final RecommendedFoods recommendedFoods;
     private final CautionaryFoods cautionaryFoods;
+    private final LocalDateTime createdAt;
 
     @Builder
     private DietInformation(
@@ -35,7 +38,8 @@ public class DietInformation {
             String referenceUrl,
             List<DietChunk> chunks,
             RecommendedFoods recommendedFoods,
-            CautionaryFoods cautionaryFoods
+            CautionaryFoods cautionaryFoods,
+            LocalDateTime createdAt
 
     ) {
         this.id = id;
@@ -46,5 +50,6 @@ public class DietInformation {
         this.chunks = new ArrayList<>(chunks);
         this.recommendedFoods = recommendedFoods;
         this.cautionaryFoods = cautionaryFoods;
+        this.createdAt = createdAt;
     }
 }

@@ -56,10 +56,10 @@ public class MemberEntity {
                          LocalDateTime createdAt, AuthType authType, String authId, Long score,Role role) {
         this.id = id;
         this.name = name;
-        this.birthdate = birthdate;
         this.gender = gender;
         this.createdAt = createdAt;
         this.authType = authType;
+        this.birthdate = birthdate;
         this.authId = authId;
         this.score = score;
         this.role = role;
