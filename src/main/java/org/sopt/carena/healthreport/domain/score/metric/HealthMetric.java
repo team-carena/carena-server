@@ -2,7 +2,7 @@ package org.sopt.carena.healthreport.domain.score.metric;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.sopt.carena.healthreport.domain.score.ScoreResult;
+import org.sopt.carena.healthreport.domain.score.ScoreItem;
 import org.sopt.carena.healthreport.domain.score.rule.DeviationType;
 import org.sopt.carena.member.domain.Gender;
 
@@ -88,7 +88,7 @@ public enum HealthMetric {
 
     private final ScorePolicy scorePolicy;
 
-    public ScoreResult calculateResult(Double value, Gender gender) {
+    public ScoreItem calculateResult(Double value, Gender gender) {
         return scorePolicy.calculate(value, gender);
     }
 }

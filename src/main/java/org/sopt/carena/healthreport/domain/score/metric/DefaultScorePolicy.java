@@ -1,7 +1,7 @@
 package org.sopt.carena.healthreport.domain.score.metric;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.carena.healthreport.domain.score.ScoreResult;
+import org.sopt.carena.healthreport.domain.score.ScoreItem;
 import org.sopt.carena.healthreport.domain.score.rule.DeviationType;
 import org.sopt.carena.member.domain.Gender;
 
@@ -17,8 +17,8 @@ public class DefaultScorePolicy implements ScorePolicy {
     private final DeviationType deviationType;
 
     @Override
-    public ScoreResult calculate(Double value, Gender gender) {
-        if (value == null) return new ScoreResult(0, 100);
+    public ScoreItem calculate(Double value, Gender gender) {
+        if (value == null) return new ScoreItem(0, 100);
 
         double min = minProvider.apply(gender);
         double max = maxProvider.apply(gender);
@@ -28,14 +28,14 @@ public class DefaultScorePolicy implements ScorePolicy {
 
         if (value < min) deviation = min - value;
         else if (value > max) deviation = value - max;
-        else return new ScoreResult(0, 100);
+        else return new ScoreItem(0, 100);
 
         // 방향 필터
         if (deviationType == DeviationType.UPPER_ONLY && value <= max)
-            return new ScoreResult(0, 100);
+            return new ScoreItem(0, 100);
 
         if (deviationType == DeviationType.LOWER_ONLY && value >= min)
-            return new ScoreResult(0, 100);
+            return new ScoreItem(0, 100);
 
         int rawStep = (int) Math.floor(deviation / unit);
         int step = Math.min(rawStep, 3);
@@ -47,6 +47,6 @@ public class DefaultScorePolicy implements ScorePolicy {
             default -> 40;
         };
 
-        return new ScoreResult(step, score);
+        return new ScoreItem(step, score);
     }
 }

@@ -3,7 +3,7 @@ package org.sopt.carena.healthreport.domain.score.caculator;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.healthreport.domain.HealthReport;
 import org.sopt.carena.healthreport.domain.score.HealthScore;
-import org.sopt.carena.healthreport.domain.score.ScoreResult;
+import org.sopt.carena.healthreport.domain.score.ScoreItem;
 import org.sopt.carena.healthreport.domain.score.metric.HealthMetric;
 import org.sopt.carena.member.domain.Gender;
 import org.springframework.stereotype.Component;
@@ -25,47 +25,47 @@ public class HealthScoreCalculator {
 
         // 각 항목별 점수 계산
         //체질량지수
-        ScoreResult bmiScore = HealthMetric.BMI.calculateResult(
+        ScoreItem bmiScore = HealthMetric.BMI.calculateResult(
                 healthReport.getBmi().value(), gender);
 
         //  혈압은 특수 계산 SYSTOLIC_BP
-        ScoreResult bpScore = bloodPressureScorePolicy.calculate(
+        ScoreItem bpScore = bloodPressureScorePolicy.calculate(
                 healthReport.getBloodPressure().systolicBp(),
                 healthReport.getBloodPressure().diastolicBp()
         );
 
         //허리둘레
-        ScoreResult waistScore = HealthMetric.WAIST_CIRCUMFERENCE.calculateResult(
+        ScoreItem waistScore = HealthMetric.WAIST_CIRCUMFERENCE.calculateResult(
                 healthReport.getWaistCircumference().value(), gender);
 
         //혈색소
-        ScoreResult hemoglobinScore = HealthMetric.HEMOGLOBIN.calculateResult(
+        ScoreItem hemoglobinScore = HealthMetric.HEMOGLOBIN.calculateResult(
                 healthReport.getHemoglobin().value(), gender);
 
 
         //공복혈당
-        ScoreResult fastingGlucoseScore = HealthMetric.FASTING_GLUCOSE.calculateResult(
+        ScoreItem fastingGlucoseScore = HealthMetric.FASTING_GLUCOSE.calculateResult(
                 healthReport.getFastingGlucose().value(), gender);
 
 
         //혈청크레아티닌
-        ScoreResult serumCreatinineScore = HealthMetric.SERUM_CREATININE.calculateResult(
+        ScoreItem serumCreatinineScore = HealthMetric.SERUM_CREATININE.calculateResult(
                 healthReport.getSerumCreatinine().value(), gender);
 
         //신사구체여과율
-        ScoreResult egfrScore = HealthMetric.EGFR.calculateResult(
+        ScoreItem egfrScore = HealthMetric.EGFR.calculateResult(
                 healthReport.getEgfr().value(), gender);
 
         //AST
-        ScoreResult astScore = HealthMetric.AST.calculateResult(
+        ScoreItem astScore = HealthMetric.AST.calculateResult(
                 healthReport.getAst().value(), gender);
 
         //ALT
-        ScoreResult altScore = HealthMetric.ALT.calculateResult(
+        ScoreItem altScore = HealthMetric.ALT.calculateResult(
                 healthReport.getAlt().value(), gender);
 
         //감마지티피
-        ScoreResult gammaGtpScore = HealthMetric.GAMMA_GTP.calculateResult(
+        ScoreItem gammaGtpScore = HealthMetric.GAMMA_GTP.calculateResult(
                 healthReport.getGammaGtp().value(), gender);
 
         //비만도점수

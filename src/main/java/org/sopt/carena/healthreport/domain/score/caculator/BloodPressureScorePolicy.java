@@ -1,6 +1,6 @@
 package org.sopt.carena.healthreport.domain.score.caculator;
 
-import org.sopt.carena.healthreport.domain.score.ScoreResult;
+import org.sopt.carena.healthreport.domain.score.ScoreItem;
 
 public class BloodPressureScorePolicy {
 
@@ -10,9 +10,9 @@ public class BloodPressureScorePolicy {
     private static final double DIA_LOW = 60;
     private static final double UNIT = 10.0;
 
-    public ScoreResult calculate(Integer systolic, Integer diastolic) {
+    public ScoreItem calculate(Integer systolic, Integer diastolic) {
         if (systolic == null || diastolic == null)
-            return new ScoreResult(0, 100);
+            return new ScoreItem(0, 100);
 
         int systolicStep = 0;
         int diastolicStep = 0;
@@ -74,6 +74,6 @@ public class BloodPressureScorePolicy {
 
         score = Math.max(score, 0);
 
-        return new ScoreResult(step, score);
+        return new ScoreItem(step, score);
     }
 }
