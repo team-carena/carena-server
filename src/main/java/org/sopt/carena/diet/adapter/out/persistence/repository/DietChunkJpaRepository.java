@@ -8,35 +8,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface DietChunkJpaRepository extends JpaRepository<DietChunkEntity, Long> {
-
-    /**
-     * pgvector의 코사인 거리(<=>)를 이용한 유사도 검색
-     * 1.0 - distance = similarity
-     */
-    /*
-    @Query(value = """
-        SELECT 
-            dc.id,
-            dc.diet_information_id,
-            dc.section,
-            dc.content,
-            dc.chunk_order,
-            dc.created_at,
-            (1.0 - (dc.embedding <=> CAST(:queryVector AS vector))) AS similarity
-        FROM diet_chunk dc
-        WHERE dc.embedding IS NOT NULL
-        ORDER BY dc.embedding <=> CAST(:queryVector AS vector)
-        LIMIT :topK
-        """, nativeQuery = true)
-    List<Object[]> findSimilarChunksByVector(
-            @Param("queryVector") String queryVector,
-            @Param("topK") int topK
-    );
-
-     */
     /**
      * pgvector 코사인 유사도 기반 식단 검색
-     * - 윈도우 함수로 각 diet_information별 최고 유사도 청크만 선택
+     * -  각 diet_information별 최고 유사도 청크만 선택
      * - 유사도 높은 순 정렬
      * - 페이징 적용
      */
