@@ -2,8 +2,6 @@ package org.sopt.carena.recommend.application.service;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.sopt.carena.healthreport.application.converter.HealthReportEmbeddingConverter;
 import org.sopt.carena.healthreport.application.port.out.GetRagResultPort;
@@ -11,15 +9,11 @@ import org.sopt.carena.healthreport.application.port.out.SaveRecommendedMealPort
 import org.sopt.carena.healthreport.domain.HealthReport;
 import org.sopt.carena.healthreport.exception.healthreport.HealthReportNotFoundException;
 import org.sopt.carena.infrastructure.llm.dto.RecommendedMealResult;
-import org.sopt.carena.member.domain.Member;
-import org.sopt.carena.recommend.adapter.out.ai.VectorStoreAdapter;
 import org.sopt.carena.recommend.application.port.in.CreateRecommendedMealUseCase;
 import org.sopt.carena.recommend.application.port.out.GetDocumentListPort;
 import org.sopt.carena.recommend.application.port.out.LoadHealthReportPort;
 import org.sopt.carena.recommend.domain.RecommendedMeal;
 import org.springframework.ai.document.Document;
-import org.springframework.ai.vectorstore.SearchRequest;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -40,12 +34,6 @@ public class CreateRecommendedMealService implements CreateRecommendedMealUseCas
 		String embeddingText = HealthReportEmbeddingConverter.toEmbeddingText(healthReport);
 
 		List<Document> documents = getDocumentListPort.searchDocuments(embeddingText, 5);
-
-		System.out.println("중복 제거 후 검색 결과");
-
-		documents.forEach(document -> System.out.println(document.getText()));
-
-		System.out.println("==================");
 
 		virtualExecutorService.submit(() -> saveRagResultAsync(embeddingText, documents, memberId, healthReportId));
 	}

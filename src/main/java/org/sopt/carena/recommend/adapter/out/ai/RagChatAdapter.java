@@ -5,7 +5,6 @@ import java.util.List;
 import org.sopt.carena.healthreport.application.port.out.GetRagResultPort;
 import org.sopt.carena.infrastructure.llm.client.RagChatClient;
 import org.sopt.carena.infrastructure.llm.dto.RecommendedMealResult;
-import org.sopt.carena.recommend.domain.RecommendedMeal;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +21,5 @@ public class RagChatAdapter implements GetRagResultPort {
 			final List<Document> documents
 	) {
 		return ragChatClient.getRecommendedMeal(embeddingText, documents);
-
-		// return RecommendedMeal.builder().build();
 	}
 }

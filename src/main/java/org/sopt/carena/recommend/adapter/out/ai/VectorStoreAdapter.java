@@ -26,11 +26,7 @@ public class VectorStoreAdapter implements GetDocumentListPort {
 						.topK(10)
 						.build()
 		);
-		System.out.println("최초 유사도 검색 결과");
 
-		docs.forEach(document -> System.out.println(document.getText()));
-
-		System.out.println("==================");
 		return docs.stream()
 				.collect(Collectors.toMap(
 						d -> d.getMetadata().get("document_id"),
