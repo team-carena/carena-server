@@ -4,7 +4,7 @@ import org.sopt.carena.healthreport.application.dto.command.ExtractTextCommand;
 import org.sopt.carena.healthreport.application.dto.view.ExtractedTextView;
 import org.sopt.carena.healthreport.application.port.in.ExtractTextFromImageUseCase;
 import org.sopt.carena.healthreport.application.port.out.OcrPort;
-import org.sopt.carena.healthreport.application.service.util.OcrHealthReportParser;
+import org.sopt.carena.healthreport.application.parser.OcrHealthReportParser;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

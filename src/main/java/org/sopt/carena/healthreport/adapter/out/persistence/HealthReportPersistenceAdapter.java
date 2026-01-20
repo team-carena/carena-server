@@ -10,6 +10,7 @@ import org.sopt.carena.healthreport.application.port.out.HealthReportPersistence
 import org.sopt.carena.healthreport.domain.HealthReport;
 import org.sopt.carena.member.adapter.out.persistence.entity.MemberEntity;
 import org.sopt.carena.member.adapter.out.persistence.repository.MemberJpaRepository;
+import org.sopt.carena.recommend.application.port.out.LoadHealthReportPort;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -21,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class HealthReportPersistenceAdapter implements HealthReportPersistencePort {
+public class HealthReportPersistenceAdapter implements HealthReportPersistencePort, LoadHealthReportPort {
 	private final HealthReportRepository healthReportRepository;
 	private final MemberJpaRepository memberJpaRepository;
 
@@ -47,92 +48,97 @@ public class HealthReportPersistenceAdapter implements HealthReportPersistencePo
 				.map(HealthReportMapper::toDomain);
 	}
 
-	public List<HealthReport> findLatestHealthReportsHeightIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndHeightIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public Optional<HealthReport> findLatestHealthReportByMemberId(final long memberId) {
+		return healthReportRepository.findTopByMemberEntityIdOrderByHealthCheckDateDesc(memberId)
+				.map(HealthReportMapper::toDomain);
+	}
+
+	public List<HealthReport> findLatestHealthReportsHeightIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndHeightIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
 
-	public List<HealthReport> findLatestHealthReportsWeightIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndWeightIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public List<HealthReport> findLatestHealthReportsWeightIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndWeightIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
 
-	public List<HealthReport> findLatestHealthReportsWaistCircumferenceIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndWaistCircumferenceIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public List<HealthReport> findLatestHealthReportsWaistCircumferenceIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndWaistCircumferenceIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
 
-	public List<HealthReport> findLatestHealthReportsBmiIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndBmiIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public List<HealthReport> findLatestHealthReportsBmiIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndBmiIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
 
-	public List<HealthReport> findLatestHealthReportsSystolicBpIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndSystolicBpIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public List<HealthReport> findLatestHealthReportsSystolicBpIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndSystolicBpIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
 
-	public List<HealthReport> findLatestHealthReportsDiastolicBpIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndDiastolicBpIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public List<HealthReport> findLatestHealthReportsDiastolicBpIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndDiastolicBpIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
 
-	public List<HealthReport> findLatestHealthReportsHemoglobinIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndHemoglobinIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public List<HealthReport> findLatestHealthReportsHemoglobinIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndHemoglobinIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
 
-	public List<HealthReport> findLatestHealthReportsFastingGlucoseIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndFastingGlucoseIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public List<HealthReport> findLatestHealthReportsFastingGlucoseIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndFastingGlucoseIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
 
-	public List<HealthReport> findLatestHealthReportsAstIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndAstIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public List<HealthReport> findLatestHealthReportsAstIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndAstIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
 
-	public List<HealthReport> findLatestHealthReportsAltIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndAltIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public List<HealthReport> findLatestHealthReportsAltIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndAltIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
 
-	public List<HealthReport> findLatestHealthReportsGammaGtpIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndGammaGtpIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public List<HealthReport> findLatestHealthReportsGammaGtpIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndGammaGtpIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
 
-	public List<HealthReport> findLatestHealthReportsSerumCreatinineIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndSerumCreatinineIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public List<HealthReport> findLatestHealthReportsSerumCreatinineIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndSerumCreatinineIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
 	}
 
-	public List<HealthReport> findLatestHealthReportsEgfrIsNotNullByMemberId(final long memberId) {
-		return healthReportRepository.findTop5ByMemberEntityIdAndEgfrIsNotNullOrderByHealthCheckDateDesc(memberId)
+	public List<HealthReport> findLatestHealthReportsEgfrIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
+		return healthReportRepository.findTop5ByMemberEntityIdAndEgfrIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()
 				.map(HealthReportMapper::toDomain)
 				.toList();
