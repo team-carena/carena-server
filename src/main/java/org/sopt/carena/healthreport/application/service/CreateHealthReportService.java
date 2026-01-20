@@ -47,7 +47,7 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 		String embeddingText = HealthReportEmbeddingConverter.toEmbeddingText(healthReport);
 
 		virtualExecutorService.submit(() -> embeddingAndSave(embeddingText, member, healthReport));
-		virtualExecutorService.submit(() -> createRecommendedMealUseCase.saveRagResult(member.getId(), healthReport.getId()));
+		virtualExecutorService.submit(() -> createRecommendedMealUseCase.saveRagResult(member.getId()));
 	}
 
 	private void embeddingAndSave(final String embeddingText, final Member member, final HealthReport healthReport) {

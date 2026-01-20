@@ -5,5 +5,5 @@ import java.util.Optional;
 import org.sopt.carena.healthreport.domain.HealthReport;
 
 public interface LoadHealthReportPort {
-	Optional<HealthReport> findByMemberIdAndHealthReportId(long memberId, long healthReportId);
+	Optional<HealthReport> findLatestHealthReportByMemberId(long memberId);
 }

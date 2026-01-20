@@ -17,7 +17,9 @@ import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CreateRecommendedMealService implements CreateRecommendedMealUseCase {
@@ -27,15 +29,15 @@ public class CreateRecommendedMealService implements CreateRecommendedMealUseCas
 	private final LoadHealthReportPort loadHealthReportPort;
 	private final ExecutorService virtualExecutorService;
 
-	public void saveRagResult(final long memberId, final long healthReportId) {
-		HealthReport healthReport = loadHealthReportPort.findByMemberIdAndHealthReportId(memberId, healthReportId)
+	public void saveRagResult(final long memberId) {
+		HealthReport healthReport = loadHealthReportPort.findLatestHealthReportByMemberId(memberId)
 				.orElseThrow(HealthReportNotFoundException::new);
 
 		String embeddingText = HealthReportEmbeddingConverter.toEmbeddingText(healthReport);
 
 		List<Document> documents = getDocumentListPort.searchDocuments(embeddingText, 5);
 
-		virtualExecutorService.submit(() -> saveRagResultAsync(embeddingText, documents, memberId, healthReportId));
+		virtualExecutorService.submit(() -> saveRagResultAsync(embeddingText, documents, memberId, healthReport.getId()));
 	}
 
 	private void saveRagResultAsync(
@@ -48,6 +50,8 @@ public class CreateRecommendedMealService implements CreateRecommendedMealUseCas
 		String baseDocumentTitle = (String)documents.get(0).getMetadata().get("title");
 
 		RecommendedMealResult result = getRagResultPort.getRecommendedMeal(embeddingText, documents);
+
+		log.info("LLM 추천 식단 생성 완료, 저장 호출");
 
 		RecommendedMeal recommendedMeal = RecommendedMeal.builder()
 				.meal(result.meal())

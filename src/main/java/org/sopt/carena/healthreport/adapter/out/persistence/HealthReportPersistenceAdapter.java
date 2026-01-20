@@ -48,6 +48,11 @@ public class HealthReportPersistenceAdapter implements HealthReportPersistencePo
 				.map(HealthReportMapper::toDomain);
 	}
 
+	public Optional<HealthReport> findLatestHealthReportByMemberId(final long memberId) {
+		return healthReportRepository.findTopByMemberEntityIdOrderByHealthCheckDateDesc(memberId)
+				.map(HealthReportMapper::toDomain);
+	}
+
 	public List<HealthReport> findLatestHealthReportsHeightIsNotNullByMemberId(final long memberId, final LocalDate healthCheckDate) {
 		return healthReportRepository.findTop5ByMemberEntityIdAndHeightIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(memberId, healthCheckDate)
 				.stream()

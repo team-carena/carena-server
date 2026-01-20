@@ -9,7 +9,6 @@ import org.sopt.carena.recommend.application.port.in.GetLatestRecommendedMealUse
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,13 +22,11 @@ public class RecommendedMealController {
 	private final CreateRecommendedMealUseCase createRecommendedMealUseCase;
 	private final GetLatestRecommendedMealUseCase getLatestRecommendedMealUseCase;
 
-	// report id 는 내부 조회로 바꾸고, 추천 생성 과정을 비동기 처리하기
-	@PostMapping(path = "/{healthReportId}")
+	@PostMapping
 	public ResponseEntity<SuccessResponse<Void>> createRecommendedMeal(
-			@AuthenticationPrincipal final long memberId,
-			@PathVariable(name = "healthReportId") final long healthReportId
+			@AuthenticationPrincipal final long memberId
 	) {
-		createRecommendedMealUseCase.saveRagResult(memberId, healthReportId);
+		createRecommendedMealUseCase.saveRagResult(memberId);
 
 		return ResponseEntity.status(SuccessCode.RECOMMENDED_MEAL_CREATED.getStatus())
 				.body(ApiResponse.success(SuccessCode.RECOMMENDED_MEAL_CREATED));
