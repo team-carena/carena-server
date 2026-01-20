@@ -1,8 +1,8 @@
 package org.sopt.carena.diet.application.service.helper;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.diet.domain.DietChunkSimilarity;
-import org.sopt.carena.diet.domain.PagedDietSimilarity;
+import org.sopt.carena.diet.domain.value.DietChunkSimilarity;
+import org.sopt.carena.diet.domain.value.PagedDietSimilarity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -25,9 +25,9 @@ public class AggregateAndPaginate {
      * 3. 페이징 적용
      */
     public PagedDietSimilarity processAndPaginate(
-            List<DietChunkSimilarity> chunks,
-            int offset,
-            int pageSize
+            final List<DietChunkSimilarity> chunks,
+            final int offset,
+            final int pageSize
     ) {
         if (chunks == null || chunks.isEmpty()) {
             log.debug("처리할 청크가 없습니다");
@@ -62,9 +62,9 @@ public class AggregateAndPaginate {
     }
 
     private PagedDietSimilarity applyPagination(
-            List<DietChunkSimilarity> sorted,
-            int offset,
-            int pageSize
+            final List<DietChunkSimilarity> sorted,
+            final int offset,
+            final int pageSize
     ) {
         if (offset >= sorted.size()) {
             log.debug("페이지 범위 초과 - offset: {}, total: {}", offset, sorted.size());

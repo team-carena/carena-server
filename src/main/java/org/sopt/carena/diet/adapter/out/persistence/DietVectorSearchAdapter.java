@@ -3,7 +3,7 @@ package org.sopt.carena.diet.adapter.out.persistence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.diet.application.port.out.LoadDietChunksByVectorPort;
-import org.sopt.carena.diet.domain.DietChunkSimilarity;
+import org.sopt.carena.diet.domain.value.DietChunkSimilarity;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -21,8 +21,8 @@ public class DietVectorSearchAdapter implements LoadDietChunksByVectorPort {
 
     @Override
     public List<DietChunkSimilarity> findSimilarChunks(
-            String embeddingText,
-            int topK
+            final String embeddingText,
+            final int topK
     ) {
         List<Document> documents = vectorStore.similaritySearch(
                 SearchRequest.builder()
@@ -48,7 +48,7 @@ public class DietVectorSearchAdapter implements LoadDietChunksByVectorPort {
     /**
      * Spring AI Document → Domain Value Object 변환
      */
-    private DietChunkSimilarity toChunkSimilarity(Document doc) {
+    private DietChunkSimilarity toChunkSimilarity(final Document doc) {
         try {
             Long dietId = extractLong(doc.getMetadata().get("document_id"));
 
@@ -75,7 +75,7 @@ public class DietVectorSearchAdapter implements LoadDietChunksByVectorPort {
         }
     }
 
-    private Long extractLong(Object obj) {
+    private Long extractLong(final Object obj) {
         if (obj instanceof Number) {
             return ((Number) obj).longValue();
         }
@@ -89,7 +89,7 @@ public class DietVectorSearchAdapter implements LoadDietChunksByVectorPort {
         return null;
     }
 
-    private Double extractDouble(Object obj) {
+    private Double extractDouble(final Object obj) {
         if (obj instanceof Number) {
             return ((Number) obj).doubleValue();
         }

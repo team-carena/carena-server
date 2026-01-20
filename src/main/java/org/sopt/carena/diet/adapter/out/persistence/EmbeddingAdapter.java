@@ -40,11 +40,11 @@ public class EmbeddingAdapter implements EmbeddingPort {
         }
     }
 
-    private EmbeddingVector mapToDomain(SingleEmbeddingResult result) {
+    private EmbeddingVector mapToDomain(final SingleEmbeddingResult result) {
         return new EmbeddingVector(result.embedding());
     }
 
-    private List<EmbeddingVector> mapToDomain(BatchEmbeddingResult result) {
+    private List<EmbeddingVector> mapToDomain(final BatchEmbeddingResult result) {
         return result.embeddings().stream()
                 .map(data -> new EmbeddingVector(data.vector()))
                 .toList();

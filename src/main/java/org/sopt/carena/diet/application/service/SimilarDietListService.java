@@ -6,9 +6,9 @@ import org.sopt.carena.diet.application.dto.view.DietListResultView;
 import org.sopt.carena.diet.application.port.in.GetSimilarDietListUseCase;
 import org.sopt.carena.diet.application.port.out.*;
 import org.sopt.carena.diet.application.service.helper.AggregateAndPaginate;
-import org.sopt.carena.diet.domain.DietChunkSimilarity;
+import org.sopt.carena.diet.domain.value.DietChunkSimilarity;
 import org.sopt.carena.diet.domain.DietInformation;
-import org.sopt.carena.diet.domain.PagedDietSimilarity;
+import org.sopt.carena.diet.domain.value.PagedDietSimilarity;
 import org.sopt.carena.healthreport.application.port.out.HealthReportEmbeddingPersistencePort;
 import org.sopt.carena.healthreport.domain.HealthReport;
 import org.sopt.carena.healthreport.domain.HealthReportEmbedding;
@@ -49,7 +49,7 @@ public class SimilarDietListService implements GetSimilarDietListUseCase {
         return getDietListByEmbedding(page, memberId, healthReport);
     }
 
-    private DietListResultView getLatestDietList(int page) {
+    private DietListResultView getLatestDietList(final int page) {
 
         Pageable pageable = PageRequest.of(
                 page - 1,
@@ -71,9 +71,9 @@ public class SimilarDietListService implements GetSimilarDietListUseCase {
     }
 
     private DietListResultView getDietListByEmbedding(
-            int page,
-            long memberId,
-            HealthReport healthReport
+            final int page,
+            final long memberId,
+            final HealthReport healthReport
     ) {
         // 임베딩 조회
         HealthReportEmbedding embedding =
@@ -112,6 +112,7 @@ public class SimilarDietListService implements GetSimilarDietListUseCase {
         Map<Long, DietInformation> dietMap =
                 dietPersistencePort.findAllByIds(dietIds);
 
+        //이 과정 안으로 넣기 (정적메서드 사용)
         List<DietListResultView.DietItem> items = paged.content().stream()
                 .map(chunk -> dietMap.get(chunk.dietInformationId()))
                 .filter(Objects::nonNull)

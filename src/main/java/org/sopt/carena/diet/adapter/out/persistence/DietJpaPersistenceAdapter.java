@@ -10,7 +10,7 @@ import org.sopt.carena.diet.adapter.out.persistence.mapper.DietPersistenceMapper
 import org.sopt.carena.diet.adapter.out.persistence.repository.DietChunkJpaRepository;
 import org.sopt.carena.diet.adapter.out.persistence.repository.DietInformationJpaRepository;
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
-import org.sopt.carena.diet.domain.value.DietChunk;
+import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,7 +90,7 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
     }
     @Override
     @Transactional(readOnly = true)
-    public Optional<DietInformation> loadById(Long dietId) {
+    public Optional<DietInformation> loadById(final Long dietId) {
         return infoRepository.findById(dietId)
                 .map(mapper::toDomain);
     }
@@ -106,7 +106,7 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
      */
     @Override
     @Transactional(readOnly = true)
-    public Map<Long, DietInformation> findAllByIds(List<Long> ids) {
+    public Map<Long, DietInformation> findAllByIds(final List<Long> ids) {
         // 빈 리스트 처리
         if (ids == null || ids.isEmpty()) {
             log.warn("빈 ID 목록으로 조회 시도");

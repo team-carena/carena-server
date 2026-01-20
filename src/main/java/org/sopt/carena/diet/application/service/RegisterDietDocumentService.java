@@ -6,6 +6,7 @@ import org.sopt.carena.diet.application.dto.command.CreateDietCommand;
 import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
 import org.sopt.carena.diet.application.port.out.EmbeddingPort;
+import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.value.*;
 import org.sopt.carena.diet.domain.DietInformation;
 import org.sopt.carena.diet.exception.embedding.EmbeddingFailedException;
