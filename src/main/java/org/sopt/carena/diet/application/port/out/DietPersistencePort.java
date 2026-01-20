@@ -21,6 +21,12 @@ public interface DietPersistencePort {
             List<String> cautionary
     );
     Optional<DietInformation> loadById(Long dietId);
-    Map<Long, DietInformation> findAllByIds(List<Long> ids);
     Slice<DietInformation> loadDietList(Pageable pageable); //건강검진 결과 없는 경우
+
+    //벡터 유사도 기반 식단 목록 조회
+    Slice<DietInformation> loadDietsByVectorSimilarity(
+            float[] embeddingVector,
+            int page,
+            int pageSize
+    );
 }

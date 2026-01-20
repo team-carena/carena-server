@@ -12,12 +12,17 @@ import org.sopt.carena.diet.adapter.out.persistence.repository.DietInformationJp
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
 import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
+import org.sopt.carena.healthreport.exception.healthreport.HealthReportEmbeddingNotFoundException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -100,28 +105,64 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
         return infoRepository.findAllByOrderByIdDesc(pageable)
                 .map(mapper::toDomain);
     }
-
-    /**
-     * ID 목록으로 식단 정보 조회
-     */
     @Override
-    @Transactional(readOnly = true)
-    public Map<Long, DietInformation> findAllByIds(final List<Long> ids) {
-        // 빈 리스트 처리
-        if (ids == null || ids.isEmpty()) {
-            log.warn("빈 ID 목록으로 조회 시도");
-            return Collections.emptyMap();
-        }
-        log.debug("식단 정보 일괄 조회 시작 - IDs: {}", ids);
+    public Slice<DietInformation> loadDietsByVectorSimilarity(final float[] embeddingVector, final int page, final int pageSize) {
+        log.debug("벡터 유사도 기반 식단 조회 - page: {}, pageSize: {}", page, pageSize);
 
-        // Entity 조회
-        List<DietInformationEntity> entities = infoRepository
-                .findAllByIdInWithDetails(ids);
-        Map<Long, DietInformation> dietMap = mapper.toMapById(entities);
+        String vectorString = convertToVectorString(embeddingVector);
+        int offset = (page - 1) * pageSize;
 
-        if (entities.isEmpty()) {
-            return Collections.emptyMap();
+        // 벡터 검색
+        List<Object[]> rawResults = dietChunkRepository.findSimilarDietsByVector(
+                vectorString, pageSize, offset
+        );
+
+        if (rawResults.isEmpty()) {
+            return new SliceImpl<>(List.of(), PageRequest.of(page - 1, pageSize), false);
         }
-        return dietMap;
+
+        List<Long> dietIds = rawResults.stream()
+                .map(row -> ((Number) row[0]).longValue())
+                .toList();
+
+        Map<Long, DietInformationEntity> dietEntityMap =
+                infoRepository.findAllById(dietIds).stream()
+                        .collect(Collectors.toMap(
+                                DietInformationEntity::getId,
+                                Function.identity()
+                        ));
+
+        //  Entity → 도메인 변환
+        List<DietInformation> diets = dietIds.stream()
+                .map(dietEntityMap::get)
+                .filter(entity -> entity != null)
+                .map(mapper::toDomain)
+                .toList();
+
+        // hasNext 계산
+        boolean hasNext = checkHasNextPage(vectorString, offset, pageSize);
+
+        log.debug("벡터 유사도 식단 조회 완료 - 결과: {}개, hasNext: {}", diets.size(), hasNext);
+
+        return new SliceImpl<>(diets, PageRequest.of(page - 1, pageSize), hasNext);
+    }
+
+    private String convertToVectorString(float[] embedding) {
+        if (embedding == null || embedding.length == 0) {
+            throw new HealthReportEmbeddingNotFoundException();
+        }
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < embedding.length; i++) {
+            if (i > 0) {
+                sb.append(",");
+            }
+            sb.append(embedding[i]);
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+    private boolean checkHasNextPage(String vectorString, int offset, int pageSize) {
+        Long totalCount = dietChunkRepository.countSimilarDietsByVector(vectorString);
+        return offset + pageSize < totalCount;
     }
 }
