@@ -1,7 +1,6 @@
 package org.sopt.carena.diet.domain.value;
 
 import org.sopt.carena.diet.exception.embedding.InvalidSectionNameException;
-import org.sopt.carena.diet.exception.embedding.SectionNameNullException;
 
 import java.util.Arrays;
 
