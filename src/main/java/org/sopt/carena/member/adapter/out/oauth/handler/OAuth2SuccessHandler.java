@@ -73,7 +73,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         //response.setHeader("Authorization", "Bearer " + loginResult.accessToken());
         addCookie(response, "oneTimeToken", loginResult.oneTimeToken(), 1209600);
         // 메인 페이지로 리다이렉트
-        String redirectUrl = frontendUrl + "/home";
+        String redirectUrl = frontendUrl + "/oauth-callback";
         response.sendRedirect(redirectUrl);
     }
     private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
