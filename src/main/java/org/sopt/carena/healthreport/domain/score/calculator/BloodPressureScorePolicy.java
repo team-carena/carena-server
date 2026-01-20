@@ -1,4 +1,4 @@
-package org.sopt.carena.healthreport.domain.score.caculator;
+package org.sopt.carena.healthreport.domain.score.calculator;
 
 import org.sopt.carena.healthreport.domain.score.ScoreItem;
 
@@ -35,7 +35,7 @@ public class BloodPressureScorePolicy {
             diastolicStep = Math.max(diastolicStep, 1);
         }
 
-        // 1단계까지만 반영
+        // 3단계까지만 반영
         systolicStep = Math.min(systolicStep, 3);
         diastolicStep = Math.min(diastolicStep, 3);
 

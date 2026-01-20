@@ -1,8 +1,6 @@
 package org.sopt.carena.member.application.dto.view;
 
 import org.sopt.carena.member.domain.Gender;
-import org.springframework.cglib.core.Local;
-
 import java.time.LocalDate;
 import java.time.Period;
 

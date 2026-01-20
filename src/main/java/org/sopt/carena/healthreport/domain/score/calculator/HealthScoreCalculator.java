@@ -1,4 +1,4 @@
-package org.sopt.carena.healthreport.domain.score.caculator;
+package org.sopt.carena.healthreport.domain.score.calculator;
 
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.healthreport.domain.HealthReport;
