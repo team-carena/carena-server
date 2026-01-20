@@ -54,7 +54,7 @@ public class SimilarDietListService implements GetSimilarDietListUseCase {
         Pageable pageable = PageRequest.of(
                 page - 1,
                 PAGE_SIZE,
-                Sort.by(Sort.Direction.DESC, "id")
+                Sort.by(Sort.Direction.DESC, "createdAt")
         );
 
         Slice<DietInformation> slice =
