@@ -30,6 +30,7 @@ public class DietPersistenceMapper {
                         .toList())
                 .recommendedFoods(toRecommendedFoods(entity))
                 .cautionaryFoods(toCautionaryFoods(entity))
+                .createdAt(entity.getCreatedAt())
                 .build();
     }
     public DietChunk toDietChunk(DietChunkEntity chunkEntity) {
