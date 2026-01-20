@@ -4,11 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.healthreport.domain.HealthReport;
 import org.sopt.carena.healthreport.domain.score.HealthScore;
 import org.sopt.carena.healthreport.domain.score.ScoreResult;
-import org.sopt.carena.healthreport.domain.score.caculator.metric.BloodPressureScorePolicy;
-import org.sopt.carena.healthreport.domain.score.caculator.metric.HealthMetric;
+import org.sopt.carena.healthreport.domain.score.metric.HealthMetric;
 import org.sopt.carena.member.domain.Gender;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 /**
  * 건강 점수 계산 도메인 서비스
@@ -70,25 +68,6 @@ public class HealthScoreCalculator {
         ScoreResult gammaGtpScore = HealthMetric.GAMMA_GTP.calculateResult(
                 healthReport.getGammaGtp().value(), gender);
 
-
-
-               /*
-        - 비만도 점수 = (BMI 단계 점수 + 허리둘레 단계 점수) / 2
-    - 둘 다 2단계 이상 → -10점 추가 감점
-    - 둘 다 3단계 이상 → -20점 추가 감점
-- 혈압 점수 = (수축기 단계 점수 + 이완기 단계 점수) / 2
-    - 둘 다 2단계 이상 → -10점
-    - 하나라도 3단계 이상 → -20점
-- 혈당 점수 = 공복혈당 단계 점수
-- 신장 점수 = (크레아티닌 단계 점수 + 신사구체여과율 단계 점수) /2
-    - 둘 다 2단계 이상 → -15점
-    - 하나라도 3단계 이상 → -25점
-- 간 기능 점수 = (AST + ALT + GGT 단계 점수) / 3
-    - 2개 이상 2단계 이상 → -10점
-    - 3개 모두 3단계 이상 → -20점
-- 혈액 점수 = 혈색소 단계 점수
-         */
-
         //비만도점수
         int obesityScore = (bmiScore.getScore() +waistScore.getScore()) / 2;
 
@@ -124,15 +103,6 @@ public class HealthScoreCalculator {
             liverScore -= 10;
         }
         // 종합 점수 계산
-        /*
-        int totalScore = obesityScore
-                + bpScore.getScore()
-                + fastingGlucoseScore.getScore()
-                + kidneysScore
-                + liverScore
-                + hemoglobinScore.getScore();
-
-         */
         log.info("[HealthScore] BMI score={}, step={}",
                 bmiScore.getScore(), bmiScore.getStep());
 
@@ -176,6 +146,5 @@ public class HealthScoreCalculator {
         // 소수점 반올림하여 정수로 표기
         int totalScore = (int) Math.round(weightedScore);
         return HealthScore.from((long) totalScore);
-
     }
 }

@@ -1,4 +1,4 @@
-package org.sopt.carena.healthreport.domain.score.caculator.metric;
+package org.sopt.carena.healthreport.domain.score.caculator;
 
 import org.sopt.carena.healthreport.domain.score.ScoreResult;
 
@@ -35,11 +35,11 @@ public class BloodPressureScorePolicy {
             diastolicStep = Math.max(diastolicStep, 1);
         }
 
-        // 1단계까지만 반영 (기존 정책 유지)
+        // 1단계까지만 반영
         systolicStep = Math.min(systolicStep, 3);
         diastolicStep = Math.min(diastolicStep, 3);
 
-        // 🔥 기존 방식 유지: 대표 단계는 더 나쁜 쪽
+
         int step = Math.max(systolicStep, diastolicStep);
 
         // =============================
@@ -76,5 +76,4 @@ public class BloodPressureScorePolicy {
 
         return new ScoreResult(step, score);
     }
-
 }

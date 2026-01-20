@@ -1,11 +1,10 @@
-package org.sopt.carena.healthreport.domain.score.caculator.metric;
+package org.sopt.carena.healthreport.domain.score.metric;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.sopt.carena.healthreport.domain.score.ScoreResult;
-import org.sopt.carena.healthreport.domain.score.caculator.DeviationType;
+import org.sopt.carena.healthreport.domain.score.rule.DeviationType;
 import org.sopt.carena.member.domain.Gender;
-
 
 /**
  * 각 건강 지표의 점수 계산에 필요한 메타데이터

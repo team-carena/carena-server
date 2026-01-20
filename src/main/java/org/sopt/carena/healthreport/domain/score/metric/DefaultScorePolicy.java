@@ -1,8 +1,8 @@
-package org.sopt.carena.healthreport.domain.score.caculator.metric;
+package org.sopt.carena.healthreport.domain.score.metric;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.carena.healthreport.domain.score.ScoreResult;
-import org.sopt.carena.healthreport.domain.score.caculator.DeviationType;
+import org.sopt.carena.healthreport.domain.score.rule.DeviationType;
 import org.sopt.carena.member.domain.Gender;
 
 import java.util.function.Function;
@@ -37,7 +37,8 @@ public class DefaultScorePolicy implements ScorePolicy {
         if (deviationType == DeviationType.LOWER_ONLY && value >= min)
             return new ScoreResult(0, 100);
 
-        int step = (int) Math.floor(deviation / unit);
+        int rawStep = (int) Math.floor(deviation / unit);
+        int step = Math.min(rawStep, 3);
 
         int score = switch (step) {
             case 0 -> 100;
