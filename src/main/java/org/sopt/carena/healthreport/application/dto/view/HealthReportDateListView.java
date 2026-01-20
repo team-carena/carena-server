@@ -19,7 +19,7 @@ public record HealthReportDateListView(
 	}
 
 	private record ReportDateInfo(
-			Long id,
+			Long healthReportId,
 			LocalDate healthCheckDate,
 			String institutionName
 	) {
