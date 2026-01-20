@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum SerumCreatinineStatus implements HealthStatusCarrier {
 	NONE("없음", RiskLevel.NONE),
-	NORMAL("혈청 크레아티닌 수치 정상", RiskLevel.NORMAL),
-	SUSPECTED("혈청 크레아티닌 수치 높음, 크레아티닌 배설이 원활하지 않음, 신장 기능 저하", RiskLevel.SUSPECTED);
+	SERUM_CREATININE_NORMAL("혈청 크레아티닌 수치 정상", RiskLevel.NORMAL),
+	SERUM_CREATININE_SUSPICIOUS("혈청 크레아티닌 수치 높음, 크레아티닌 배설이 원활하지 않음, 신장 기능 저하", RiskLevel.SUSPICIOUS);
 
 	private final String description;
 	private final RiskLevel riskLevel;
@@ -21,8 +21,8 @@ public enum SerumCreatinineStatus implements HealthStatusCarrier {
 			return NONE;
 		}
 		if (serumCreatinine <= 1.5) {
-			return NORMAL;
+			return SERUM_CREATININE_NORMAL;
 		}
-		return SUSPECTED;
+		return SERUM_CREATININE_SUSPICIOUS;
 	}
 }

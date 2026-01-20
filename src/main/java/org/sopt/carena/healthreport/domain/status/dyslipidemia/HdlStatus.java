@@ -12,7 +12,7 @@ public enum HdlStatus implements HealthStatusCarrier {
 	NONE("없음", RiskLevel.NONE),
 	NORMAL("HDL 수치 정상, 고밀도 콜레스테롤 수치 정상", RiskLevel.NORMAL),
 	HDL_BORDERLINE("HDL 수치 다소 낮음, 고밀도 콜레스테롤 수치 다소 낮음, 심혈관 보호 기능 감소 가능, 낮은 HDL 콜레스테롤 의심", RiskLevel.BORDERLINE),
-	HDL_SUSPECTED("HDL 수치 낮음, 고밀도 콜레스테롤 수치 낮음, 심혈관 보호 기능 저하, 낮은 HDL 콜레스테롤 의심", RiskLevel.SUSPECTED);
+	HDL_SUSPICIOUS("HDL 수치 낮음, 고밀도 콜레스테롤 수치 낮음, 심혈관 보호 기능 저하, 낮은 HDL 콜레스테롤 의심", RiskLevel.SUSPICIOUS);
 
 	private final String description;
 	private final RiskLevel riskLevel;
@@ -27,6 +27,6 @@ public enum HdlStatus implements HealthStatusCarrier {
 		if(hdl>=40){
 			return HdlStatus.HDL_BORDERLINE;
 		}
-		return HdlStatus.HDL_SUSPECTED;
+		return HdlStatus.HDL_SUSPICIOUS;
 	}
 }

@@ -12,7 +12,7 @@ public enum AltStatus implements HealthStatusCarrier {
 	NONE("없음", RiskLevel.NONE),
 	NORMAL("알라닌아미노전달효소 수치 정상, ALT 수치 정상", RiskLevel.NORMAL),
 	ALT_BORDERLINE("알라닌아미노전달효소 다소 수치 높음, ALT 수치 다소 높음, 간 수치 다소 높음, 간 기능 저하", RiskLevel.BORDERLINE),
-	ALT_SUSPECTED("알라닌아미노전달효소 수치 높음, ALT 수치 높음, 간 수치 높음, 간 기능 손상, 간염 의심, 지방간 의심", RiskLevel.SUSPECTED);
+	ALT_SUSPICIOUS("알라닌아미노전달효소 수치 높음, ALT 수치 높음, 간 수치 높음, 간 기능 손상, 간염 의심, 지방간 의심", RiskLevel.SUSPICIOUS);
 
 	private final String description;
 	private final RiskLevel riskLevel;
@@ -27,6 +27,6 @@ public enum AltStatus implements HealthStatusCarrier {
 		if(alt <=45){
 			return ALT_BORDERLINE;
 		}
-		return ALT_SUSPECTED;
+		return ALT_SUSPICIOUS;
 	}
 }

@@ -13,7 +13,7 @@ public enum BmiStatus implements HealthStatusCarrier {
 	UNDERWEIGHT("저체중, 체중 증량 필요", RiskLevel.BORDERLINE),
 	NORMAL("체질량지수 정상", RiskLevel.NORMAL),
 	OVERWEIGHT("과체중, 체중 감소 필요", RiskLevel.BORDERLINE),
-	OBESE("비만, 체중 감소 필요", RiskLevel.SUSPECTED);
+	OBESE("비만, 체중 감소 필요", RiskLevel.SUSPICIOUS);
 
 	private final String description;
 	private final RiskLevel riskLevel;

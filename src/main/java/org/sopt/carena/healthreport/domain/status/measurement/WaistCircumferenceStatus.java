@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public enum WaistCircumferenceStatus implements HealthStatusCarrier {
 	NONE("없음", RiskLevel.NONE),
 	NORMAL("허리둘레 수치 정상", RiskLevel.NORMAL),
-	ABDOMINAL_OBESITY("복부 비만", RiskLevel.SUSPECTED);
+	ABDOMINAL_OBESITY("복부 비만", RiskLevel.SUSPICIOUS);
 
 	private final String description;
 	private final RiskLevel riskLevel;

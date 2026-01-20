@@ -12,7 +12,7 @@ public enum LdlStatus implements HealthStatusCarrier {
 	NONE("없음", RiskLevel.NONE),
 	NORMAL("LDL 수치 정상, 저밀도 콜레스테롤 수치 정상", RiskLevel.NORMAL),
 	LDL_BORDERLINE("LDL 수치 다소 높음, 저밀도 콜레스테롤 수치 다소 높음, 동맥경화 위험 증가 가능, 고콜레스테롤혈증 의심", RiskLevel.BORDERLINE),
-	LDL_SUSPECTED("LDL 수치 높음, 저밀도 콜레스테롤 수치 높음, 동맥경화 위험 증가, 고콜레스테롤혈증 의심", RiskLevel.SUSPECTED);
+	LDL_SUSPICIOUS("LDL 수치 높음, 저밀도 콜레스테롤 수치 높음, 동맥경화 위험 증가, 고콜레스테롤혈증 의심", RiskLevel.SUSPICIOUS);
 
 	private final String description;
 	private final RiskLevel riskLevel;
@@ -27,6 +27,6 @@ public enum LdlStatus implements HealthStatusCarrier {
 		if(ldl <160){
 			return LDL_BORDERLINE;
 		}
-		return LDL_SUSPECTED;
+		return LDL_SUSPICIOUS;
 	}
 }

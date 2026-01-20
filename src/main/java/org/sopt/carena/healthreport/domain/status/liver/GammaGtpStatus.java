@@ -13,7 +13,7 @@ public enum GammaGtpStatus implements HealthStatusCarrier {
 	NONE("없음", RiskLevel.NONE),
 	NORMAL("감마 지티피 수치 정상, GTP 수치 정상", RiskLevel.NORMAL),
 	GAMMA_GTP_BORDERLINE("감마 지티피 수치 다소 높음, GTP 수치 다소 높음, 간 수치 다소 높음, 간 기능 저하", RiskLevel.BORDERLINE),
-	GAMMA_GTP_SUSPECTED("감마 지티피 수치 높음, GTP 수치 높음, 간 수치 높음, 간 기능 손상", RiskLevel.SUSPECTED);
+	GAMMA_GTP_SUSPICIOUS("감마 지티피 수치 높음, GTP 수치 높음, 간 수치 높음, 간 기능 손상", RiskLevel.SUSPICIOUS);
 
 	private final String description;
 	private final RiskLevel riskLevel;
@@ -35,7 +35,7 @@ public enum GammaGtpStatus implements HealthStatusCarrier {
 		if(gammaGtp<=77){
 			return GAMMA_GTP_BORDERLINE;
 		}
-		return GAMMA_GTP_SUSPECTED;
+		return GAMMA_GTP_SUSPICIOUS;
 	}
 
 	private static GammaGtpStatus femaleStatus(final double gammaGtp){
@@ -45,6 +45,6 @@ public enum GammaGtpStatus implements HealthStatusCarrier {
 		if(gammaGtp<=45){
 			return GAMMA_GTP_BORDERLINE;
 		}
-		return GAMMA_GTP_SUSPECTED;
+		return GAMMA_GTP_SUSPICIOUS;
 	}
 }
