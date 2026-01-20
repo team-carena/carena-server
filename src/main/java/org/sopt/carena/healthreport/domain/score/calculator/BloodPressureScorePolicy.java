@@ -10,70 +10,51 @@ public class BloodPressureScorePolicy {
     private static final double DIA_LOW = 60;
     private static final double UNIT = 10.0;
 
-    public ScoreItem calculate(Integer systolic, Integer diastolic) {
-        if (systolic == null || diastolic == null)
-            return new ScoreItem(0, 100);
+    // 가중치
+    public static final double SYS_WEIGHT = 0.12;
+    public static final double DIA_WEIGHT = 0.08;
 
-        int systolicStep = 0;
-        int diastolicStep = 0;
+    public ScoreItem[] calculate(Integer systolic, Integer diastolic) {
+        ScoreItem sysItem = null;
+        ScoreItem diaItem = null;
 
-        // 수축기 상방 이탈
-        if (systolic > SYS_MAX) {
-            systolicStep = (int) ((systolic - SYS_MAX) / UNIT);
+        // 수축기
+        if (systolic != null) {
+            int systolicStep = calculateStep(systolic, SYS_LOW, SYS_MAX);
+            int systolicScore = scoreFromStep(systolicStep);
+            sysItem = new ScoreItem(systolicStep, systolicScore, SYS_WEIGHT);
         }
 
-        // 이완기 상방 이탈
-        if (diastolic > DIA_MAX) {
-            diastolicStep = (int) ((diastolic - DIA_MAX) / UNIT);
+        // 이완기
+        if (diastolic != null) {
+            int diastolicStep = calculateStep(diastolic, DIA_LOW, DIA_MAX);
+            int diastolicScore = scoreFromStep(diastolicStep);
+            diaItem = new ScoreItem(diastolicStep, diastolicScore, DIA_WEIGHT);
         }
+        return new ScoreItem[]{sysItem, diaItem};
+    }
 
-        //  하방 이탈
-        if (systolic < SYS_LOW) {
-            systolicStep = Math.max(systolicStep, 1);
+    private int calculateStep(int value, double min, double max) {
+        if (value < min) return 1; // 하방 이탈 → 1단계만 반영
+        if (value >= max) {
+            double raw = (value + 1e-9 - max) / UNIT;
+            int step;
+
+            if (Math.floor(raw) == raw) {
+                step = (int) raw;
+            } else {
+                step = (int) Math.ceil(raw);
+            }
+            return step;
         }
-        if (diastolic < DIA_LOW) {
-            diastolicStep = Math.max(diastolicStep, 1);
-        }
-
-        // 3단계까지만 반영
-        systolicStep = Math.min(systolicStep, 3);
-        diastolicStep = Math.min(diastolicStep, 3);
-
-
-        int step = Math.max(systolicStep, diastolicStep);
-
-        // =============================
-        // 여기부터 점수 계산만 변경
-        // =============================
-
-        int systolicScore = switch (systolicStep) {
+        return 0;
+    }
+    private int scoreFromStep(int step) {
+        return switch (step) {
             case 0 -> 100;
             case 1 -> 80;
             case 2 -> 60;
             default -> 40;
         };
-
-        int diastolicScore = switch (diastolicStep) {
-            case 0 -> 100;
-            case 1 -> 80;
-            case 2 -> 60;
-            default -> 40;
-        };
-
-        // 평균 점수
-        int score = (systolicScore + diastolicScore) / 2;
-
-        //  추가 감점 규칙
-        if (systolicStep >= 2 && diastolicStep >= 2) {
-            score -= 10;
-        }
-
-        if (systolicStep >= 3 || diastolicStep >= 3) {
-            score -= 20;
-        }
-
-        score = Math.max(score, 0);
-
-        return new ScoreItem(step, score);
     }
 }

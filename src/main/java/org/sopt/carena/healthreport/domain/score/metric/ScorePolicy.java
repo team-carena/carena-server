@@ -5,5 +5,5 @@ import org.sopt.carena.healthreport.domain.score.ScoreItem;
 import org.sopt.carena.member.domain.Gender;
 
 public interface ScorePolicy {
-    ScoreItem calculate(Double value, Gender gender);
+    ScoreItem calculate(Double value, Gender gender, double importance);
 }

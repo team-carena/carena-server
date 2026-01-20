@@ -16,9 +16,14 @@ public class DefaultScorePolicy implements ScorePolicy {
     private final Function<Gender, Double> unitProvider;
     private final DeviationType deviationType;
 
+    private final boolean lowerExclusive; // 하한 초과(true)/이상(false)
+    private final boolean upperExclusive; // 상한 미만(true)/이하(false)
+
+
     @Override
-    public ScoreItem calculate(Double value, Gender gender) {
-        if (value == null) return new ScoreItem(0, 100);
+    public ScoreItem calculate(Double value, Gender gender, double importance) {
+
+        if (value == null) return new ScoreItem(0, 100, importance);
 
         double min = minProvider.apply(gender);
         double max = maxProvider.apply(gender);
@@ -26,27 +31,46 @@ public class DefaultScorePolicy implements ScorePolicy {
 
         double deviation = 0;
 
-        if (value < min) deviation = min - value;
-        else if (value > max) deviation = value - max;
-        else return new ScoreItem(0, 100);
+        // 상방 이탈
+        if (deviationType != DeviationType.LOWER_ONLY) {
+            if (upperExclusive) { // 상한 미만
+                if (value >= max) deviation = value - max + 1e-9;
+            } else { // 상한 이하
+                if (value > max) deviation = value - max;
+            }
+        }
 
-        // 방향 필터
-        if (deviationType == DeviationType.UPPER_ONLY && value <= max)
-            return new ScoreItem(0, 100);
+        // 하방 이탈
+        if (deviationType != DeviationType.UPPER_ONLY) {
+            if (lowerExclusive) { // 하한 초과
+                if (value <= min) deviation = min - value + 1e-9;
+            } else { // 하한 이상
+                if (value < min) deviation = min - value;
+            }
+        }
 
-        if (deviationType == DeviationType.LOWER_ONLY && value >= min)
-            return new ScoreItem(0, 100);
+        // 정상 범위면 step 0
+        if (deviation <= 0) return new ScoreItem(0, 100, importance);
 
-        int rawStep = (int) Math.floor(deviation / unit);
+
+        double stepsDouble = deviation / unit;
+        int rawStep;
+
+        // deviation/unit이 정수면 그대로, 아니면 올림
+        if (Math.floor(stepsDouble) == stepsDouble) {
+            rawStep = (int) stepsDouble;
+        } else {
+            rawStep = (int) Math.ceil(stepsDouble);
+        }
         int step = Math.min(rawStep, 3);
 
+        // 점수 계산
         int score = switch (step) {
             case 0 -> 100;
             case 1 -> 80;
             case 2 -> 60;
             default -> 40;
         };
-
-        return new ScoreItem(step, score);
+        return new ScoreItem(step, score, importance);
     }
 }
