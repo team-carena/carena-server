@@ -5,8 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ScoreResult {
-
+public class ScoreItem{
     private final int step;   // 0,1,2,3
     private final int score;  // 100,80,60,40
 

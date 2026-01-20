@@ -1,4 +1,4 @@
-package org.sopt.carena.healthreport.application.service;
+package org.sopt.carena.member.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.carena.healthreport.domain.HealthReport;

@@ -13,7 +13,9 @@ import org.sopt.carena.healthreport.domain.HealthReportEmbedding;
 import org.sopt.carena.healthreport.domain.status.HealthStatusCarrier;
 import org.sopt.carena.healthreport.domain.status.RiskLevel;
 import org.sopt.carena.healthreport.exception.healthreport.HealthReportAlreadyExistsException;
+import org.sopt.carena.member.application.port.in.HealthScoreUseCase;
 import org.sopt.carena.member.application.port.out.MemberPersistencePort;
+import org.sopt.carena.member.application.service.MemberHealthScoreService;
 import org.sopt.carena.member.domain.Member;
 
 import org.sopt.carena.member.exception.jwt.MemberNotFoundException;
@@ -30,6 +32,7 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 	private final HealthReportEmbeddingPersistencePort healthReportEmbeddingPersistencePort;
 	private final EmbeddingPort embeddingPort;
 	private final ExecutorService virtualExecutorService;
+	private final HealthScoreUseCase healthScoreUseCase;
 
 	public void createHealthReport(final CreateHealthReportCommand commend) {
 		Member member = memberPersistencePort.getMemberById(commend.memberId())
@@ -45,8 +48,8 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 		HealthReport healthReport = healthReportPersistencePort
 				.saveHealthReport(HealthReport.create(commend, member.getGender()));
 
-		//점수 계산
-		memberHealthScoreService.updateMemberScore(member, healthReport);
+		//점수 계산 -> 여기선 멤버의  Usecase호출 / member에서 점수 계산~~~
+		healthScoreUseCase.updateMemberScore(member, healthReport);
 
 		virtualExecutorService.submit(() -> embeddingAndSave(member, healthReport));
 	}
