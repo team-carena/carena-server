@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class CreateHealthReportService implements CreateHealthReportUseCase {
 	private final HealthReportPersistencePort healthReportPersistencePort;
 	private final MemberPersistencePort memberPersistencePort;
+	private final MemberHealthScoreService memberHealthScoreService;
 	private final HealthReportEmbeddingPersistencePort healthReportEmbeddingPersistencePort;
 	private final EmbeddingPort embeddingPort;
 	private final ExecutorService virtualExecutorService;
@@ -43,6 +44,9 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 
 		HealthReport healthReport = healthReportPersistencePort
 				.saveHealthReport(HealthReport.create(commend, member.getGender()));
+
+		//점수 계산
+		memberHealthScoreService.updateMemberScore(member, healthReport);
 
 		virtualExecutorService.submit(() -> embeddingAndSave(member, healthReport));
 	}

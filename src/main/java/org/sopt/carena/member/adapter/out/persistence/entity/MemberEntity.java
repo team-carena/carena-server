@@ -64,4 +64,7 @@ public class MemberEntity {
         this.score = score;
         this.role = role;
     }
+    public void updateScore(Long score) {
+        this.score = score;
+    }
 }

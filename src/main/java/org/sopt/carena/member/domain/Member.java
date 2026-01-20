@@ -63,4 +63,8 @@ public class Member {
     public int getAge() {
         return Period.between(this.birthdate, LocalDate.now()).getYears();
     }
+
+    public void updateScore(Long score) {
+        this.score = score;
+    }
 }

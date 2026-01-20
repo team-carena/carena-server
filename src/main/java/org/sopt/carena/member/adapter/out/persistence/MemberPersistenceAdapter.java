@@ -8,6 +8,7 @@ import org.sopt.carena.member.application.port.out.MemberPersistencePort;
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Member;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -35,5 +36,14 @@ public class MemberPersistenceAdapter implements MemberPersistencePort {
     @Override
     public Optional<Member> findByAuthTypeAndProviderUserId(final AuthType authType, final String providerUserId) {
         return memberJpaRepository.findByAuthIdAndAuthType(providerUserId,authType).map(MemberMapper::toDomain);
+    }
+
+    @Override
+    @Transactional
+    public void updateScore(Long memberId, Long score) {
+        MemberEntity member = memberJpaRepository.findById(memberId)
+                .orElseThrow();
+
+        member.updateScore(score);
     }
 }
