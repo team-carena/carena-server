@@ -61,7 +61,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // tempToken 쿠키에 저장
         addCookie(response, "tempToken", loginResult.tempToken(), 600);
         // 회원가입 페이지로 리다이렉트
-        String redirectUrl = frontendUrl + "/login";
+        String redirectUrl = frontendUrl + "/signup";
         response.sendRedirect(redirectUrl);
     }
 
