@@ -14,6 +14,8 @@ import org.sopt.carena.diet.domain.value.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import java.util.*;
 
@@ -93,6 +95,12 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
                 .map(mapper::toDomain);
     }
 
+    @Override
+    public Slice<DietInformation> loadDietList(final Pageable pageable) {
+        return infoRepository.findAllByOrderByIdDesc(pageable)
+                .map(mapper::toDomain);
+    }
+
     /**
      * ID 목록으로 식단 정보 조회
      */
@@ -104,7 +112,6 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
             log.warn("빈 ID 목록으로 조회 시도");
             return Collections.emptyMap();
         }
-
         log.debug("식단 정보 일괄 조회 시작 - IDs: {}", ids);
 
         // Entity 조회

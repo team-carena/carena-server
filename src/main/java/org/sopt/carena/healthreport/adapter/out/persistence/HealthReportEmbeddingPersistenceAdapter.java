@@ -11,7 +11,6 @@ import org.sopt.carena.healthreport.application.port.out.HealthReportEmbeddingPe
 import org.sopt.carena.healthreport.domain.HealthReport;
 import org.sopt.carena.healthreport.domain.HealthReportEmbedding;
 import org.sopt.carena.healthreport.exception.healthreport.HealthReportEmbeddingNotFoundException;
-import org.sopt.carena.healthreport.exception.healthreport.HealthReportNotFoundException;
 import org.sopt.carena.member.adapter.out.persistence.entity.MemberEntity;
 import org.sopt.carena.member.adapter.out.persistence.repository.MemberJpaRepository;
 import org.springframework.stereotype.Component;
@@ -53,14 +52,11 @@ public class HealthReportEmbeddingPersistenceAdapter implements HealthReportEmbe
 
 	@Override
 	public HealthReport findLatestByMemberId(Long memberId) {
+		HealthReport healthReport =
+				healthReportRepository.findLatestByMemberId(memberId)
+						.map(HealthReportMapper::toDomain)
+						.orElse(null);
 
-		HealthReport healthReport = healthReportRepository
-				.findLatestByMemberId(memberId)
-				.map(HealthReportMapper::toDomain)  // Entity → Domain 변환
-				.orElseThrow(HealthReportNotFoundException::new);
-
-		log.debug("최신 건강검진 조회 완료 - memberId: {}, healthReportId: {}",
-				memberId, healthReport.getId());
 		return healthReport;
 	}
 }

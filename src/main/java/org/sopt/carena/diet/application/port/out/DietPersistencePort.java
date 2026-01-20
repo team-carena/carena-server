@@ -22,4 +22,5 @@ public interface DietPersistencePort {
     );
     Optional<DietInformation> loadById(Long dietId);
     Map<Long, DietInformation> findAllByIds(List<Long> ids);
+    Slice<DietInformation> loadDietList(Pageable pageable); //건강검진 결과 없는 경우
 }
