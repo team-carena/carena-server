@@ -13,6 +13,7 @@ import org.sopt.carena.recommend.application.port.in.CreateRecommendedMealUseCas
 import org.sopt.carena.recommend.application.port.out.GetDocumentListPort;
 import org.sopt.carena.recommend.application.port.out.LoadHealthReportPort;
 import org.sopt.carena.recommend.domain.RecommendedMeal;
+import org.sopt.carena.recommend.exception.DocumentNotExistException;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,12 @@ public class CreateRecommendedMealService implements CreateRecommendedMealUseCas
 
 		List<Document> documents = getDocumentListPort.searchDocuments(embeddingText, 5);
 
-		virtualExecutorService.submit(() -> saveRagResultAsync(embeddingText, documents, memberId, healthReport.getId()));
+		if (documents.isEmpty()) {
+			throw new DocumentNotExistException();
+		}
+
+		virtualExecutorService.submit(
+				() -> saveRagResultAsync(embeddingText, documents, memberId, healthReport.getId()));
 	}
 
 	private void saveRagResultAsync(
