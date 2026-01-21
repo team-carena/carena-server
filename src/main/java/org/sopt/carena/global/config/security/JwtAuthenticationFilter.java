@@ -15,7 +15,9 @@ import org.sopt.carena.member.application.service.util.JwtTokenParser;
 import org.sopt.carena.member.application.service.util.JwtTokenValidator;
 import org.sopt.carena.member.domain.Role;
 import org.sopt.carena.member.exception.code.MemberErrorCode;
+import org.sopt.carena.member.exception.jwt.EmptyTokenException;
 import org.sopt.carena.member.exception.jwt.InvalidTokenException;
+import org.sopt.carena.member.exception.jwt.MalformedTokenException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -66,47 +68,45 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String accessToken = AccessTokenResolver.resolve(request);
+        try {
+            String accessToken = AccessTokenResolver.resolve(request);
 
-        if (accessToken.isEmpty()) {
-            log.debug("인증이 필요한 경로에 토큰이 없습니다 - URI: {}", uri);
-            sendErrorResponse(response, MemberErrorCode.EMPTY_TOKEN);
-            return;
-        }
-
-        if (accessTokenBlacklistStore.isBlacklisted(accessToken)) {
-            log.warn("블랙리스트 처리된 액세스 토큰");
-            handlerExceptionResolver.resolveException(
-                    request,
-                    response,
-                    null,
-                    new InvalidTokenException()
-            );
-            return;
-        }
-
-        if (!jwtTokenValidator.isValid(accessToken)) {
-            log.warn("유효하지 않은 액세스 토큰");
-            handlerExceptionResolver.resolveException(request, response, null, new InvalidTokenException());
-            return;  // 필터 체인 중단
-        }
-        Long memberId = jwtTokenParser.getMemberId(accessToken);
-        Role memberRole = jwtTokenParser.getRole(accessToken);
-
-        UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(
-                        memberId,
+            if (accessTokenBlacklistStore.isBlacklisted(accessToken)) {
+                log.warn("블랙리스트 처리된 액세스 토큰");
+                handlerExceptionResolver.resolveException(
+                        request,
+                        response,
                         null,
-                        List.of(new SimpleGrantedAuthority(memberRole.name()))
+                        new InvalidTokenException()
                 );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        log.debug("role- : {}", memberRole);
-        log.debug("JWT 인증 성공 - MemberId: {}", memberId);
+                return;
+            }
+
+            if (!jwtTokenValidator.isValid(accessToken)) {
+                log.warn("유효하지 않은 액세스 토큰");
+                handlerExceptionResolver.resolveException(request, response, null, new InvalidTokenException());
+                return;  // 필터 체인 중단
+            }
+            Long memberId = jwtTokenParser.getMemberId(accessToken);
+            Role memberRole = jwtTokenParser.getRole(accessToken);
+
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            memberId,
+                            null,
+                            List.of(new SimpleGrantedAuthority(memberRole.name()))
+                    );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.debug("role- : {}", memberRole);
+            log.debug("JWT 인증 성공 - MemberId: {}", memberId);
 
 
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
+        } catch (EmptyTokenException | MalformedTokenException e) {
+            log.warn("토큰 추출 실패: {}", e.getMessage());
+            handlerExceptionResolver.resolveException(request, response, null, e);
+        }
     }
-
 
     /**
      * 쿠키에서 추출

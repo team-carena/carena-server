@@ -1,19 +1,18 @@
-package org.sopt.carena.diet.application.service;
+package org.sopt.carena.diet.application.service.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.carena.diet.application.port.in.EmbeddingTextGenerateUseCase;
-import org.sopt.carena.diet.domain.value.DietChunk;
+import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.exception.embedding.CreateEmbeddingTextFailedException;
 import org.sopt.carena.diet.exception.embedding.EmbeddingTextNullException;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-@Service
 @Slf4j
-public class DietEmbeddingTextService implements EmbeddingTextGenerateUseCase {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class DietEmbeddingTextUtil  {
 
-    @Override
-    public String generate(final DietChunk chunk,final String documentTitle) {
+    public static String generate(final DietChunk chunk,final String documentTitle) {
 
         try {
             String normalizedTitle = removeDietSuffix(documentTitle);
@@ -36,7 +35,7 @@ public class DietEmbeddingTextService implements EmbeddingTextGenerateUseCase {
         }
     }
 
-    private String sectionSentence(final DietChunk chunk, final String normalizedTitle) {
+    private static String sectionSentence(final DietChunk chunk, final String normalizedTitle) {
         return switch (chunk.getSection()) {
             case NECESSITY ->
                     normalizedTitle + "은" + chunk.getContent();
@@ -47,11 +46,11 @@ public class DietEmbeddingTextService implements EmbeddingTextGenerateUseCase {
         };
     }
 
-    private String normalize(final String text) {
+    private static String normalize(final String text) {
         return text.replaceAll("\\s+", " ").trim();
     }
 
-    private String removeDietSuffix(final String title) {
+    private static String removeDietSuffix(final String title) {
         if (title == null || title.isEmpty()) {
             return title;
         }

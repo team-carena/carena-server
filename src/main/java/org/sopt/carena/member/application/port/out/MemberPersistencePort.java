@@ -10,4 +10,5 @@ public interface MemberPersistencePort {
     Member save(Member member);
     boolean existsByAuthIdAndAuthType(String authId, AuthType authType);
     Optional<Member> findByAuthTypeAndProviderUserId(AuthType authType, String providerUserId);
+    void updateScore(Long memberId, Long score);
 }

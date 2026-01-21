@@ -6,12 +6,15 @@ import org.sopt.carena.diet.application.dto.command.CreateDietCommand;
 import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
 import org.sopt.carena.diet.application.port.out.EmbeddingPort;
+import org.sopt.carena.diet.application.service.util.DietEmbeddingTextUtil;
+import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.value.*;
 import org.sopt.carena.diet.domain.DietInformation;
 import org.sopt.carena.diet.exception.embedding.EmbeddingFailedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -21,10 +24,8 @@ import java.util.Map;
 public class RegisterDietDocumentService
         implements RegisterDietDocumentUseCase {
 
-    private final DietEmbeddingTextService dietEmbeddingTextService;
     private final DietPersistencePort dietPersistencePort;
     private final EmbeddingPort embeddingPort;
-
     @Override
     @Transactional
     public void register(final CreateDietCommand command) {
@@ -38,7 +39,7 @@ public class RegisterDietDocumentService
 
             // 2. 임베딩 텍스트 생성
             List<String> embeddingTexts = chunks.stream()
-                    .map(chunk -> dietEmbeddingTextService.generate(chunk, documentTitle))
+                    .map(chunk -> DietEmbeddingTextUtil.generate(chunk, documentTitle))
                     .toList();
 
             log.debug("생성된 임베딩 텍스트 개수: {}", embeddingTexts.size());
@@ -76,7 +77,6 @@ public class RegisterDietDocumentService
                     command.recommendedCategories(),
                     command.cautionaryFoods()
             );
-
             log.info("식단 정보 등록 성공: {}", documentTitle);
         } catch (Exception e) {
             log.error("식단 정보 등록 실패", e);
@@ -111,6 +111,7 @@ public class RegisterDietDocumentService
                 .chunks(chunks)
                 .recommendedFoods(recommendedFoods)
                 .cautionaryFoods(cautionaryFoods)
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 

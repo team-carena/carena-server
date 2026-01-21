@@ -1,7 +1,8 @@
-package org.sopt.carena.diet.domain.value;
+package org.sopt.carena.diet.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.sopt.carena.diet.domain.value.DietSection;
 
 import java.util.Map;
 

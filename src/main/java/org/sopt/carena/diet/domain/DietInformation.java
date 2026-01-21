@@ -2,17 +2,12 @@ package org.sopt.carena.diet.domain;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.sopt.carena.diet.application.dto.command.CreateDietCommand;
 import org.sopt.carena.diet.domain.value.CautionaryFoods;
-import org.sopt.carena.diet.domain.value.DietChunk;
 import org.sopt.carena.diet.domain.value.RecommendedFoods;
-import org.sopt.carena.healthtip.application.dto.command.CreateHealthTipCommand;
-import org.sopt.carena.healthtip.domain.HealthTip;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 public class DietInformation {
@@ -25,6 +20,7 @@ public class DietInformation {
     private final List<DietChunk> chunks;
     private final RecommendedFoods recommendedFoods;
     private final CautionaryFoods cautionaryFoods;
+    private final LocalDateTime createdAt;
 
     @Builder
     private DietInformation(
@@ -35,7 +31,8 @@ public class DietInformation {
             String referenceUrl,
             List<DietChunk> chunks,
             RecommendedFoods recommendedFoods,
-            CautionaryFoods cautionaryFoods
+            CautionaryFoods cautionaryFoods,
+            LocalDateTime createdAt
 
     ) {
         this.id = id;
@@ -46,5 +43,6 @@ public class DietInformation {
         this.chunks = new ArrayList<>(chunks);
         this.recommendedFoods = recommendedFoods;
         this.cautionaryFoods = cautionaryFoods;
+        this.createdAt = createdAt;
     }
 }

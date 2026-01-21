@@ -9,17 +9,21 @@ import org.sopt.carena.diet.adapter.out.persistence.entity.RecommendedCategoryEn
 import org.sopt.carena.diet.adapter.out.persistence.mapper.DietPersistenceMapper;
 import org.sopt.carena.diet.adapter.out.persistence.repository.DietChunkJpaRepository;
 import org.sopt.carena.diet.adapter.out.persistence.repository.DietInformationJpaRepository;
+import org.sopt.carena.diet.adapter.out.persistence.repository.DietVectorSearchResult;
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
-import org.sopt.carena.diet.domain.value.DietChunk;
+import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import org.sopt.carena.healthreport.exception.healthreport.HealthReportEmbeddingNotFoundException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -91,7 +95,7 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
     }
     @Override
     @Transactional(readOnly = true)
-    public Optional<DietInformation> loadById(Long dietId) {
+    public Optional<DietInformation> loadById(final Long dietId) {
         return infoRepository.findById(dietId)
                 .map(mapper::toDomain);
     }
@@ -100,5 +104,62 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
     public Slice<DietInformation> loadDietList(final Pageable pageable) {
         return infoRepository.findAllByOrderByIdDesc(pageable)
                 .map(mapper::toDomain);
+    }
+    @Override
+    public Slice<DietInformation> loadDietsByVectorSimilarity(final float[] embeddingVector, final int page, final int pageSize) {
+        log.debug("벡터 유사도 기반 식단 조회 - page: {}, pageSize: {}", page, pageSize);
+
+        String vectorString = convertToVectorString(embeddingVector);
+        int offset = (page - 1) * pageSize;
+
+        // 벡터 검색
+        List<DietVectorSearchResult> rawResults = dietChunkRepository.findSimilarDietsByVector(vectorString, pageSize+1, offset);
+
+        if (rawResults.isEmpty()) {
+            return new SliceImpl<>(List.of(), PageRequest.of(page - 1, pageSize), false);
+        }
+        boolean hasNext = rawResults.size() > pageSize;
+
+        List<DietVectorSearchResult> actualResults = hasNext
+                ? rawResults.subList(0, pageSize)
+                : rawResults;
+
+        List<Long> dietIds = actualResults.stream()
+                .map(DietVectorSearchResult::getDietInformationId)
+                .toList();
+
+
+        Map<Long, DietInformationEntity> dietEntityMap =
+                infoRepository.findAllById(dietIds).stream()
+                        .collect(Collectors.toMap(
+                                DietInformationEntity::getId,
+                                Function.identity()
+                        ));
+
+        //  Entity → 도메인 변환
+        List<DietInformation> diets = dietIds.stream()
+                .map(dietEntityMap::get)
+                .filter(entity -> entity != null)
+                .map(mapper::toDomain)
+                .toList();
+
+        log.debug("벡터 유사도 식단 조회 완료 - 결과: {}개, hasNext: {}", diets.size(), hasNext);
+
+        return new SliceImpl<>(diets, PageRequest.of(page - 1, pageSize), hasNext);
+    }
+
+    private String convertToVectorString(float[] embedding) {
+        if (embedding == null || embedding.length == 0) {
+            throw new HealthReportEmbeddingNotFoundException();
+        }
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < embedding.length; i++) {
+            if (i > 0) {
+                sb.append(",");
+            }
+            sb.append(embedding[i]);
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }

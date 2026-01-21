@@ -1,15 +1,13 @@
 package org.sopt.carena.diet.adapter.out.persistence.entity;
 
 import io.hypersistence.utils.hibernate.id.Tsid;
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
-import org.springframework.data.annotation.CreatedDate;
+import org.sopt.carena.global.common.BaseEntity;
 import org.springframework.data.annotation.LastModifiedDate;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +16,7 @@ import java.util.List;
 @Table(name = "diet_information")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DietInformationEntity {
+public class DietInformationEntity extends BaseEntity {
 
     @Id
     @Tsid
@@ -43,12 +41,7 @@ public class DietInformationEntity {
     private String reference;
     private String referenceUrl;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
+    @Builder
     public DietInformationEntity(
             String title,
             String content,

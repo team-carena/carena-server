@@ -2,6 +2,7 @@ package org.sopt.carena.healthreport.adapter.out.persistence.entity;
 
 import java.time.LocalDate;
 
+import org.sopt.carena.global.common.BaseEntity;
 import org.sopt.carena.member.adapter.out.persistence.entity.MemberEntity;
 import org.sopt.carena.member.domain.Gender;
 
@@ -29,7 +30,7 @@ import lombok.NoArgsConstructor;
 		@Index(name = "idx_health_report_member_id", columnList = "member_id")
 })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HealthReportEntity {
+public class HealthReportEntity extends BaseEntity {
 	@Id
 	@Tsid
 	private Long id;
@@ -41,55 +42,55 @@ public class HealthReportEntity {
 	private String institutionName;
 
 	@Column(name = "height")
-	private Double height;
+	private Double height; //신장
 
 	@Column(name = "weight")
-	private Double weight;
+	private Double weight; //체중
 
 	@Column(name = "waist_circumference")
-	private Double waistCircumference;
+	private Double waistCircumference; //허리둘레 !
 
 	@Column(name = "bmi")
-	private Double bmi;
+	private Double bmi; //체질량지수 !
 
 	@Column(name = "systolic_bp")
-	private Integer systolicBp;
+	private Integer systolicBp;  //수축기혈압 !
 
 	@Column(name = "diastolic_bp")
-	private Integer diastolicBp;
+	private Integer diastolicBp;  //이완기혈압 !
 
 	@Column(name = "hemoglobin")
-	private Double hemoglobin;
+	private Double hemoglobin;  //혈색소 !
 
 	@Column(name = "fasting_glucose")
-	private Double fastingGlucose;
+	private Double fastingGlucose;  //공복혈당 !
 
 	@Column(name = "total_cholesterol")
-	private Double totalCholesterol;
+	private Double totalCholesterol;  //총콜레스테롤
 
 	@Column(name = "hdl")
-	private Double hdl;
+	private Double hdl;  //고밀도 콜레스테롤
 
 	@Column(name = "ldl")
-	private Double ldl;
+	private Double ldl;  //저밀도 콜레스테롤
 
 	@Column(name = "triglyceride")
-	private Double triglyceride;
+	private Double triglyceride;  //중성지방
 
 	@Column(name = "serum_creatinine")
-	private Double serumCreatinine;
+	private Double serumCreatinine;  //혈청크레아티닌 !
 
 	@Column(name = "egfr")
-	private Double egfr;
+	private Double egfr;  //신사구체여과율 !
 
 	@Column(name = "ast")
-	private Double ast;
+	private Double ast;  //AST !
 
 	@Column(name = "alt")
-	private Double alt;
+	private Double alt;  //ALT !
 
 	@Column(name = "gamma_gtp")
-	private Double gammaGtp;
+	private Double gammaGtp;  //감마지티피 !
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -97,7 +98,7 @@ public class HealthReportEntity {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "gender", nullable = false)
-	private Gender gender;
+	private Gender gender;  //성별
 
 	@Builder
 	private HealthReportEntity(
