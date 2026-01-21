@@ -23,7 +23,6 @@ public class MemberMapper {
                 .name(member.getName())
                 .birthdate(member.getBirthdate())
                 .gender(member.getGender())
-                .createdAt(member.getCreatedAt())
                 .authType(member.getAuthType())
                 .authId(member.getAuthId())
                 .score(member.getScore())

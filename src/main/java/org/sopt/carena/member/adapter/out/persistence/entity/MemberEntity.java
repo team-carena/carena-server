@@ -35,9 +35,6 @@ public class MemberEntity extends BaseEntity {
     @Column(name = "gender",nullable = false)
     private Gender gender;
 
-    @Column(name = "created_at",nullable = false)
-    private LocalDateTime createdAt;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "auth_type",nullable = false)
     private AuthType authType;
@@ -54,11 +51,10 @@ public class MemberEntity extends BaseEntity {
 
     @Builder
     private MemberEntity(Long id, String name, LocalDate birthdate, Gender gender,
-                         LocalDateTime createdAt, AuthType authType, String authId, Long score,Role role) {
+                         AuthType authType, String authId, Long score,Role role) {
         this.id = id;
         this.name = name;
         this.gender = gender;
-        this.createdAt = createdAt;
         this.authType = authType;
         this.birthdate = birthdate;
         this.authId = authId;
