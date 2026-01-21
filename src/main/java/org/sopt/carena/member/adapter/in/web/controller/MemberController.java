@@ -39,7 +39,6 @@ public class MemberController implements MemberApiDocs{
     private final GetMemberInfoUseCase getMemberInfoUseCase;
     private final GenerateTokenUseCase generateTokenUseCase;
     private final LogoutUseCase logoutUseCase;
-    //private final AccessTokenResolver accessTokenResolver;
 
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<Void>> signup(
@@ -48,7 +47,7 @@ public class MemberController implements MemberApiDocs{
             HttpServletResponse response
     ) {
         signupUseCase.signup(SignUpCommand.of(tempToken, request));
-        CookieUtil.deleteTempTokenCookie(response);
+        CookieUtil.deleteCookie(response,"tempToken");
         return ResponseEntity.status(MemberSuccessCode.SIGNUP_SUCCESS.getStatus())
                 .body(ApiResponse.success(MemberSuccessCode.SIGNUP_SUCCESS));
     }
@@ -76,6 +75,7 @@ public class MemberController implements MemberApiDocs{
         TokenGeneratedView result=generateTokenUseCase.generateToken(oneTimeToken);
         HeaderUtil.setAuthorizationHeader(response, result.accessToken());
         CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
+        CookieUtil.deleteCookie(response,"oneTimeToken");
         return ResponseEntity.status(MemberSuccessCode.TOKEN_GENERATED.getStatus())
                 .body(ApiResponse.success(MemberSuccessCode.TOKEN_GENERATED));
     }
@@ -110,7 +110,8 @@ public class MemberController implements MemberApiDocs{
     ) {
         String accessToken = AccessTokenResolver.resolve(request);
         logoutUseCase.logout(memberId,accessToken);
-        CookieUtil.deleteRefreshTokenCookie(response);
+        //CookieUtil.deleteRefreshTokenCookie(response);
+        CookieUtil.deleteCookie(response, "refreshToken");
         log.info("memberId: {}", memberId);
         return ResponseEntity.status(MemberSuccessCode.LOGOUT_SUCCESS.getStatus())
                 .body(ApiResponse.success(MemberSuccessCode.LOGOUT_SUCCESS));

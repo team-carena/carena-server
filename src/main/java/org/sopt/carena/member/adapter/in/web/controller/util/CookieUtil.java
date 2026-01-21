@@ -31,8 +31,8 @@ public class CookieUtil {
         response.addHeader("Set-Cookie", cookie.toString());
     }
 
-    public static void deleteTempTokenCookie(HttpServletResponse response) {
-        ResponseCookie cookie = ResponseCookie.from("tempToken", "")
+    public static void deleteCookie(HttpServletResponse response, String cookieName) {
+        ResponseCookie cookie = ResponseCookie.from(cookieName, "")
                 .path("/")
                 .maxAge(0)
                 .httpOnly(true)
@@ -40,17 +40,6 @@ public class CookieUtil {
                 .sameSite("None")
                 .build();
 
-        response.addHeader("Set-Cookie", cookie.toString());
-    }
-
-    public static void deleteRefreshTokenCookie(HttpServletResponse response) {
-        ResponseCookie cookie = ResponseCookie.from("refreshToken","")
-                .path("/")
-                .maxAge(0)
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
-                .build();
         response.addHeader("Set-Cookie", cookie.toString());
     }
 }
