@@ -42,8 +42,7 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
                 info.getTitle(),
                 info.getContent(),
                 info.getReference(),
-                info.getReferenceUrl(),
-                info.getCreatedAt()
+                info.getReferenceUrl()
         );
 
         infoEntity = infoRepository.save(infoEntity);

@@ -3,6 +3,7 @@ package org.sopt.carena.member.adapter.out.persistence.entity;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import lombok.*;
+import org.sopt.carena.global.common.BaseEntity;
 import org.sopt.carena.member.domain.AuthType;
 import org.sopt.carena.member.domain.Gender;
 import org.sopt.carena.member.domain.Role;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberEntity {
+public class MemberEntity extends BaseEntity {
 
     @Id
     @Tsid

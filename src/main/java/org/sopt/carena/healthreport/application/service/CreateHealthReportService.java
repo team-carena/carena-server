@@ -1,7 +1,6 @@
 package org.sopt.carena.healthreport.application.service;
 
 import java.util.concurrent.ExecutorService;
-import java.util.stream.Collectors;
 
 import org.sopt.carena.diet.application.port.out.EmbeddingPort;
 import org.sopt.carena.healthreport.application.converter.HealthReportEmbeddingConverter;
@@ -11,12 +10,9 @@ import org.sopt.carena.healthreport.application.port.out.HealthReportEmbeddingPe
 import org.sopt.carena.healthreport.application.port.out.HealthReportPersistencePort;
 import org.sopt.carena.healthreport.domain.HealthReport;
 import org.sopt.carena.healthreport.domain.HealthReportEmbedding;
-import org.sopt.carena.healthreport.domain.status.HealthStatusCarrier;
-import org.sopt.carena.healthreport.domain.status.RiskLevel;
 import org.sopt.carena.healthreport.exception.healthreport.HealthReportAlreadyExistsException;
 import org.sopt.carena.member.application.port.in.HealthScoreUseCase;
 import org.sopt.carena.member.application.port.out.MemberPersistencePort;
-import org.sopt.carena.member.application.service.MemberHealthScoreService;
 import org.sopt.carena.member.domain.Member;
 
 import org.sopt.carena.member.exception.jwt.MemberNotFoundException;
@@ -31,7 +27,6 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 	private final CreateRecommendedMealUseCase createRecommendedMealUseCase;
 	private final HealthReportPersistencePort healthReportPersistencePort;
 	private final MemberPersistencePort memberPersistencePort;
-	private final MemberHealthScoreService memberHealthScoreService;
 	private final HealthReportEmbeddingPersistencePort healthReportEmbeddingPersistencePort;
 	private final EmbeddingPort embeddingPort;
 	private final ExecutorService virtualExecutorService;

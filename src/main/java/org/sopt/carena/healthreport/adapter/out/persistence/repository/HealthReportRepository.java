@@ -18,7 +18,7 @@ public interface HealthReportRepository extends JpaRepository<HealthReportEntity
 	Optional<HealthReportEntity> findTopByMemberEntityIdOrderByHealthCheckDateDesc(long memberId);
 
 	@Query("""
-        SELECT h FROM HealthReportEntity h
+			SELECT h FROM HealthReportEntity h
         WHERE h.memberEntity.id = :memberId
         ORDER BY h.healthCheckDate DESC
         LIMIT 1
@@ -54,7 +54,5 @@ public interface HealthReportRepository extends JpaRepository<HealthReportEntity
 	List<HealthReportEntity> findTop5ByMemberEntityIdAndSerumCreatinineIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(long memberId, LocalDate healthCheckDate);
 
 	List<HealthReportEntity> findTop5ByMemberEntityIdAndEgfrIsNotNullAndHealthCheckDateBeforeOrderByHealthCheckDateDesc(long memberId, LocalDate healthCheckDate);
-	List<HealthReportEntity> findTop5ByMemberEntityIdAndEgfrIsNotNullOrderByHealthCheckDateDesc(long memberId);
+	}
 
-	//Optional<HealthReportEntity> findTopByMemberEntityIdOrderByHealthCheckDateDesc(long memberId);
-}

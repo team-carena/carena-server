@@ -48,9 +48,6 @@ public class DietChunkEntity {
     @Column(nullable = false)
     private int chunkOrder;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-
     public DietChunkEntity(
             DietInformationEntity document,
             DietSection section,

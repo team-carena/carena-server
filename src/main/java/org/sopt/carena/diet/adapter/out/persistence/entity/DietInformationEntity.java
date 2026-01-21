@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.sopt.carena.global.common.BaseEntity;
 import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.List;
 @Table(name = "diet_information")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DietInformationEntity {
+public class DietInformationEntity extends BaseEntity {
 
     @Id
     @Tsid
@@ -40,25 +41,17 @@ public class DietInformationEntity {
     private String reference;
     private String referenceUrl;
 
-    @Column(name = "created_at",nullable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
     @Builder
     public DietInformationEntity(
             String title,
             String content,
             String reference,
-            String referenceUrl,
-            LocalDateTime createdAt
+            String referenceUrl
     ) {
         this.title = title;
         this.content = content;
         this.reference = reference;
         this.referenceUrl = referenceUrl;
-        this.createdAt = createdAt;
     }
     public void setRecommendedFood(RecommendedCategoryEntity recommendedFood) {
         this.recommendedFood = recommendedFood;
