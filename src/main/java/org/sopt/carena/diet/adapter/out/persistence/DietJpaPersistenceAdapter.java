@@ -9,6 +9,7 @@ import org.sopt.carena.diet.adapter.out.persistence.entity.RecommendedCategoryEn
 import org.sopt.carena.diet.adapter.out.persistence.mapper.DietPersistenceMapper;
 import org.sopt.carena.diet.adapter.out.persistence.repository.DietChunkJpaRepository;
 import org.sopt.carena.diet.adapter.out.persistence.repository.DietInformationJpaRepository;
+import org.sopt.carena.diet.adapter.out.persistence.repository.DietVectorSearchResult;
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
 import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.DietInformation;
@@ -113,17 +114,21 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
         int offset = (page - 1) * pageSize;
 
         // 벡터 검색
-        List<Object[]> rawResults = dietChunkRepository.findSimilarDietsByVector(
-                vectorString, pageSize, offset
-        );
+        List<DietVectorSearchResult> rawResults = dietChunkRepository.findSimilarDietsByVector(vectorString, pageSize+1, offset);
 
         if (rawResults.isEmpty()) {
             return new SliceImpl<>(List.of(), PageRequest.of(page - 1, pageSize), false);
         }
+        boolean hasNext = rawResults.size() > pageSize;
 
-        List<Long> dietIds = rawResults.stream()
-                .map(row -> ((Number) row[0]).longValue())
+        List<DietVectorSearchResult> actualResults = hasNext
+                ? rawResults.subList(0, pageSize)
+                : rawResults;
+
+        List<Long> dietIds = actualResults.stream()
+                .map(DietVectorSearchResult::getDietInformationId)
                 .toList();
+
 
         Map<Long, DietInformationEntity> dietEntityMap =
                 infoRepository.findAllById(dietIds).stream()
@@ -138,9 +143,6 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
                 .filter(entity -> entity != null)
                 .map(mapper::toDomain)
                 .toList();
-
-        // hasNext 계산
-        boolean hasNext = checkHasNextPage(vectorString, offset, pageSize);
 
         log.debug("벡터 유사도 식단 조회 완료 - 결과: {}개, hasNext: {}", diets.size(), hasNext);
 
@@ -160,9 +162,5 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
         }
         sb.append("]");
         return sb.toString();
-    }
-    private boolean checkHasNextPage(String vectorString, int offset, int pageSize) {
-        Long totalCount = dietChunkRepository.countSimilarDietsByVector(vectorString);
-        return offset + pageSize < totalCount;
     }
 }

@@ -14,6 +14,7 @@ public interface DietChunkJpaRepository extends JpaRepository<DietChunkEntity, L
      * - 유사도 높은 순 정렬
      * - 페이징 적용
      */
+    //todo: low number에서 fullscan발생하니 고치기
     @Query(value = """
         WITH ranked_chunks AS (
             SELECT 
@@ -36,29 +37,9 @@ public interface DietChunkJpaRepository extends JpaRepository<DietChunkEntity, L
         ORDER BY similarity DESC
         LIMIT :limit OFFSET :offset
         """, nativeQuery = true)
-    List<Object[]> findSimilarDietsByVector(
+    List<DietVectorSearchResult> findSimilarDietsByVector(
             @Param("queryVector") String queryVector,
             @Param("limit") int limit,
             @Param("offset") int offset
     );
-
-    /**
-     * 전체 결과 개수 확인 (hasNext 판단용)
-     */
-    @Query(value = """
-        WITH ranked_chunks AS (
-            SELECT 
-                dc.diet_information_id,
-                ROW_NUMBER() OVER (
-                    PARTITION BY dc.diet_information_id 
-                    ORDER BY (dc.embedding <=> CAST(:queryVector AS vector)) ASC
-                ) as rn
-            FROM diet_chunk dc
-            WHERE dc.embedding IS NOT NULL
-        )
-        SELECT COUNT(*)
-        FROM ranked_chunks
-        WHERE rn = 1
-        """, nativeQuery = true)
-    Long countSimilarDietsByVector(@Param("queryVector") String queryVector);
 }
