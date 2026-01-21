@@ -46,7 +46,7 @@ public class DietController implements DietApiDocs {
     public ResponseEntity<SuccessResponse<DietDetailResponse>> dietDetail(
             @PathVariable final String id
     ) {
-        DietDetailResultView result = getDietDetailUseCase.getDietDetail(id);
+        DietDetailResultView result = getDietDetailUseCase.getDietDetail(Long.valueOf(id));
         DietDetailResponse response = DietDetailResponse.from(result);
 
         return ResponseEntity.status(DietSuccessCode.DIET_DETAIL.getStatus())
