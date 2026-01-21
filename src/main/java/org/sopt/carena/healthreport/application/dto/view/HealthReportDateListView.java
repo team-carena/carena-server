@@ -19,13 +19,13 @@ public record HealthReportDateListView(
 	}
 
 	private record ReportDateInfo(
-			Long healthReportId,
+			String healthReportId,
 			LocalDate healthCheckDate,
 			String institutionName
 	) {
 		private static ReportDateInfo from(final HealthReport healthReport) {
 			return new ReportDateInfo(
-					healthReport.getId(),
+					String.valueOf(healthReport.getId()),
 					healthReport.getHealthCheckDate(),
 					healthReport.getInstitutionName());
 		}
