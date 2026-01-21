@@ -6,6 +6,7 @@ import org.sopt.carena.diet.application.dto.command.CreateDietCommand;
 import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
 import org.sopt.carena.diet.application.port.out.DietPersistencePort;
 import org.sopt.carena.diet.application.port.out.EmbeddingPort;
+import org.sopt.carena.diet.application.service.util.DietEmbeddingTextUtil;
 import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.value.*;
 import org.sopt.carena.diet.domain.DietInformation;
@@ -23,7 +24,6 @@ import java.util.Map;
 public class RegisterDietDocumentService
         implements RegisterDietDocumentUseCase {
 
-    private final DietEmbeddingTextService dietEmbeddingTextService;
     private final DietPersistencePort dietPersistencePort;
     private final EmbeddingPort embeddingPort;
     @Override
@@ -39,7 +39,7 @@ public class RegisterDietDocumentService
 
             // 2. 임베딩 텍스트 생성
             List<String> embeddingTexts = chunks.stream()
-                    .map(chunk -> dietEmbeddingTextService.generate(chunk, documentTitle))
+                    .map(chunk -> DietEmbeddingTextUtil.generate(chunk, documentTitle))
                     .toList();
 
             log.debug("생성된 임베딩 텍스트 개수: {}", embeddingTexts.size());
