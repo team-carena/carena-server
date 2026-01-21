@@ -1,5 +1,7 @@
 package org.sopt.carena.healthreport.adapter.in.web.controller;
 
+import java.time.LocalDate;
+
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.sopt.carena.healthreport.adapter.in.web.request.CreateHealthReportRequest;
 import org.sopt.carena.healthreport.application.dto.view.EntireHealthReportView;
@@ -29,41 +31,41 @@ public interface HealthReportApiDocs {
 	ResponseEntity<SuccessResponse<EntireHealthReportView>> getEntireHealthReport(long memberId, long healthReportId);
 
 	@Operation(summary = "건강 검진 결과 중 신장(키) 항목 히스토리 조회", description = "신장(키) 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getHeightHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getHeightHistory(long memberId, LocalDate healthCheckDate);
 
 	@Operation(summary = "건강 검진 결과 중 체중 항목 히스토리 조회", description = "체중 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getWeightHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getWeightHistory(long memberId, LocalDate healthCheckDate);
 
 	@Operation(summary = "건강 검진 결과 중 허리 둘레 항목 히스토리 조회", description = "허리 둘레 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getWaistCircumferenceHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getWaistCircumferenceHistory(long memberId, LocalDate healthCheckDate);
 
 	@Operation(summary = "건강 검진 중 결과 중 체질량 지수 항목 히스토리 조회", description = "체질량 지수 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getBmiHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getBmiHistory(long memberId, LocalDate healthCheckDate);
 
 	@Operation(summary = "건강 검진 중 결과 중 수축기 혈압 항목 히스토리 조회", description = "수축기 혈압 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getSystolicBpHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getSystolicBpHistory(long memberId, LocalDate healthCheckDate);
 
 	@Operation(summary = "건강 검진 중 결과 중 이완기 혈압 항목 히스토리 조회", description = "이완기 혈압 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getDiastolicBpHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getDiastolicBpHistory(long memberId, LocalDate healthCheckDate);
 
 	@Operation(summary = "건강 검진 중 결과 중 혈색소 항목 히스토리 조회", description = "혈색소 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getHemoglobinHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getHemoglobinHistory(long memberId, LocalDate healthCheckDate);
 
 	@Operation(summary = "건강 검진 중 결과 중 공복 혈당 항목 히스토리 조회", description = "공복 혈당 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getFastingGlucoseHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getFastingGlucoseHistory(long memberId, LocalDate healthCheckDate);
 
 	@Operation(summary = "건강 검진 중 결과 중 AST 항목 히스토리 조회", description = "AST 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getAstHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getAstHistory(long memberId, LocalDate healthCheckDate);
 
 	@Operation(summary = "건강 검진 중 결과 중 ALT 항목 히스토리 조회", description = "ALT 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getAltHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getAltHistory(long memberId, LocalDate healthCheckDate);
 
 	@Operation(summary = "건강 검진 중 결과 중 감마 지티피 항목 히스토리 조회", description = "감마 지티피 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getGammaGtpHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getGammaGtpHistory(long memberId, LocalDate healthCheckDate);
 
 	@Operation(summary = "건강 검진 중 결과 중 혈청 크레아티닌 항목 히스토리 조회", description = "혈청 크레아티닌 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getSerumCreatinineHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getSerumCreatinineHistory(long memberId, LocalDate healthCheckDate);
 
 	@Operation(summary = "건강 검진 중 결과 중 신사구체여과율 항목 히스토리 조회", description = "신사구체여과율 항목에 대해 최근 5개의 기록을 조회합니다.")
-	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getEgfrHistory(long memberId);
+	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getEgfrHistory(long memberId, LocalDate healthCheckDate);
 }

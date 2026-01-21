@@ -9,7 +9,7 @@ public enum RiskLevel {
 	NONE("없음"),
 	NORMAL("정상"),
 	BORDERLINE("경계"),
-	SUSPECTED("의심");
+	SUSPICIOUS("의심");
 
 	private final String description;
 }

@@ -16,31 +16,32 @@ public interface HealthReportPersistencePort {
 
 	Optional<HealthReport> findByMemberIdAndHealthReportId(long memberId, long healthReportId);
 
-	List<HealthReport> findLatestHealthReportsHeightIsNotNullByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsHeightIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
-	List<HealthReport> findLatestHealthReportsWeightIsNotNullByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsWeightIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
-	List<HealthReport> findLatestHealthReportsWaistCircumferenceIsNotNullByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsWaistCircumferenceIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
-	List<HealthReport> findLatestHealthReportsBmiIsNotNullByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsBmiIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
-	List<HealthReport> findLatestHealthReportsSystolicBpIsNotNullByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsSystolicBpIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
-	List<HealthReport> findLatestHealthReportsDiastolicBpIsNotNullByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsDiastolicBpIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
-	List<HealthReport> findLatestHealthReportsHemoglobinIsNotNullByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsHemoglobinIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
-	List<HealthReport> findLatestHealthReportsFastingGlucoseIsNotNullByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsFastingGlucoseIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
-	List<HealthReport> findLatestHealthReportsAstIsNotNullByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsAstIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
-	List<HealthReport> findLatestHealthReportsAltIsNotNullByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsAltIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
-	List<HealthReport> findLatestHealthReportsGammaGtpIsNotNullByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsGammaGtpIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
-	List<HealthReport> findLatestHealthReportsSerumCreatinineIsNotNullByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsSerumCreatinineIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
 	List<HealthReport> findLatestHealthReportsEgfrIsNotNullByMemberId(long memberId);
 
 	Optional<HealthReport> findLatestByMemberId(long memberId);
+	List<HealthReport> findLatestHealthReportsEgfrIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 }

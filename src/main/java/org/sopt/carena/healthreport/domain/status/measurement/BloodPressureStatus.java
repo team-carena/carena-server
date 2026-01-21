@@ -12,7 +12,7 @@ public enum BloodPressureStatus implements HealthStatusCarrier {
 	NONE("없음", RiskLevel.NONE),
 	NORMAL("혈압 정상", RiskLevel.NORMAL),
 	PRE_HYPERTENSION("고혈압 전단계", RiskLevel.BORDERLINE),
-	HYPERTENSION("고혈압 의심", RiskLevel.SUSPECTED);
+	HYPERTENSION("고혈압 의심", RiskLevel.SUSPICIOUS);
 
 	private final String description;
 	private final RiskLevel riskLevel;

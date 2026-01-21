@@ -1,5 +1,6 @@
 package org.sopt.carena.healthreport.application.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.sopt.carena.healthreport.application.dto.view.HealthReportHistoryElement;
@@ -15,8 +16,9 @@ import lombok.RequiredArgsConstructor;
 public class HealthReportItemHistoryService implements HealthReportItemHistoryUseCase {
 	private final HealthReportPersistencePort healthReportPersistencePort;
 
-	public HealthReportHistoryView loadHeightHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsHeightIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadHeightHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsHeightIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getHeight().value(),
@@ -26,8 +28,9 @@ public class HealthReportItemHistoryService implements HealthReportItemHistoryUs
 		return HealthReportHistoryView.from(elements);
 	}
 
-	public HealthReportHistoryView loadWeightHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsWeightIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadWeightHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsWeightIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getWeight().value(),
@@ -37,8 +40,9 @@ public class HealthReportItemHistoryService implements HealthReportItemHistoryUs
 		return HealthReportHistoryView.from(elements);
 	}
 
-	public HealthReportHistoryView loadWaistCircumferenceHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsWaistCircumferenceIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadWaistCircumferenceHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsWaistCircumferenceIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getWaistCircumference().value(),
@@ -48,8 +52,9 @@ public class HealthReportItemHistoryService implements HealthReportItemHistoryUs
 		return HealthReportHistoryView.from(elements);
 	}
 
-	public HealthReportHistoryView loadBmiHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsBmiIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadBmiHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsBmiIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getBmi().value(),
@@ -59,8 +64,9 @@ public class HealthReportItemHistoryService implements HealthReportItemHistoryUs
 		return HealthReportHistoryView.from(elements);
 	}
 
-	public HealthReportHistoryView loadSystolicBpHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsSystolicBpIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadSystolicBpHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsSystolicBpIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getBloodPressure().systolicBp(),
@@ -70,8 +76,9 @@ public class HealthReportItemHistoryService implements HealthReportItemHistoryUs
 		return HealthReportHistoryView.from(elements);
 	}
 
-	public HealthReportHistoryView loadDiastolicBpHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsDiastolicBpIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadDiastolicBpHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsDiastolicBpIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getBloodPressure().diastolicBp(),
@@ -81,8 +88,9 @@ public class HealthReportItemHistoryService implements HealthReportItemHistoryUs
 		return HealthReportHistoryView.from(elements);
 	}
 
-	public HealthReportHistoryView loadHemoglobinHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsHemoglobinIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadHemoglobinHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsHemoglobinIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getHemoglobin().value(),
@@ -92,8 +100,9 @@ public class HealthReportItemHistoryService implements HealthReportItemHistoryUs
 		return HealthReportHistoryView.from(elements);
 	}
 
-	public HealthReportHistoryView loadFastingGlucoseHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsFastingGlucoseIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadFastingGlucoseHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsFastingGlucoseIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getFastingGlucose().value(),
@@ -103,8 +112,9 @@ public class HealthReportItemHistoryService implements HealthReportItemHistoryUs
 		return HealthReportHistoryView.from(elements);
 	}
 
-	public HealthReportHistoryView loadAstHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsAstIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadAstHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsAstIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getAst().value(),
@@ -114,8 +124,9 @@ public class HealthReportItemHistoryService implements HealthReportItemHistoryUs
 		return HealthReportHistoryView.from(elements);
 	}
 
-	public HealthReportHistoryView loadAltHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsAltIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadAltHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsAltIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getAlt().value(),
@@ -125,8 +136,9 @@ public class HealthReportItemHistoryService implements HealthReportItemHistoryUs
 		return HealthReportHistoryView.from(elements);
 	}
 
-	public HealthReportHistoryView loadGammaGtpHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsGammaGtpIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadGammaGtpHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsGammaGtpIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getGammaGtp().value(),
@@ -136,8 +148,9 @@ public class HealthReportItemHistoryService implements HealthReportItemHistoryUs
 		return HealthReportHistoryView.from(elements);
 	}
 
-	public HealthReportHistoryView loadSerumCreatinineHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsSerumCreatinineIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadSerumCreatinineHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsSerumCreatinineIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getSerumCreatinine().value(),
@@ -147,8 +160,9 @@ public class HealthReportItemHistoryService implements HealthReportItemHistoryUs
 		return HealthReportHistoryView.from(elements);
 	}
 
-	public HealthReportHistoryView loadEgfrHistory(final long memberId) {
-		List<HealthReportHistoryElement> elements = healthReportPersistencePort.findLatestHealthReportsEgfrIsNotNullByMemberId(memberId)
+	public HealthReportHistoryView loadEgfrHistory(final long memberId, final LocalDate healthCheckDate) {
+		List<HealthReportHistoryElement> elements =
+				healthReportPersistencePort.findLatestHealthReportsEgfrIsNotNullByMemberId(memberId, healthCheckDate)
 				.stream()
 				.map(healthReport -> HealthReportHistoryElement.of(
 						healthReport.getEgfr().value(),

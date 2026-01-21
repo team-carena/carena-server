@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum EgfrStatus implements HealthStatusCarrier {
 	NONE("없음", RiskLevel.NONE),
-	NORMAL("신사구체 여과율 수치 정상", RiskLevel.NORMAL),
-	SUSPECTED("신사구체 여과율 수치 낮음, 신장 기능 저하, 만성 신부전 의심", RiskLevel.SUSPECTED);
+	EGFR_NORMAL("신사구체 여과율 수치 정상", RiskLevel.NORMAL),
+	EGFR_SUSPICIOUS("신사구체 여과율 수치 낮음, 신장 기능 저하, 만성 신부전 의심", RiskLevel.SUSPICIOUS);
 
 	private final String description;
 	private final RiskLevel riskLevel;
@@ -21,8 +21,8 @@ public enum EgfrStatus implements HealthStatusCarrier {
 			return NONE;
 		}
 		if (egfr >= 60) {
-			return NORMAL;
+			return EGFR_NORMAL;
 		}
-		return SUSPECTED;
+		return EGFR_SUSPICIOUS;
 	}
 }

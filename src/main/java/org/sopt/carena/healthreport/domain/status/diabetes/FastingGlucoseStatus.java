@@ -12,7 +12,7 @@ public enum FastingGlucoseStatus implements HealthStatusCarrier {
 	NONE("없음", RiskLevel.NONE),
 	NORMAL("공복 혈당 수치 정상", RiskLevel.NORMAL),
 	IMPAIRED_FASTING_GLUCOSE("공복 혈당 수치 다소 높음, 혈당 조절 능력 저하, 공복 혈당 장애", RiskLevel.BORDERLINE),
-	DIABETES_SUSPECTED("공복 혈당 수치 높음, 인슐린 분비 부족, 당뇨 의심", RiskLevel.SUSPECTED);
+	DIABETES_SUSPICIOUS("공복 혈당 수치 높음, 인슐린 분비 부족, 당뇨 의심", RiskLevel.SUSPICIOUS);
 
 	private final String description;
 	private final RiskLevel riskLevel;
@@ -27,6 +27,6 @@ public enum FastingGlucoseStatus implements HealthStatusCarrier {
 		if (fastingGlucose <= 125) {
 			return IMPAIRED_FASTING_GLUCOSE;
 		}
-		return DIABETES_SUSPECTED;
+		return DIABETES_SUSPICIOUS;
 	}
 }

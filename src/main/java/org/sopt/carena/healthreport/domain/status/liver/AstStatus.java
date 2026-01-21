@@ -12,7 +12,7 @@ public enum AstStatus implements HealthStatusCarrier {
 	NONE("없음", RiskLevel.NONE),
 	NORMAL("아스파테이트아미노전달효소 수치 정상, AST 수치 정상", RiskLevel.NORMAL),
 	AST_BORDERLINE("아스파테이트아미노전달효소 수치 다소 높음, AST 수치 다소 높음, 간 수치 다소 높음, 간 기능 저하", RiskLevel.BORDERLINE),
-	AST_SUSPECTED("아스파테이트아미노전달효소 수치 높음, AST 수치 높음, 간 수치 높음, 간 기능 손상, 간염 의심, 간 경변 의심", RiskLevel.SUSPECTED);
+	AST_SUSPICIOUS("아스파테이트아미노전달효소 수치 높음, AST 수치 높음, 간 수치 높음, 간 기능 손상, 간염 의심, 간 경변 의심", RiskLevel.SUSPICIOUS);
 
 
 	private final String description;
@@ -28,6 +28,6 @@ public enum AstStatus implements HealthStatusCarrier {
 		if(ast <= 50){
 			return AST_BORDERLINE;
 		}
-		return AST_SUSPECTED;
+		return AST_SUSPICIOUS;
 	}
 }

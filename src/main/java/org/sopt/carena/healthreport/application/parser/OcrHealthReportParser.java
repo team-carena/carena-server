@@ -1,4 +1,4 @@
-package org.sopt.carena.healthreport.application.service.util;
+package org.sopt.carena.healthreport.application.parser;
 
 import java.util.ArrayList;
 import java.util.List;

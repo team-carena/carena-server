@@ -13,8 +13,8 @@ public enum HemoglobinStatus implements HealthStatusCarrier {
 	NONE("없음", RiskLevel.NONE),
 	NORMAL("혈색소 수치 정상", RiskLevel.NORMAL),
 	ANEMIA_BORDERLINE("혈색소 수치 다소 낮음, 철분 부족, 헤모글로빈 부족, 빈혈 의심", RiskLevel.BORDERLINE),
-	ANEMIA_SUSPECTED("혈색소 수치 낮음, 철분 부족, 헤모글로빈 부족, 빈혈 의심", RiskLevel.SUSPECTED),
-	POLYCYTHEMIA_SUSPECTED("혈색소 수치 높음, 헤모글로빈 과다, 적혈구 과다증 의심", RiskLevel.SUSPECTED);
+	ANEMIA_SUSPICIOUS("혈색소 수치 낮음, 철분 부족, 헤모글로빈 부족, 빈혈 의심", RiskLevel.SUSPICIOUS),
+	POLYCYTHEMIA_SUSPICIOUS("혈색소 수치 높음, 헤모글로빈 과다, 적혈구 과다증 의심", RiskLevel.SUSPICIOUS);
 
 	private final String description;
 	private final RiskLevel riskLevel;
@@ -31,7 +31,7 @@ public enum HemoglobinStatus implements HealthStatusCarrier {
 
 	private static HemoglobinStatus maleStatus(final double hemoglobin) {
 		if(hemoglobin >= 16.6){
-			return POLYCYTHEMIA_SUSPECTED;
+			return POLYCYTHEMIA_SUSPICIOUS;
 		}
 		if(hemoglobin >= 13){
 			return NORMAL;
@@ -39,12 +39,12 @@ public enum HemoglobinStatus implements HealthStatusCarrier {
 		if(hemoglobin > 12){
 			return ANEMIA_BORDERLINE;
 		}
-		return ANEMIA_SUSPECTED;
+		return ANEMIA_SUSPICIOUS;
 	}
 
 	private static HemoglobinStatus femaleStatus(final double hemoglobin) {
 		if(hemoglobin >= 15){
-			return POLYCYTHEMIA_SUSPECTED;
+			return POLYCYTHEMIA_SUSPICIOUS;
 		}
 		if(hemoglobin >= 12){
 			return NORMAL;
@@ -52,6 +52,6 @@ public enum HemoglobinStatus implements HealthStatusCarrier {
 		if(hemoglobin > 10){
 			return ANEMIA_BORDERLINE;
 		}
-		return ANEMIA_SUSPECTED;
+		return ANEMIA_SUSPICIOUS;
 	}
 }
