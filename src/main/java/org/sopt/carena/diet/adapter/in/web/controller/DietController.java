@@ -15,7 +15,6 @@ import org.sopt.carena.diet.application.dto.view.DietListResultView;
 import org.sopt.carena.diet.application.port.in.GetDietListUseCase;
 import org.sopt.carena.diet.application.port.in.RegisterDietDocumentUseCase;
 import org.sopt.carena.diet.application.port.in.GetDietDetailUseCase;
-import org.sopt.carena.diet.domain.DietInformation;
 import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
@@ -44,10 +43,10 @@ public class DietController implements DietApiDocs {
 
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponse<DietDetailResponse>> dietDetail(
-            @PathVariable final Long id
+            @PathVariable final String id
     ) {
         try{
-            DietDetailResultView result = getDietDetailUseCase.getDietDetail(id);
+            DietDetailResultView result = getDietDetailUseCase.getDietDetail(Long.parseLong(id));
             DietDetailResponse response = DietDetailResponse.from(result);
 
             return ResponseEntity.status(DietSuccessCode.DIET_DETAIL.getStatus())

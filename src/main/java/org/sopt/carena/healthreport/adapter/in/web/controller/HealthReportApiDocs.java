@@ -28,7 +28,7 @@ public interface HealthReportApiDocs {
 	ResponseEntity<SuccessResponse<HealthReportDateListView>> getReportDateList(long id, @Min(1) int index);
 
 	@Operation(summary = "건강 검진 결과 중 내용 전체 조회", description = "식별자에 해당하는 건강 검진 결과의 전체 내용을 조회합니다.")
-	ResponseEntity<SuccessResponse<EntireHealthReportView>> getEntireHealthReport(long memberId, long healthReportId);
+	ResponseEntity<SuccessResponse<EntireHealthReportView>> getEntireHealthReport(long memberId, String healthReportId);
 
 	@Operation(summary = "건강 검진 결과 중 신장(키) 항목 히스토리 조회", description = "신장(키) 항목에 대해 최근 5개의 기록을 조회합니다.")
 	ResponseEntity<SuccessResponse<HealthReportHistoryView>> getHeightHistory(long memberId, LocalDate healthCheckDate);

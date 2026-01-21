@@ -7,7 +7,7 @@ import org.sopt.carena.healthreport.domain.HealthReport;
 import org.sopt.carena.healthreport.domain.status.RiskLevel;
 
 public record EntireHealthReportView(
-		long id,
+		String id,
 		LocalDate healthCheckDate,
 		List<DisplayElement> basic,
 		List<DisplayElement> bloodPressure,
@@ -18,7 +18,7 @@ public record EntireHealthReportView(
 ) {
 	public static EntireHealthReportView from(final HealthReport report) {
 		return new EntireHealthReportView(
-				report.getId(), report.getHealthCheckDate(),
+				String.valueOf(report.getId()), report.getHealthCheckDate(),
 				buildBasicInspection(report),
 				buildBloodPressureInspection(report),
 				buildDiabetesInspection(report),

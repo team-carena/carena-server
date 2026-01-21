@@ -16,7 +16,7 @@ public interface DietApiDocs {
     ResponseEntity<SuccessResponse<Void>> createDiet(@Valid CreateAdminDietRequest request);
 
     @Operation(summary = "식단 상세 조회" , description = "해당 식단의 제목, 내용, 추천식품, 비추천식품을 반환해줍니다.")
-    ResponseEntity<SuccessResponse<DietDetailResponse>> dietDetail(Long id);
+    ResponseEntity<SuccessResponse<DietDetailResponse>> dietDetail(String id);
 
     @Operation(summary = "식단 리스트 조회" , description = "전체 식단의 리스트를 조회합니다.")
     ResponseEntity<SuccessResponse<DietListResponse>> getDietList(@Min(1) int page);
