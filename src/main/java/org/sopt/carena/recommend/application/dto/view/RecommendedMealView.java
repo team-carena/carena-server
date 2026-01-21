@@ -3,7 +3,7 @@ package org.sopt.carena.recommend.application.dto.view;
 import org.sopt.carena.recommend.domain.RecommendedMeal;
 
 public record RecommendedMealView(
-		long recommendedMealId,
+		String recommendedMealId,
 		String meal,
 		String description,
 		long baseDietDocument,
@@ -11,7 +11,7 @@ public record RecommendedMealView(
 ) {
 	public static RecommendedMealView from(RecommendedMeal recommendedMeal) {
 		return new RecommendedMealView(
-				recommendedMeal.getId(),
+				String.valueOf(recommendedMeal.getId()),
 				recommendedMeal.getMeal(),
 				recommendedMeal.getDescription(),
 				recommendedMeal.getBaseDocumentId(),
