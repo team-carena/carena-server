@@ -46,16 +46,11 @@ public class DietController implements DietApiDocs {
     public ResponseEntity<SuccessResponse<DietDetailResponse>> dietDetail(
             @PathVariable final Long id
     ) {
-        try{
-            DietDetailResultView result = getDietDetailUseCase.getDietDetail(id);
-            DietDetailResponse response = DietDetailResponse.from(result);
+        DietDetailResultView result = getDietDetailUseCase.getDietDetail(id);
+        DietDetailResponse response = DietDetailResponse.from(result);
 
-            return ResponseEntity.status(DietSuccessCode.DIET_DETAIL.getStatus())
-                    .body(ApiResponse.success(DietSuccessCode.DIET_DETAIL,response));
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        return ResponseEntity.status(DietSuccessCode.DIET_DETAIL.getStatus())
+                .body(ApiResponse.success(DietSuccessCode.DIET_DETAIL, response));
     }
 
     @GetMapping
