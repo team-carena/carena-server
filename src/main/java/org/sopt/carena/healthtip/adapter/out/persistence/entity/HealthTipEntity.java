@@ -14,12 +14,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.sopt.carena.global.common.BaseEntity;
 
 @Entity
 @Getter
 @Table(name = "health_tip")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HealthTipEntity {
+public class HealthTipEntity extends BaseEntity {
 	@Id
 	@Tsid
 	private Long id;

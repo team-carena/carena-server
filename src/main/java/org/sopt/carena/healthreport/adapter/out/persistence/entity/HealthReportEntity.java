@@ -2,6 +2,7 @@ package org.sopt.carena.healthreport.adapter.out.persistence.entity;
 
 import java.time.LocalDate;
 
+import org.sopt.carena.global.common.BaseEntity;
 import org.sopt.carena.member.adapter.out.persistence.entity.MemberEntity;
 import org.sopt.carena.member.domain.Gender;
 
@@ -29,7 +30,7 @@ import lombok.NoArgsConstructor;
 		@Index(name = "idx_health_report_member_id", columnList = "member_id")
 })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HealthReportEntity {
+public class HealthReportEntity extends BaseEntity {
 	@Id
 	@Tsid
 	private Long id;

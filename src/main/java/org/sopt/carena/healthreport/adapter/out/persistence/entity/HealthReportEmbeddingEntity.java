@@ -2,6 +2,7 @@ package org.sopt.carena.healthreport.adapter.out.persistence.entity;
 
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.sopt.carena.global.common.BaseEntity;
 import org.sopt.carena.member.adapter.out.persistence.entity.MemberEntity;
 
 import io.hypersistence.utils.hibernate.id.Tsid;
@@ -29,7 +30,7 @@ import lombok.NoArgsConstructor;
 				@Index(name = "idx_health_report_embedding_health_report_id", columnList = "health_report_id")
 		})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HealthReportEmbeddingEntity {
+public class HealthReportEmbeddingEntity extends BaseEntity {
 	@Id
 	@Tsid
 	private Long id;
