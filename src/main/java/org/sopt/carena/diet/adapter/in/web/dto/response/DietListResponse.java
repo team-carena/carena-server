@@ -8,13 +8,13 @@ public record DietListResponse(
         List<DietItem> diets,
         boolean hasNext
 ) {
-    private record DietItem(Long id, String title) {}
+    private record DietItem(String id, String title) {}
 
     // DietListResult -> DietListResponse 변환
     public static DietListResponse from(DietListResultView result) {
         List<DietItem> items = result.items().stream()
                 .map(resultItem -> new DietItem(
-                        resultItem.id(),
+                        String.valueOf(resultItem.id()),
                         resultItem.title()
                 ))
                 .toList();

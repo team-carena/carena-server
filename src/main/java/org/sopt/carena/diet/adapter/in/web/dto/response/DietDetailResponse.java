@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public record DietDetailResponse(
-        Long id,
+        String id,
         String title,
         String content,
         Map<String, List<String>> recommends,

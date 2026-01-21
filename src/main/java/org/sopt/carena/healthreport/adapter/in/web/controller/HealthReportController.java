@@ -75,11 +75,11 @@ public class HealthReportController implements HealthReportApiDocs {
 	@GetMapping(path = "/{healthReportId}")
 	public ResponseEntity<SuccessResponse<EntireHealthReportView>> getEntireHealthReport(
 			@AuthenticationPrincipal final long memberId,
-			@PathVariable(name = "healthReportId") final long healthReportId
+			@PathVariable(name = "healthReportId") final String healthReportId
 	) {
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_FOUND,
-						getEntireHealthReportUseCase.getEntireHealthReport(memberId, healthReportId)));
+						getEntireHealthReportUseCase.getEntireHealthReport(memberId, Long.parseLong(healthReportId))));
 	}
 
 	@GetMapping(path = "/measurement/height")

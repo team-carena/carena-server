@@ -22,11 +22,11 @@ public interface HealthTipApiDocs {
 	ResponseEntity<SuccessResponse<ReadHealthTipTickerView>> readHealthTipTicker(long memberId);
 
 	@Operation(summary = "건강팁 상세 조회", description = "특정 ID에 해당하는 건강팁의 세부 내용을 조회합니다.")
-	ResponseEntity<SuccessResponse<ReadHealthTipDetailView>> readHealthTipDetail(long healthTipId);
+	ResponseEntity<SuccessResponse<ReadHealthTipDetailView>> readHealthTipDetail(String healthTipId);
 
 	@Operation(summary = "[ADMIN] 건강팁 생성", description = "건강팁 큐레이션을 생성하는 어드민 기능입니다.")
 	ResponseEntity<SuccessResponse<Void>> createHealthTip(@Valid CreateHealthTipRequest request);
 
 	@Operation(summary = "[ADMIN] 건강팁 삭제", description = "건강팁 큐레이션을 삭제하는 어드민 기능입니다.")
-	ResponseEntity<SuccessResponse<Void>> deleteHealthTip(long healthTipId);
+	ResponseEntity<SuccessResponse<Void>> deleteHealthTip(String healthTipId);
 }

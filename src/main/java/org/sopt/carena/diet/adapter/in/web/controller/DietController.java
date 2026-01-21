@@ -44,7 +44,7 @@ public class DietController implements DietApiDocs {
 
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponse<DietDetailResponse>> dietDetail(
-            @PathVariable final Long id
+            @PathVariable final String id
     ) {
         DietDetailResultView result = getDietDetailUseCase.getDietDetail(id);
         DietDetailResponse response = DietDetailResponse.from(result);
