@@ -10,6 +10,7 @@ import org.sopt.carena.member.application.port.in.GetMemberInfoUseCase;
 import org.sopt.carena.member.application.port.out.MemberPersistencePort;
 import org.sopt.carena.member.domain.Member;
 import org.sopt.carena.member.exception.jwt.MemberNotFoundException;
+import org.sopt.carena.recommend.application.port.out.LoadHealthReportPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +23,14 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class MemberInfoService implements GetMemberInfoUseCase {
 
-    private final MemberPersistencePort memberRepository;
-    private final HealthReportPersistencePort healthReportRepository;
+    private final MemberPersistencePort memberPersistencePort;
+    private final LoadHealthReportPort loadHealthReportPort;
 
     @Override
     public MemberInfoView getMemberInfo(final Long memberId) {
-        Member member = memberRepository.getMemberById(memberId)
+        Member member = memberPersistencePort.getMemberById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
-        Optional<HealthReport> healthReport = healthReportRepository.findLatestByMemberId(memberId);
+        Optional<HealthReport> healthReport = loadHealthReportPort.findLatestHealthReportByMemberId(memberId);
         LocalDate latestHealthCheckDate = healthReport
                 .map(HealthReport::getHealthCheckDate)
                 .orElse(null);
@@ -45,7 +46,7 @@ public class MemberInfoService implements GetMemberInfoUseCase {
     }
     @Override
     public MyPageInfoView getMyPageInfo(final Long memberId) {
-        Member member = memberRepository.getMemberById(memberId)
+        Member member = memberPersistencePort.getMemberById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
         return MyPageInfoView.of(
                 member.getName(),

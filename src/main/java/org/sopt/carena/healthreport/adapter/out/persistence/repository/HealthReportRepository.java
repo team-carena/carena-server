@@ -8,22 +8,12 @@ import org.sopt.carena.healthreport.adapter.out.persistence.entity.HealthReportE
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface HealthReportRepository extends JpaRepository<HealthReportEntity, Long> {
 
 	Optional<HealthReportEntity> findByMemberEntityIdAndId(long memberId, long healthReportId);
 
 	Optional<HealthReportEntity> findTopByMemberEntityIdOrderByHealthCheckDateDesc(long memberId);
-
-	@Query("""
-			SELECT h FROM HealthReportEntity h
-        WHERE h.memberEntity.id = :memberId
-        ORDER BY h.healthCheckDate DESC
-        LIMIT 1
-        """)
-	Optional<HealthReportEntity> findLatestByMemberId(@Param("memberId") Long memberId);
 
 	boolean existsByMemberEntityIdAndHealthCheckDate(Long memberId, LocalDate healthCheckDate);
 

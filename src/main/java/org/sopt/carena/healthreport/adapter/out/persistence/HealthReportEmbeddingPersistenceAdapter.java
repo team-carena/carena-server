@@ -53,7 +53,7 @@ public class HealthReportEmbeddingPersistenceAdapter implements HealthReportEmbe
 	@Override
 	public HealthReport findLatestByMemberId(Long memberId) {
 		HealthReport healthReport =
-				healthReportRepository.findLatestByMemberId(memberId)
+				healthReportRepository.findTopByMemberEntityIdOrderByHealthCheckDateDesc(memberId)
 						.map(HealthReportMapper::toDomain)
 						.orElse(null);
 
