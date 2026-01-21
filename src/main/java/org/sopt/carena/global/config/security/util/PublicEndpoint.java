@@ -15,6 +15,7 @@ public enum PublicEndpoint {
     OAUTH2_START("/oauth2/**", HttpMethod.GET),
     OAUTH2_CALLBACK("/login/oauth2/**", HttpMethod.GET),
     LOGIN("/login", HttpMethod.GET),
+    SIGN_UP("/signup", HttpMethod.POST),
     MEMBER_SIGNUP("/api/v1/member/signup", HttpMethod.POST),
     TOKEN_REFRESH("/api/v1/member/token/refresh", HttpMethod.POST),
 
