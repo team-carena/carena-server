@@ -36,8 +36,6 @@ public class VectorStoreAdapter implements GetDocumentListPort {
 				.stream()
 				.limit(limit)
 				.toList();
-		System.out.println("===document id 추출===");
-		documentIds.forEach(id -> System.out.print(id+" "));
 
 		return dietInformationRepository.findAllByIdInWithDetails(documentIds).stream()
 				.map(DietPersistenceMapper::toDomain)

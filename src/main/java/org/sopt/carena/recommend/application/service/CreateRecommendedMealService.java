@@ -42,7 +42,6 @@ public class CreateRecommendedMealService implements CreateRecommendedMealUseCas
 			throw new DocumentNotExistException();
 		}
 
-		System.out.println("===식단 추천 시작===");
 		virtualExecutorService.submit(
 				() -> saveRagResultAsync(embeddingText, documents, memberId, healthReport.getId()));
 	}
