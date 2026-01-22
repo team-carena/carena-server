@@ -53,32 +53,27 @@ public class CreateRecommendedMealService implements CreateRecommendedMealUseCas
 			final long memberId,
 			final long healthReportId
 	) {
-		try{
-			Long baseDocumentId = documents.getFirst().getId();
-			String baseDocumentTitle = documents.getFirst().getTitle();
+		Long baseDocumentId = documents.getFirst().getId();
+		String baseDocumentTitle = documents.getFirst().getTitle();
 
-			List<String> documentContents = documents.stream()
-					.map(DietInformation::getCombinedChunkContent)
-					.toList();
+		List<String> documentContents = documents.stream()
+				.map(DietInformation::getCombinedChunkContent)
+				.toList();
 
-			RecommendedMealResult result = getRagResultPort.getRecommendedMeal(embeddingText, documentContents);
+		RecommendedMealResult result = getRagResultPort.getRecommendedMeal(embeddingText, documentContents);
 
-			log.info("LLM 추천 식단 생성 완료, 저장 호출");
+		log.info("LLM 추천 식단 생성 완료, 저장 호출");
 
-			RecommendedMeal recommendedMeal = RecommendedMeal.builder()
-					.meal(result.meal())
-					.description(result.description())
-					.baseDocumentId(baseDocumentId)
-					.baseDocumentTitle(baseDocumentTitle)
-					.memberId(memberId)
-					.healthReportId(healthReportId)
-					.build();
+		RecommendedMeal recommendedMeal = RecommendedMeal.builder()
+				.meal(result.meal())
+				.description(result.description())
+				.baseDocumentId(baseDocumentId)
+				.baseDocumentTitle(baseDocumentTitle)
+				.memberId(memberId)
+				.healthReportId(healthReportId)
+				.build();
 
-			// rag 결과 저장
-			saveRecommendedMealPort.saveRecommendedMeal(recommendedMeal);
-		} catch (Exception e) {
-			e.printStackTrace();
-			// throw new RuntimeException(e);
-		}
+		// rag 결과 저장
+		saveRecommendedMealPort.saveRecommendedMeal(recommendedMeal);
 	}
 }
