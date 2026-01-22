@@ -6,7 +6,7 @@ public record RecommendedMealView(
 		String recommendedMealId,
 		String meal,
 		String description,
-		long baseDietDocument,
+		String baseDietDocumentId,
 		String baseDietTitle
 ) {
 	public static RecommendedMealView from(RecommendedMeal recommendedMeal) {
@@ -14,7 +14,7 @@ public record RecommendedMealView(
 				String.valueOf(recommendedMeal.getId()),
 				recommendedMeal.getMeal(),
 				recommendedMeal.getDescription(),
-				recommendedMeal.getBaseDocumentId(),
+				String.valueOf(recommendedMeal.getBaseDocumentId()),
 				recommendedMeal.getBaseDocumentTitle()
 		);
 	}
