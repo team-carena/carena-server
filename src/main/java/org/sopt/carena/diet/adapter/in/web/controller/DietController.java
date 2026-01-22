@@ -42,11 +42,11 @@ public class DietController implements DietApiDocs {
                 .body(ApiResponse.success(DietSuccessCode.DIET_CREATED));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{dietInformationId}")
     public ResponseEntity<SuccessResponse<DietDetailResponse>> dietDetail(
-            @PathVariable final String id
+            @PathVariable final String dietInformationId
     ) {
-        DietDetailResultView result = getDietDetailUseCase.getDietDetail(Long.valueOf(id));
+        DietDetailResultView result = getDietDetailUseCase.getDietDetail(Long.valueOf(dietInformationId));
         DietDetailResponse response = DietDetailResponse.from(result);
 
         return ResponseEntity.status(DietSuccessCode.DIET_DETAIL.getStatus())
