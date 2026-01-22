@@ -31,7 +31,6 @@ public class DietInformationEntity extends BaseEntity {
     @OneToMany(mappedBy = "document",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<DietChunkEntity> chunks = new ArrayList<>();
 
-
     @OneToOne(mappedBy = "dietInformation",cascade = CascadeType.ALL, orphanRemoval = true)
     private RecommendedCategoryEntity recommendedFood;
 

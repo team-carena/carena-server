@@ -3,6 +3,7 @@ package org.sopt.carena.recommend.application.service;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
+import org.sopt.carena.diet.domain.DietInformation;
 import org.sopt.carena.healthreport.application.converter.HealthReportEmbeddingConverter;
 import org.sopt.carena.healthreport.application.port.out.GetRagResultPort;
 import org.sopt.carena.healthreport.application.port.out.SaveRecommendedMealPort;
@@ -14,7 +15,6 @@ import org.sopt.carena.recommend.application.port.out.GetDocumentListPort;
 import org.sopt.carena.recommend.application.port.out.LoadHealthReportPort;
 import org.sopt.carena.recommend.domain.RecommendedMeal;
 import org.sopt.carena.recommend.exception.DocumentNotExistException;
-import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class CreateRecommendedMealService implements CreateRecommendedMealUseCas
 
 		String embeddingText = HealthReportEmbeddingConverter.toEmbeddingText(healthReport);
 
-		List<Document> documents = getDocumentListPort.searchDocuments(embeddingText, 5);
+		List<DietInformation> documents = getDocumentListPort.searchDocumentsId(embeddingText, 5);
 
 		if (documents.isEmpty()) {
 			throw new DocumentNotExistException();
@@ -48,14 +48,18 @@ public class CreateRecommendedMealService implements CreateRecommendedMealUseCas
 
 	private void saveRagResultAsync(
 			final String embeddingText,
-			final List<Document> documents,
+			final List<DietInformation> documents,
 			final long memberId,
 			final long healthReportId
 	) {
-		Long baseDocumentId = (Long)documents.get(0).getMetadata().get("document_id");
-		String baseDocumentTitle = (String)documents.get(0).getMetadata().get("title");
+		Long baseDocumentId = documents.getFirst().getId();
+		String baseDocumentTitle = documents.getFirst().getTitle();
 
-		RecommendedMealResult result = getRagResultPort.getRecommendedMeal(embeddingText, documents);
+		List<String> documentContents = documents.stream()
+				.map(DietInformation::getCombinedChunkContent)
+				.toList();
+
+		RecommendedMealResult result = getRagResultPort.getRecommendedMeal(embeddingText, documentContents);
 
 		log.info("LLM 추천 식단 생성 완료, 저장 호출");
 
