@@ -18,7 +18,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OcrClient {
@@ -37,6 +39,8 @@ public class OcrClient {
 		builder.part("message", buildMessage(extractImageFormat(format), filename));
 		builder.part("file", file.getResource());
 
+		log.debug("OCR 요청 file format {}", format);
+
 		try {
 			return webClient.post()
 					.uri(requestUrl)
@@ -46,6 +50,7 @@ public class OcrClient {
 					.retrieve()
 					.bodyToMono(OcrResponse.class).block();
 		} catch (Exception e) {
+			log.error("OCR 응답 에러 : {}", e.getMessage());
 			throw new OcrApiFailException();
 		}
 	}
