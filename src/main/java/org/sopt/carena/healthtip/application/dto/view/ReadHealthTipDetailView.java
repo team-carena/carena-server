@@ -6,7 +6,7 @@ import org.sopt.carena.healthtip.domain.HealthTip;
 import org.sopt.carena.healthtip.domain.value.Hashtag;
 
 public record ReadHealthTipDetailView(
-		long id,
+		String id,
 		String title,
 		String subTitle,
 		String content,
@@ -15,7 +15,7 @@ public record ReadHealthTipDetailView(
 ) {
 	public static ReadHealthTipDetailView from(final HealthTip healthTip) {
 		return new ReadHealthTipDetailView(
-				healthTip.getId(),
+				String.valueOf(healthTip.getId()),
 				healthTip.getTitle(),
 				healthTip.getSubTitle(),
 				healthTip.getContent(),
