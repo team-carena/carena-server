@@ -3,10 +3,12 @@ package org.sopt.carena.global.exception.handler;
 import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.exception.BaseException;
 import org.sopt.carena.global.exception.code.ErrorCode;
+import org.sopt.carena.member.exception.code.MemberErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -57,5 +59,10 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
 	protected ResponseEntity<ApiResponse> handleException(Exception e) {
 		// e.printStackTrace();
 		return buildErrorResponse(ErrorCode.UNDEFINED_ERROR);
+	}
+
+	@ExceptionHandler(MissingRequestCookieException.class)
+	protected ResponseEntity<ApiResponse> handleMissingRequestCookie(MissingRequestCookieException e) {
+		return buildErrorResponse(MemberErrorCode.NOT_EXIST_TOKEN);
 	}
 }

@@ -64,7 +64,7 @@ public class MemberController implements MemberApiDocs{
         HeaderUtil.setAuthorizationHeader(response, result.accessToken());
         CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
         return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())
-                        .body(ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED));
+                .body(ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED));
     }
 
     @PostMapping("/tokens")
@@ -72,10 +72,10 @@ public class MemberController implements MemberApiDocs{
             @CookieValue(name="oneTimeToken") final String oneTimeToken,
             HttpServletResponse response
     ) {
-        TokenGeneratedView result=generateTokenUseCase.generateToken(oneTimeToken);
+        TokenGeneratedView result = generateTokenUseCase.generateToken(oneTimeToken);
         HeaderUtil.setAuthorizationHeader(response, result.accessToken());
         CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
-        CookieUtil.deleteCookie(response,"oneTimeToken");
+        CookieUtil.deleteCookie(response, "oneTimeToken");
         return ResponseEntity.status(MemberSuccessCode.TOKEN_GENERATED.getStatus())
                 .body(ApiResponse.success(MemberSuccessCode.TOKEN_GENERATED));
     }
@@ -110,7 +110,6 @@ public class MemberController implements MemberApiDocs{
     ) {
         String accessToken = AccessTokenResolver.resolve(request);
         logoutUseCase.logout(memberId,accessToken);
-        //CookieUtil.deleteRefreshTokenCookie(response);
         CookieUtil.deleteCookie(response, "refreshToken");
         log.info("memberId: {}", memberId);
         return ResponseEntity.status(MemberSuccessCode.LOGOUT_SUCCESS.getStatus())
