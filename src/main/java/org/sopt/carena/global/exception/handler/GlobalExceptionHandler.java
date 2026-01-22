@@ -15,6 +15,9 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler extends BaseExceptionHandler {
 
@@ -57,7 +60,7 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<ApiResponse> handleException(Exception e) {
-		// e.printStackTrace();
+		e.printStackTrace();
 		return buildErrorResponse(ErrorCode.UNDEFINED_ERROR);
 	}
 
