@@ -8,23 +8,19 @@ public record MemberInfoView(
         String name,
         int age,
         Gender gender,
-        Long score,
-        LocalDate latestHealthCheckDate
+        Long score
 ) {
     private MemberInfoView(
             String name,
             LocalDate birthdate,
             Gender gender,
-            Long score,
-            LocalDate latestHealthCheckDate
+            Long score
     ) {
         this(
                 name,
                 calculateAge(birthdate),
                 gender,
-                score,
-                latestHealthCheckDate
-
+                score
         );
     }
 
@@ -32,10 +28,9 @@ public record MemberInfoView(
             String name,
             LocalDate birthdate,
             Gender gender,
-            Long score,
-            LocalDate latestHealthCheckDate
+            Long score
     ) {
-        return new MemberInfoView(name, birthdate, gender, score, latestHealthCheckDate);
+        return new MemberInfoView(name, birthdate, gender, score);
     }
 
     private static int calculateAge(LocalDate birthdate) {

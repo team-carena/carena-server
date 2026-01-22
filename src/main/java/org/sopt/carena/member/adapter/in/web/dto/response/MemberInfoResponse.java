@@ -11,16 +11,14 @@ public record MemberInfoResponse(
         String name,
         int age,
         Gender gender,
-        Long score,
-        LocalDate latestHealthCheckDate
+        Long score
 ) {
     public static MemberInfoResponse from(final MemberInfoView view) {
         return new MemberInfoResponse(
                 view.name(),
                 view.age(),
                 view.gender(),
-                view.score(),
-                view.latestHealthCheckDate()
+                view.score()
         );
     }
 }
