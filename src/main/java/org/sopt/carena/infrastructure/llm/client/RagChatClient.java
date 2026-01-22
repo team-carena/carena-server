@@ -1,13 +1,11 @@
 package org.sopt.carena.infrastructure.llm.client;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.sopt.carena.infrastructure.exception.LLMResultDeserializationException;
 import org.sopt.carena.infrastructure.llm.dto.RecommendMealPromptProperties;
 import org.sopt.carena.infrastructure.llm.dto.RecommendedMealResult;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,10 +23,10 @@ public class RagChatClient {
 	private final ChatClient chatClient;
 	private final ObjectMapper objectMapper;
 
-	public RecommendedMealResult getRecommendedMeal(String healthState, List<Document> documents) {
+	public RecommendedMealResult getRecommendedMeal(final String healthState, final List<String> documentContents) {
 		String systemPrompt = recommendMealPromptProperties.systemPrompt();
 
-		String userPrompt = buildUserPrompt(healthState, documents);
+		String userPrompt = buildUserPrompt(healthState, documentContents);
 
 		log.info("프롬프트 생성 성공, LLM 호출");
 
@@ -43,10 +41,8 @@ public class RagChatClient {
 		return parse(rawTextResponse);
 	}
 
-	private String buildUserPrompt(String healthState, List<Document> documents) {
-		String context = documents.stream()
-				.map(Document::getText)
-				.collect(Collectors.joining(LINE_SEPARATOR));
+	private String buildUserPrompt(String healthState, List<String> documentContents) {
+		String context = String.join(LINE_SEPARATOR, documentContents);
 
 		return recommendMealPromptProperties.userPrompt()
 				.replace("{healthState}", healthState)

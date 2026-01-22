@@ -9,7 +9,7 @@ import org.sopt.carena.healthreport.domain.status.RiskLevel;
 public class HealthReportEmbeddingConverter {
 	public static String toEmbeddingText(HealthReport healthReport) {
 		return healthReport.getStatusCarriers().stream()
-				.filter(carrier -> carrier.getRiskLevel() != RiskLevel.NONE)
+				.filter(carrier -> carrier.getRiskLevel() != RiskLevel.NONE && carrier.getRiskLevel() != RiskLevel.NORMAL)
 				.map(HealthStatusCarrier::getDescription)
 				.collect(Collectors.collectingAndThen(
 						Collectors.joining(", "),

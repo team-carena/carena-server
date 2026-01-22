@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 public class DietJpaPersistenceAdapter implements DietPersistencePort {
 
     private final DietInformationJpaRepository infoRepository;
-    private final DietPersistenceMapper mapper;
     private final DietChunkJpaRepository dietChunkRepository;
 
     @Override
@@ -97,13 +96,13 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
     @Transactional(readOnly = true)
     public Optional<DietInformation> loadById(final Long dietId) {
         return infoRepository.findById(dietId)
-                .map(mapper::toDomain);
+                .map(DietPersistenceMapper::toDomain);
     }
 
     @Override
     public Slice<DietInformation> loadDietList(final Pageable pageable) {
         return infoRepository.findAllByOrderByIdDesc(pageable)
-                .map(mapper::toDomain);
+                .map(DietPersistenceMapper::toDomain);
     }
     @Override
     public Slice<DietInformation> loadDietsByVectorSimilarity(final float[] embeddingVector, final int page, final int pageSize) {
@@ -140,7 +139,7 @@ public class DietJpaPersistenceAdapter implements DietPersistencePort {
         List<DietInformation> diets = dietIds.stream()
                 .map(dietEntityMap::get)
                 .filter(entity -> entity != null)
-                .map(mapper::toDomain)
+                .map(DietPersistenceMapper::toDomain)
                 .toList();
 
         log.debug("벡터 유사도 식단 조회 완료 - 결과: {}개, hasNext: {}", diets.size(), hasNext);

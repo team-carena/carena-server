@@ -52,7 +52,7 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 		healthScoreUseCase.updateMemberScore(member, healthReport);
 
         virtualExecutorService.submit(() -> embeddingAndSave(embeddingText, member, healthReport));
-        virtualExecutorService.submit(() -> createRecommendedMealUseCase.saveRagResult(member.getId()));
+		createRecommendedMealUseCase.saveRagResult(member.getId());
 	}
 
     private void embeddingAndSave(final String embeddingText, final Member member, final HealthReport healthReport) {

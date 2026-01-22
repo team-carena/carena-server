@@ -8,6 +8,8 @@ import org.sopt.carena.diet.domain.value.RecommendedFoods;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Getter
 public class DietInformation {
@@ -44,5 +46,12 @@ public class DietInformation {
         this.recommendedFoods = recommendedFoods;
         this.cautionaryFoods = cautionaryFoods;
         this.createdAt = createdAt;
+    }
+
+    public String getCombinedChunkContent() {
+        return chunks.stream()
+                .map(DietChunk::getContent)
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining("\n"));
     }
 }

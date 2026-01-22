@@ -31,5 +31,4 @@ public interface DietInformationJpaRepository extends JpaRepository<DietInformat
         """)
     List<DietInformationEntity> findAllByIdInWithDetails(@Param("ids") List<Long> ids);
 
-
 }

@@ -6,7 +6,6 @@ import org.sopt.carena.diet.domain.DietInformation;
 import org.sopt.carena.diet.domain.value.CautionaryFoods;
 import org.sopt.carena.diet.domain.DietChunk;
 import org.sopt.carena.diet.domain.value.RecommendedFoods;
-import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,10 +14,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.LinkedHashMap;
 
-@Component
 public class DietPersistenceMapper {
 
-    public DietInformation toDomain(DietInformationEntity entity) {
+    public static DietInformation toDomain(DietInformationEntity entity) {
         return DietInformation.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
@@ -26,14 +24,14 @@ public class DietPersistenceMapper {
                 .reference(entity.getReference())
                 .referenceUrl(entity.getReferenceUrl())
                 .chunks(entity.getChunks().stream()
-                        .map(this::toDietChunk)
+                        .map(DietPersistenceMapper::toDietChunk)
                         .toList())
                 .recommendedFoods(toRecommendedFoods(entity))
                 .cautionaryFoods(toCautionaryFoods(entity))
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
-    public DietChunk toDietChunk(DietChunkEntity chunkEntity) {
+    public static DietChunk toDietChunk(DietChunkEntity chunkEntity) {
         return DietChunk.builder()
                 .id(chunkEntity.getId())
                 .section(chunkEntity.getSection())
@@ -58,12 +56,12 @@ public class DietPersistenceMapper {
         return new CautionaryFoods(entity.getCautionaryFood().getCautionary());
     }
 
-    public Map<Long, DietInformation> toMapById(List<DietInformationEntity> entities) {
+    public static Map<Long, DietInformation> toMapById(List<DietInformationEntity> entities) {
         if (entities == null || entities.isEmpty()) {
             return Collections.emptyMap();
         }
         return entities.stream()
-                .map(this::toDomain)
+                .map(DietPersistenceMapper::toDomain)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toMap(
                         DietInformation::getId,
