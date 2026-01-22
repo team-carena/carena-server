@@ -60,11 +60,11 @@ public class MemberController implements MemberApiDocs{
             @CookieValue(name = "refreshToken") final String refreshToken,
             HttpServletResponse response
     ) {
-            TokenGeneratedView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
-            HeaderUtil.setAuthorizationHeader(response, result.accessToken());
-            CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
-            return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())
-                    .body(ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED));
+        TokenGeneratedView result = refreshTokenUseCase.refreshAccessToken(refreshToken);
+        HeaderUtil.setAuthorizationHeader(response, result.accessToken());
+        CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
+        return ResponseEntity.status(MemberSuccessCode.TOKEN_REFRESHED.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.TOKEN_REFRESHED));
     }
 
     @PostMapping("/tokens")
@@ -72,12 +72,12 @@ public class MemberController implements MemberApiDocs{
             @CookieValue(name="oneTimeToken") final String oneTimeToken,
             HttpServletResponse response
     ) {
-            TokenGeneratedView result = generateTokenUseCase.generateToken(oneTimeToken);
-            HeaderUtil.setAuthorizationHeader(response, result.accessToken());
-            CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
-            CookieUtil.deleteCookie(response, "oneTimeToken");
-            return ResponseEntity.status(MemberSuccessCode.TOKEN_GENERATED.getStatus())
-                    .body(ApiResponse.success(MemberSuccessCode.TOKEN_GENERATED));
+        TokenGeneratedView result = generateTokenUseCase.generateToken(oneTimeToken);
+        HeaderUtil.setAuthorizationHeader(response, result.accessToken());
+        CookieUtil.addRefreshTokenCookie(response, result.refreshToken());
+        CookieUtil.deleteCookie(response, "oneTimeToken");
+        return ResponseEntity.status(MemberSuccessCode.TOKEN_GENERATED.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.TOKEN_GENERATED));
     }
 
     @GetMapping("/my-page")
