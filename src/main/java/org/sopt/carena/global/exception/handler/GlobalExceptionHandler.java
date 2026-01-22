@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -58,14 +59,19 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
 		return buildErrorResponse(ErrorCode.INVALID_REQUEST_METHOD);
 	}
 
+	@ExceptionHandler(MissingRequestCookieException.class)
+	protected ResponseEntity<ApiResponse> handleMissingRequestCookie(MissingRequestCookieException e) {
+		return buildErrorResponse(MemberErrorCode.NOT_EXIST_TOKEN);
+	}
+
+	@ExceptionHandler(MissingServletRequestPartException.class)
+	protected ResponseEntity<ApiResponse> handleMissingServletRequestPartException(MissingServletRequestPartException e){
+		return buildErrorResponse(ErrorCode.INVALID_REQUEST_MESSAGE);
+	}
+
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<ApiResponse> handleException(Exception e) {
 		e.printStackTrace();
 		return buildErrorResponse(ErrorCode.UNDEFINED_ERROR);
-	}
-
-	@ExceptionHandler(MissingRequestCookieException.class)
-	protected ResponseEntity<ApiResponse> handleMissingRequestCookie(MissingRequestCookieException e) {
-		return buildErrorResponse(MemberErrorCode.NOT_EXIST_TOKEN);
 	}
 }
