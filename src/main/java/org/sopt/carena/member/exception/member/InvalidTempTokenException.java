@@ -7,8 +7,4 @@ public class InvalidTempTokenException extends BaseException {
     public InvalidTempTokenException() {
         super(MemberErrorCode.INVALID_TEMP_TOKEN);
     }
-
-    public InvalidTempTokenException(String message) {
-        super(MemberErrorCode.INVALID_TEMP_TOKEN, message);
-    }
 }
