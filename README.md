@@ -61,7 +61,7 @@
 - Spring Data JPA
   - 추상화된 인터페이스를 이용한 데이터베이스 접근을 위해 사용
 - Spring Security
-  - 필터링 방식의 인증 인가 방식의 구현을 위해 사용
+  - 필터링 방식의 인증 · 인가 구현을 위해 사용
 - JWT (Access / Refresh Token)
   - 무상태성 인증 방식 구현을 위해 사용
 - Spring AI
