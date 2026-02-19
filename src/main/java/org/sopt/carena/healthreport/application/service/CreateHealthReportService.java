@@ -3,6 +3,7 @@ package org.sopt.carena.healthreport.application.service;
 import java.util.concurrent.ExecutorService;
 
 import org.sopt.carena.diet.application.port.out.EmbeddingPort;
+import org.sopt.carena.diet.exception.embedding.EmbeddingFailedException;
 import org.sopt.carena.healthreport.application.converter.HealthReportEmbeddingConverter;
 import org.sopt.carena.healthreport.application.dto.command.CreateHealthReportCommand;
 import org.sopt.carena.healthreport.application.port.in.CreateHealthReportUseCase;
@@ -17,10 +18,15 @@ import org.sopt.carena.member.domain.Member;
 
 import org.sopt.carena.member.exception.jwt.MemberNotFoundException;
 import org.sopt.carena.recommend.application.port.in.CreateRecommendedMealUseCase;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CreateHealthReportService implements CreateHealthReportUseCase {
@@ -55,6 +61,12 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 		createRecommendedMealUseCase.saveRagResult(member.getId());
 	}
 
+	@Retryable(
+			retryFor = EmbeddingFailedException.class,
+			maxAttempts = 3,
+			backoff = @Backoff(delay = 5000, multiplier = 2),
+			recover = "recoverEmbedding"
+	)
     private void embeddingAndSave(final String embeddingText, final Member member, final HealthReport healthReport) {
         // 임베딩 호출
         float[] embedding = embeddingPort.embed(embeddingText).vector();
@@ -70,4 +82,9 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
         // 임베딩 결과 저장
         healthReportEmbeddingPersistencePort.saveHealthReportEmbedding(healthReportEmbedding);
     }
+
+	@Recover
+	public void recoverEmbedding(final EmbeddingFailedException e, final Member member, final HealthReport healthReport){
+		log.error("임베딩 실패: {}",e.getMessage());
+	}
 }
