@@ -15,6 +15,9 @@ import org.sopt.carena.recommend.application.port.out.GetDocumentListPort;
 import org.sopt.carena.recommend.application.port.out.LoadHealthReportPort;
 import org.sopt.carena.recommend.domain.RecommendedMeal;
 import org.sopt.carena.recommend.exception.DocumentNotExistException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -46,6 +49,12 @@ public class CreateRecommendedMealService implements CreateRecommendedMealUseCas
 				() -> saveRagResultAsync(embeddingText, documents, memberId, healthReport.getId()));
 	}
 
+	@Retryable(
+			retryFor = Exception.class,
+			maxAttempts = 3,
+			backoff = @Backoff(delay = 5000, multiplier = 2),
+			recover = "recoverRecommendMeal"
+	)
 	private void saveRagResultAsync(
 			final String embeddingText,
 			final List<DietInformation> documents,
@@ -74,5 +83,16 @@ public class CreateRecommendedMealService implements CreateRecommendedMealUseCas
 
 		// rag 결과 저장
 		saveRecommendedMealPort.saveRecommendedMeal(recommendedMeal);
+	}
+
+	@Recover
+	public void recoverRecommendMeal(
+			final Exception e,
+			final String embeddingText,
+			final List<DietInformation> documents,
+			final long memberId,
+			final long healthReportId
+	) {
+		log.error("LLM 호출 실패: {}", e.getMessage());
 	}
 }
