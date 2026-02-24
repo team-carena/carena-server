@@ -24,14 +24,15 @@ public class ExtractTextFromImageService implements ExtractTextFromImageUseCase 
 			retryFor = OcrApiFailException.class,
 			maxAttempts = 3,
 			backoff = @Backoff(delay = 5000, multiplier = 2),
-			recover = "recoverEmbedding"
+			recover = "recoverOcrApi"
 	)
 	public ExtractedTextView extractTextFromImage(final ExtractTextCommand command) {
 		return OcrHealthReportParser.parse(ocrPort.extractText(command));
 	}
 
 	@Recover
-	public void recoverOcrApi(final OcrApiFailException e, final ExtractTextCommand command) {
+	public ExtractedTextView recoverOcrApi(final OcrApiFailException e, final ExtractTextCommand command) {
 		log.error(e.getMessage());
+		throw e;
 	}
 }
