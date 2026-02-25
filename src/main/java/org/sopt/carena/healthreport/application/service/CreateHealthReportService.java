@@ -67,7 +67,7 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 			backoff = @Backoff(delay = 5000, multiplier = 2),
 			recover = "recoverEmbedding"
 	)
-    private void embeddingAndSave(final String embeddingText, final Member member, final HealthReport healthReport) {
+    public void embeddingAndSave(final String embeddingText, final Member member, final HealthReport healthReport) {
         // 임베딩 호출
         float[] embedding = embeddingPort.embed(embeddingText).vector();
 
@@ -84,7 +84,12 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
     }
 
 	@Recover
-	public void recoverEmbedding(final EmbeddingFailedException e, final Member member, final HealthReport healthReport){
+	public void recoverEmbedding(
+			final EmbeddingFailedException e,
+			final String embeddingText,
+			final Member member,
+			final HealthReport healthReport
+	){
 		log.error("임베딩 실패: {}",e.getMessage());
 	}
 }
