@@ -55,7 +55,7 @@ public class CreateRecommendedMealService implements CreateRecommendedMealUseCas
 			backoff = @Backoff(delay = 5000, multiplier = 2),
 			recover = "recoverRecommendMeal"
 	)
-	private void saveRagResultAsync(
+	public void saveRagResultAsync(
 			final String embeddingText,
 			final List<DietInformation> documents,
 			final long memberId,
