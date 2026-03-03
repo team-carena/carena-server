@@ -18,4 +18,7 @@ public interface InstitutionApiDocs {
 
 	@Operation(summary = "시/군/구 주소 코드 조회", description = "시/도 단위 주소 코드에 포함되는 시/군/구 단위의 주소 코드 목록을 조회합니다.")
 	ResponseEntity<SuccessResponse<SigunguCodeView>> getSigunguCode(int sidoCode);
+
+	@Operation(summary = "건강검진 기관 조회", description = "검색 파라미터 조건에 해당하는 건강검진 기관 목록을 조회합니다.")
+	ResponseEntity<SuccessResponse<InstitutionListView>> getInstitutionInfo(@Min(1) int page, Integer sidoCode, Integer sigunguCode, @Min(0) @Max(6) int type, String name);
 }

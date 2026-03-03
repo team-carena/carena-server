@@ -1,5 +1,6 @@
 package org.sopt.carena.infrastructure.publicdata.client;
 
+import org.sopt.carena.infrastructure.publicdata.dto.InstitutionInfoResponse;
 import org.sopt.carena.infrastructure.publicdata.dto.SidoCodeResponse;
 import org.sopt.carena.infrastructure.publicdata.dto.SigunguCodeResponse;
 import org.sopt.carena.institution.exception.PublicDataAccessFailException;
@@ -34,7 +35,7 @@ public class PublicDataClient {
 
 	// 전체 18개
 	public SidoCodeResponse getSidoCode() {
-		try{
+		try {
 			return webClient.get()
 					.uri(uriBuilder -> uriBuilder
 							.scheme("https")
@@ -51,8 +52,9 @@ public class PublicDataClient {
 		}
 	}
 
-	public SigunguCodeResponse getSigunguCode(final int sidoCode){
-		try{
+	// 전체 45개
+	public SigunguCodeResponse getSigunguCode(final int sidoCode) {
+		try {
 			return webClient.get()
 					.uri(uriBuilder -> uriBuilder
 							.scheme("https")
@@ -65,6 +67,35 @@ public class PublicDataClient {
 					)
 					.retrieve()
 					.bodyToMono(SigunguCodeResponse.class).block();
+		} catch (Exception e) {
+			throw new PublicDataAccessFailException();
+		}
+	}
+
+	public InstitutionInfoResponse getInstitutionInfo(
+			final int page,
+			final Integer sidoCode,
+			final Integer sigunguCode,
+			final int type,
+			final String institutionName
+	) {
+		try {
+			return webClient.get()
+					.uri(uriBuilder -> uriBuilder
+							.scheme("https")
+							.host(baseUrl)
+							.path(institutionRequestPath)
+							.queryParam("serviceKey", apiKey)
+							.queryParam("pageNo", page)
+							.queryParam("numOfRows", 20)
+							.queryParam("siDoCd", sidoCode)
+							.queryParam("siGunGuCd", sigunguCode)
+							.queryParam("hchType", type)
+							.queryParam("hmcNm", institutionName)
+							.build()
+					)
+					.retrieve()
+					.bodyToMono(InstitutionInfoResponse.class).block();
 		} catch (Exception e) {
 			throw new PublicDataAccessFailException();
 		}

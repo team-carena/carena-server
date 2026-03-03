@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class PublicDataAdapter implements GetAddressCodePort {
+public class PublicDataAdapter implements GetAddressCodePort, GetInstitutionInfoPort {
 	private final PublicDataClient publicDataClient;
 
 	public List<SidoCode> getSidoCodeList() {
@@ -25,5 +25,16 @@ public class PublicDataAdapter implements GetAddressCodePort {
 
 	public List<SigunguCode> getSigunguAddressCodeBySidoCode(final int sidoCode) {
 		return AddressCodeMapper.toSigunguCodes(publicDataClient.getSigunguCode(sidoCode));
+	}
+
+	public InstitutionInfoList searchInstitutionInfo(
+			final int page,
+			final Integer sidoCode,
+			final Integer sigunguCode,
+			final int type,
+			final String institutionName
+	) {
+		return InstitutionInfoMapper.toInstitutionInfoList(
+				publicDataClient.getInstitutionInfo(page, sidoCode, sigunguCode, type, institutionName));
 	}
 }
