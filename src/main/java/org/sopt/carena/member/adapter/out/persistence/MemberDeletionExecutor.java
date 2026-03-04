@@ -16,9 +16,9 @@ public class MemberDeletionExecutor {
     private final MemberJpaRepository memberJpaRepository;
 
     public void deleteAll(Long memberId) {
-        healthReportEmbeddingRepository.deleteById(memberId);
-        healthReportRepository.deleteById(memberId);
-        recommendedMealRepository.deleteById(memberId);
+        healthReportEmbeddingRepository.deleteAllByMemberEntityId(memberId);
+        healthReportRepository.deleteAllByMemberEntityId(memberId);
+        recommendedMealRepository.deleteAllByMemberEntityId(memberId);
         memberJpaRepository.deleteById(memberId);
     }
 }

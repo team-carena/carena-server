@@ -10,4 +10,6 @@ import org.springframework.data.repository.query.Param;
 public interface HealthReportEmbeddingRepository extends JpaRepository<HealthReportEmbeddingEntity, Long> {
 	@Query("SELECT h FROM HealthReportEmbeddingEntity h WHERE h.healthReportEntity.id = :healthReportId")
 	Optional<HealthReportEmbeddingEntity> findByHealthReportId(@Param("healthReportId") Long healthReportId);
+
+	void deleteAllByMemberEntityId(Long memberId);
 }

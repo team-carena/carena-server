@@ -44,4 +44,6 @@ public interface HealthReportRepository extends JpaRepository<HealthReportEntity
 	List<HealthReportEntity> findTop5ByMemberEntityIdAndSerumCreatinineIsNotNullAndHealthCheckDateLessThanEqualOrderByHealthCheckDateDesc(long memberId, LocalDate healthCheckDate);
 
 	List<HealthReportEntity> findTop5ByMemberEntityIdAndEgfrIsNotNullAndHealthCheckDateLessThanEqualOrderByHealthCheckDateDesc(long memberId, LocalDate healthCheckDate);
+
+	void deleteAllByMemberEntityId(Long memberId);
 }

@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RecommendedMealRepository extends JpaRepository<RecommendedMealEntity, Long> {
 	Optional<RecommendedMealEntity> findTopByMemberEntityIdOrderByCreatedAtDesc(long memberId);
+
+	void deleteAllByMemberEntityId(Long memberId);
 }
