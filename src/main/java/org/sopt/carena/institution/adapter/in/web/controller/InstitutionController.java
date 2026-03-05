@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -33,7 +34,7 @@ public class InstitutionController implements InstitutionApiDocs {
 
 	@GetMapping(path = "/sigungu-code")
 	public ResponseEntity<SuccessResponse<SigunguCodeView>> getSigunguCode(
-			@RequestParam(name = "sidoCode") final int sidoCode
+			@RequestParam(name = "sidoCode") @NotNull final int sidoCode
 	) {
 		return ResponseEntity.status(SuccessCode.ADDRESS_CODE_FOUND.getStatus())
 				.body(ApiResponse.success(SuccessCode.ADDRESS_CODE_FOUND,
