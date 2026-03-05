@@ -22,11 +22,4 @@ public class RefreshTokenBlacklistStoreAdapter implements RefreshTokenBlacklistS
                 .set(key, "logout", Duration.ofMillis(ttlMillis));
         log.debug("AccessToken 블랙리스트 등록 (TTL={}ms)", ttlMillis);
     }
-
-    @Override
-    public boolean isBlacklisted(String refreshToken) {
-        return Boolean.TRUE.equals(
-                redisTemplate.hasKey(PREFIX + refreshToken)
-        );
-    }
 }

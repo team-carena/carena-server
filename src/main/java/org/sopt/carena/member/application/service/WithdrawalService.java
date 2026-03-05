@@ -24,8 +24,6 @@ public class WithdrawalService implements WithdrawalUseCase {
 
     @Override
     public void withdrawal(final Long memberId,String accessToken,String refreshToken) {
-        Member member = memberRepository.getMemberById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
 
         //refresh token 블랙리스팅 처리
         refreshTokenStore.delete(memberId);
