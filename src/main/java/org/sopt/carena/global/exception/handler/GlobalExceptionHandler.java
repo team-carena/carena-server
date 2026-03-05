@@ -9,6 +9,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestCookieException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -33,8 +34,7 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
 	}
 
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	protected ResponseEntity<ApiResponse> handleMethodArgumentTypeMismatchException(
-			MethodArgumentTypeMismatchException e) {
+	protected ResponseEntity<ApiResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
 		return buildErrorResponse(ErrorCode.INVALID_REQUEST_MESSAGE);
 	}
 
@@ -54,8 +54,7 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
 	}
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	protected ResponseEntity<ApiResponse> handleHttpRequestMethodNotSupportedException(
-			HttpRequestMethodNotSupportedException e) {
+	protected ResponseEntity<ApiResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
 		return buildErrorResponse(ErrorCode.INVALID_REQUEST_METHOD);
 	}
 
@@ -65,7 +64,12 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
 	}
 
 	@ExceptionHandler(MissingServletRequestPartException.class)
-	protected ResponseEntity<ApiResponse> handleMissingServletRequestPartException(MissingServletRequestPartException e){
+	protected ResponseEntity<ApiResponse> handleMissingServletRequestPartException(MissingServletRequestPartException e) {
+		return buildErrorResponse(ErrorCode.INVALID_REQUEST_MESSAGE);
+	}
+
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	protected ResponseEntity<ApiResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
 		return buildErrorResponse(ErrorCode.INVALID_REQUEST_MESSAGE);
 	}
 
