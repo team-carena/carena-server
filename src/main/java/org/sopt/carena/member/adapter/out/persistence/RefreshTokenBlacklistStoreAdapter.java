@@ -20,6 +20,6 @@ public class RefreshTokenBlacklistStoreAdapter implements RefreshTokenBlacklistS
         String key = PREFIX + refreshToken;
         redisTemplate.opsForValue()
                 .set(key, "logout", Duration.ofMillis(ttlMillis));
-        log.debug("AccessToken 블랙리스트 등록 (TTL={}ms)", ttlMillis);
+        log.debug("RefreshToken 블랙리스트 등록 (TTL={}ms)", ttlMillis);
     }
 }
