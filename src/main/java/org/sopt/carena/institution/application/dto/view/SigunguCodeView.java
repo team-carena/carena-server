@@ -14,7 +14,7 @@ public record SigunguCodeView(
 	}
 
 	private record SigunguCodeInfo(
-			String sidoName,
+			String sigunguName,
 			int sidoCode,
 			int sigunguCode
 	) {
