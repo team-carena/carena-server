@@ -3,11 +3,9 @@ package org.sopt.carena.member.application.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.member.application.port.in.WithdrawalUseCase;
-import org.sopt.carena.member.application.port.out.AccessTokenBlacklistStore;
-import org.sopt.carena.member.application.port.out.MemberPersistencePort;
-import org.sopt.carena.member.application.port.out.RefreshTokenBlacklistStore;
-import org.sopt.carena.member.application.port.out.RefreshTokenStore;
+import org.sopt.carena.member.application.port.out.*;
 import org.sopt.carena.member.application.service.util.JwtTokenParser;
+import org.sopt.carena.member.domain.TokenType;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +15,7 @@ public class WithdrawalService implements WithdrawalUseCase {
     private final MemberPersistencePort memberRepository;
     private final RefreshTokenStore refreshTokenStore;
     private final JwtTokenParser jwtTokenParser;
-    private final AccessTokenBlacklistStore accessTokenBlacklistStore;
-    private final RefreshTokenBlacklistStore refreshTokenBlacklistStore;
+    private final TokenBlacklistStore tokenBlacklistStore;
 
     @Override
     public void withdrawal(final Long memberId,String accessToken,String refreshToken) {
@@ -34,13 +31,13 @@ public class WithdrawalService implements WithdrawalUseCase {
             if (refreshToken != null) {
                 long remaining = jwtTokenParser.getRemainingValidityMillis(refreshToken);
                 if (remaining > 0) {
-                    refreshTokenBlacklistStore.blacklist(refreshToken, remaining);
+                    tokenBlacklistStore.blacklist(refreshToken, TokenType.REFRESH, remaining);
                 }
             }
 
             long remaining = jwtTokenParser.getRemainingValidityMillis(accessToken);
             if (remaining > 0) {
-                accessTokenBlacklistStore.blacklist(accessToken, remaining);
+                tokenBlacklistStore.blacklist(accessToken, TokenType.ACCESS,remaining);
             }
         } catch (Exception e) {
             // Redis 장애 시에도 탈퇴는 완료로 처리 (토큰은 만료 시 자연 무효화, 탈퇴 회원 토큰은 API에서 차단되기 때문에 이렇게 판단함)

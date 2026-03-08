@@ -10,10 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.carena.global.api.response.FailureResponse;
 import org.sopt.carena.global.config.security.util.PublicEndpoint;
 import org.sopt.carena.global.config.security.util.AccessTokenResolver;
-import org.sopt.carena.member.application.port.out.AccessTokenBlacklistStore;
+import org.sopt.carena.member.application.port.out.TokenBlacklistStore;
 import org.sopt.carena.member.application.service.util.JwtTokenParser;
 import org.sopt.carena.member.application.service.util.JwtTokenValidator;
 import org.sopt.carena.member.domain.Role;
+import org.sopt.carena.member.domain.TokenType;
 import org.sopt.carena.member.exception.code.MemberErrorCode;
 import org.sopt.carena.member.exception.jwt.EmptyTokenException;
 import org.sopt.carena.member.exception.jwt.InvalidTokenException;
@@ -38,17 +39,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenParser jwtTokenParser;
     private final ObjectMapper objectMapper;
     private final HandlerExceptionResolver handlerExceptionResolver;
-    private final AccessTokenBlacklistStore accessTokenBlacklistStore;
+    private final TokenBlacklistStore tokenBlacklistStore;
 
     public JwtAuthenticationFilter(JwtTokenValidator jwtTokenValidator,
                                    JwtTokenParser jwtTokenParser, ObjectMapper objectMapper,
                                    @Qualifier("handlerExceptionResolver") HandlerExceptionResolver handlerExceptionResolver,
-                                   AccessTokenBlacklistStore accessTokenBlacklistStore) {
+                                   TokenBlacklistStore tokenBlacklistStore) {
         this.jwtTokenValidator = jwtTokenValidator;
         this.jwtTokenParser = jwtTokenParser;
         this.objectMapper = objectMapper;
         this.handlerExceptionResolver = handlerExceptionResolver;
-        this.accessTokenBlacklistStore = accessTokenBlacklistStore;
+        this.tokenBlacklistStore = tokenBlacklistStore;
     }
 
     @Override
@@ -71,7 +72,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String accessToken = AccessTokenResolver.resolve(request);
 
-            if (accessTokenBlacklistStore.isBlacklisted(accessToken)) {
+            if (tokenBlacklistStore.isBlacklisted(accessToken, TokenType.ACCESS)) {
                 log.warn("블랙리스트 처리된 액세스 토큰");
                 handlerExceptionResolver.resolveException(
                         request,
