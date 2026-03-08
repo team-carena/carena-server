@@ -81,6 +81,7 @@ jobs:
             export OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
             export NAVER_OCR_URL="${{ secrets.NAVER_OCR_URL }}"
             export NAVER_OCR_SECRET_KEY="${{ secrets.NAVER_OCR_SECRET_KEY }}"
+            export PUBLIC_DATA_API_KEY="${{ secrets.PUBLIC_DATA_API_KEY }}"
             export DOZZLE_USERNAME="${{ secrets.DOZZLE_USERNAME }}"
             export DOZZLE_PASSWORD="${{ secrets.DOZZLE_PASSWORD }}"
             
