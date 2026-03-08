@@ -5,8 +5,13 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
@@ -33,8 +38,14 @@ public class WebClientConfig {
 						.addHandlerLast(new WriteTimeoutHandler(10000, TimeUnit.MILLISECONDS))
 				);
 
+		XmlMapper xmlMapper = new XmlMapper();
+		xmlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
 		return WebClient.builder()
 				.clientConnector(new ReactorClientHttpConnector(httpClient))
+				.codecs(configurer -> configurer
+						.customCodecs()
+						.register(new Jackson2JsonDecoder(xmlMapper, MediaType.APPLICATION_XML)))
 				.build();
 	}
 }
