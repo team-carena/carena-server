@@ -29,4 +29,7 @@ public interface MemberApiDocs {
 
     @Operation(summary = "로그아웃",description = "로그아웃 처리를 하고 리프레시 토큰을 레디스에서 삭제합니다.")
     ResponseEntity<SuccessResponse<Void>> logout(Long memberId, HttpServletRequest request, HttpServletResponse response);
+
+    @Operation(summary = "회원탈퇴",description = "해당 회원을 탈퇴처리합니다.")
+    ResponseEntity<SuccessResponse<Void>> withdrawal(Long memberId, String refreshToken,HttpServletRequest request, HttpServletResponse response);
 }

@@ -8,6 +8,8 @@ import org.sopt.carena.healthreport.adapter.out.persistence.entity.HealthReportE
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 public interface HealthReportRepository extends JpaRepository<HealthReportEntity, Long> {
 
@@ -44,4 +46,8 @@ public interface HealthReportRepository extends JpaRepository<HealthReportEntity
 	List<HealthReportEntity> findTop5ByMemberEntityIdAndSerumCreatinineIsNotNullAndHealthCheckDateLessThanEqualOrderByHealthCheckDateDesc(long memberId, LocalDate healthCheckDate);
 
 	List<HealthReportEntity> findTop5ByMemberEntityIdAndEgfrIsNotNullAndHealthCheckDateLessThanEqualOrderByHealthCheckDateDesc(long memberId, LocalDate healthCheckDate);
+
+	@Modifying
+	@Query("DELETE FROM HealthReportEntity h WHERE h.memberEntity.id = :memberId")
+	void deleteAllByMemberEntityId(Long memberId);
 }

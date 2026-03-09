@@ -17,6 +17,7 @@ import java.util.Optional;
 public class MemberPersistenceAdapter implements MemberPersistencePort {
 
     private final MemberJpaRepository memberJpaRepository;
+    private final MemberDeletionExecutor deletionExecutor;
 
     @Override
     public Optional<Member> getMemberById(final Long id) {
@@ -45,5 +46,11 @@ public class MemberPersistenceAdapter implements MemberPersistencePort {
                 .orElseThrow();
 
         member.updateScore(score);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMemberAggregate(Long memberId) {
+        deletionExecutor.deleteAll(memberId);
     }
 }

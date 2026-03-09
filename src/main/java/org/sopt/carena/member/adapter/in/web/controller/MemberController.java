@@ -2,6 +2,7 @@ package org.sopt.carena.member.adapter.in.web.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.sopt.carena.global.config.security.util.AccessTokenResolver;
+import org.sopt.carena.member.application.port.in.*;
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -18,12 +19,7 @@ import org.sopt.carena.member.adapter.in.web.code.MemberSuccessCode;
 import org.sopt.carena.member.application.dto.command.SignUpCommand;
 import org.sopt.carena.member.application.dto.view.MyPageInfoView;
 import org.sopt.carena.member.application.dto.view.TokenGeneratedView;
-import org.sopt.carena.member.application.port.in.GenerateTokenUseCase;
-import org.sopt.carena.member.application.port.in.LogoutUseCase;
-import org.sopt.carena.member.application.port.in.RefreshTokenUseCase;
-import org.sopt.carena.member.application.port.in.SignupUseCase;
 import org.sopt.carena.member.application.dto.view.MemberInfoView;
-import org.sopt.carena.member.application.port.in.GetMemberInfoUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +35,7 @@ public class MemberController implements MemberApiDocs{
     private final GetMemberInfoUseCase getMemberInfoUseCase;
     private final GenerateTokenUseCase generateTokenUseCase;
     private final LogoutUseCase logoutUseCase;
+    private final WithdrawalUseCase withdrawalUseCase;
 
     @PostMapping("/signup")
     public ResponseEntity<SuccessResponse<Void>> signup(
@@ -114,5 +111,19 @@ public class MemberController implements MemberApiDocs{
         log.info("memberId: {}", memberId);
         return ResponseEntity.status(MemberSuccessCode.LOGOUT_SUCCESS.getStatus())
                 .body(ApiResponse.success(MemberSuccessCode.LOGOUT_SUCCESS));
+    }
+
+    @PostMapping("/withdrawal")
+    public ResponseEntity<SuccessResponse<Void>> withdrawal(
+            @AuthenticationPrincipal Long memberId,
+            @CookieValue(name = "refreshToken") final String refreshToken,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        String accessToken = AccessTokenResolver.resolve(request);
+        withdrawalUseCase.withdrawal(memberId,accessToken,refreshToken);
+        CookieUtil.deleteCookie(response, "refreshToken");
+        return ResponseEntity.status(MemberSuccessCode.WITHDRAWAL_SUCCESS.getStatus())
+                .body(ApiResponse.success(MemberSuccessCode.WITHDRAWAL_SUCCESS));
     }
 }

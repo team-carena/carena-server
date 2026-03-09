@@ -11,4 +11,5 @@ public interface MemberPersistencePort {
     boolean existsByAuthIdAndAuthType(String authId, AuthType authType);
     Optional<Member> findByAuthTypeAndProviderUserId(AuthType authType, String providerUserId);
     void updateScore(Long memberId, Long score);
+    void deleteMemberAggregate(Long memberId);
 }
