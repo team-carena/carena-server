@@ -102,6 +102,7 @@ public class HealthReportEntity extends BaseEntity {
 
 	@Builder
 	private HealthReportEntity(
+			final Long id,
 			final LocalDate healthCheckDate,
 			final String institutionName,
 			final Double height,
@@ -124,6 +125,7 @@ public class HealthReportEntity extends BaseEntity {
 			final MemberEntity memberEntity,
 			final Gender gender
 	) {
+		this.id = id;
 		this.healthCheckDate = healthCheckDate;
 		this.institutionName = institutionName;
 		this.height = height;

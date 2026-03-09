@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class HealthReportEmbedding {
-	private long id;
+	private Long id;
 	private long memberId;
 	private long healthReportId;
 
@@ -14,7 +14,7 @@ public class HealthReportEmbedding {
 
 	@Builder
 	private HealthReportEmbedding(
-			final long id,
+			final Long id,
 			final long memberId,
 			final long healthReportId,
 			final String embeddingText,

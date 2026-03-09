@@ -3,7 +3,7 @@ package org.sopt.carena.healthreport.adapter.in.web.controller;
 import java.time.LocalDate;
 
 import org.sopt.carena.global.api.response.SuccessResponse;
-import org.sopt.carena.healthreport.adapter.in.web.request.CreateHealthReportRequest;
+import org.sopt.carena.healthreport.adapter.in.web.request.WriteHealthReportRequest;
 import org.sopt.carena.healthreport.application.dto.view.EntireHealthReportView;
 import org.sopt.carena.healthreport.application.dto.view.ExtractedTextView;
 import org.sopt.carena.healthreport.application.dto.view.HealthReportDateListView;
@@ -22,7 +22,10 @@ public interface HealthReportApiDocs {
 	ResponseEntity<SuccessResponse<ExtractedTextView>> extractText(MultipartFile file);
 
 	@Operation(summary = "건강 검진 결과 저장", description = "건강 검진 결과를 저장합니다.")
-	ResponseEntity<SuccessResponse<Void>> createHealthReport(long memberId, @Valid CreateHealthReportRequest request);
+	ResponseEntity<SuccessResponse<Void>> createHealthReport(long memberId, @Valid WriteHealthReportRequest request);
+
+	@Operation(summary = "건강 검진 결과 수정", description = "건강 검진 결과를 수정합니다.")
+	ResponseEntity<SuccessResponse<Void>> updateHealthReport(long memberId, String healthReportId, @Valid WriteHealthReportRequest request);
 
 	@Operation(summary = "저장된 건강 검진 결과 데이터의 날짜 목록 조회", description = "건강 검진 결과 데이터의 날짜 목록을 조회합니다.")
 	ResponseEntity<SuccessResponse<HealthReportDateListView>> getReportDateList(long id, @Min(1) int index);

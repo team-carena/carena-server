@@ -1,6 +1,7 @@
 package org.sopt.carena.healthreport.adapter.out.persistence;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.sopt.carena.healthreport.adapter.out.persistence.entity.HealthReportEmbeddingEntity;
 import org.sopt.carena.healthreport.adapter.out.persistence.entity.HealthReportEntity;
 import org.sopt.carena.healthreport.adapter.out.persistence.mapper.HealthReportEmbeddingMapper;
@@ -31,10 +32,17 @@ public class HealthReportEmbeddingPersistenceAdapter implements HealthReportEmbe
 	@Transactional
 	public void saveHealthReportEmbedding(HealthReportEmbedding healthReportEmbedding) {
 		MemberEntity memberEntityProxy = memberJpaRepository.getReferenceById(healthReportEmbedding.getMemberId());
-		HealthReportEntity healthReportEntityProxy = healthReportRepository.getReferenceById(healthReportEmbedding.getHealthReportId());
+		HealthReportEntity healthReportEntityProxy = healthReportRepository.getReferenceById(
+				healthReportEmbedding.getHealthReportId());
 
-		HealthReportEmbeddingEntity healthReportEmbeddingEntity = HealthReportEmbeddingMapper
-				.toEntity(healthReportEmbedding, memberEntityProxy, healthReportEntityProxy);
+		Long existingEmbeddingId = healthReportEmbeddingRepository.findByHealthReportId(
+						healthReportEmbedding.getHealthReportId())
+				.map(HealthReportEmbeddingEntity::getId)
+				.orElse(null);
+
+		HealthReportEmbeddingEntity healthReportEmbeddingEntity = (existingEmbeddingId == null) ?
+				HealthReportEmbeddingMapper.toEntity(healthReportEmbedding, memberEntityProxy, healthReportEntityProxy) :
+				HealthReportEmbeddingMapper.toEntity(existingEmbeddingId, healthReportEmbedding, memberEntityProxy, healthReportEntityProxy);
 
 		healthReportEmbeddingRepository.save(healthReportEmbeddingEntity);
 	}

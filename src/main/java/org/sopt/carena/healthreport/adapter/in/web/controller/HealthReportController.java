@@ -4,15 +4,17 @@ import java.time.LocalDate;
 
 import org.sopt.carena.global.api.response.ApiResponse;
 import org.sopt.carena.global.api.response.SuccessResponse;
-import org.sopt.carena.healthreport.adapter.in.web.request.CreateHealthReportRequest;
+import org.sopt.carena.healthreport.adapter.in.web.request.WriteHealthReportRequest;
 import org.sopt.carena.healthreport.adapter.in.web.code.SuccessCode;
 import org.sopt.carena.healthreport.application.dto.command.CreateHealthReportCommand;
+import org.sopt.carena.healthreport.application.dto.command.UpdateHealthReportCommand;
 import org.sopt.carena.healthreport.application.dto.command.ExtractTextCommand;
 import org.sopt.carena.healthreport.application.dto.view.EntireHealthReportView;
 import org.sopt.carena.healthreport.application.dto.view.ExtractedTextView;
 import org.sopt.carena.healthreport.application.dto.view.HealthReportDateListView;
 import org.sopt.carena.healthreport.application.dto.view.HealthReportHistoryView;
 import org.sopt.carena.healthreport.application.port.in.CreateHealthReportUseCase;
+import org.sopt.carena.healthreport.application.port.in.UpdateHealthReportUseCase;
 import org.sopt.carena.healthreport.application.port.in.ExtractTextFromImageUseCase;
 import org.sopt.carena.healthreport.application.port.in.GetEntireHealthReportUseCase;
 import org.sopt.carena.healthreport.application.port.in.GetReportDateListUseCase;
@@ -22,6 +24,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +41,7 @@ import lombok.RequiredArgsConstructor;
 public class HealthReportController implements HealthReportApiDocs {
 	private final ExtractTextFromImageUseCase extractTextFromImageUseCase;
 	private final CreateHealthReportUseCase createHealthReportUseCase;
+	private final UpdateHealthReportUseCase updateHealthReportUseCase;
 	private final GetReportDateListUseCase getReportDateListUseCase;
 	private final GetEntireHealthReportUseCase getEntireHealthReportUseCase;
 	private final HealthReportItemHistoryUseCase healthReportItemHistoryUseCase;
@@ -54,12 +58,24 @@ public class HealthReportController implements HealthReportApiDocs {
 	@PostMapping
 	public ResponseEntity<SuccessResponse<Void>> createHealthReport(
 			@AuthenticationPrincipal final long memberId,
-			@Valid @RequestBody final CreateHealthReportRequest request
+			@Valid @RequestBody final WriteHealthReportRequest request
 	) {
 		createHealthReportUseCase.createHealthReport(CreateHealthReportCommand.of(memberId, request));
 
 		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_CREATED.getStatus())
 				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_CREATED));
+	}
+
+	@PutMapping(path = "/{healthReportId}")
+	public ResponseEntity<SuccessResponse<Void>> updateHealthReport(
+			@AuthenticationPrincipal final long memberId,
+			@PathVariable(name = "healthReportId") final String healthReportId,
+			@Valid @RequestBody final WriteHealthReportRequest request
+	) {
+		updateHealthReportUseCase.updateHealthReport(UpdateHealthReportCommand.of(memberId, Long.parseLong(healthReportId), request));
+
+		return ResponseEntity.status(SuccessCode.HEALTH_REPORT_UPDATED.getStatus())
+				.body(ApiResponse.success(SuccessCode.HEALTH_REPORT_UPDATED));
 	}
 
 	@GetMapping(path = "/dates")

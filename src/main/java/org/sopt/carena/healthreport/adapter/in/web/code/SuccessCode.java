@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 public enum SuccessCode implements SuccessResultCode {
 	EXTRACT_TEXT_SUCCESS(HttpStatus.OK, "텍스트 추출이 완료되었습니다."),
 	HEALTH_REPORT_CREATED(HttpStatus.CREATED, "건강 검진 기록이 생성되었습니다."),
+	HEALTH_REPORT_UPDATED(HttpStatus.OK, "건강 검진 기록 수정이 완료되었습니다."),
 	HEALTH_REPORT_FOUND(HttpStatus.OK, "건강 검진 기록 조회가 완료되었습니다.");
 
 	private final HttpStatus status;
