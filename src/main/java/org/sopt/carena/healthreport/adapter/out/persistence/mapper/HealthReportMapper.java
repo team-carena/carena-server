@@ -35,6 +35,7 @@ public class HealthReportMapper {
 
 	public static HealthReportEntity toEntity(final HealthReport domain) {
 		return HealthReportEntity.builder()
+				.id(domain.getId())
 				.gender(domain.getGender())
 				.healthCheckDate(domain.getHealthCheckDate())
 				.institutionName(domain.getInstitutionName())
@@ -60,6 +61,7 @@ public class HealthReportMapper {
 
 	public static HealthReportEntity toEntity(final HealthReport domain, final MemberEntity memberEntity) {
 		return HealthReportEntity.builder()
+				.id(domain.getId())
 				.gender(domain.getGender())
 				.healthCheckDate(domain.getHealthCheckDate())
 				.institutionName(domain.getInstitutionName())

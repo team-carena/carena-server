@@ -4,8 +4,9 @@ import java.time.LocalDate;
 
 import org.sopt.carena.healthreport.adapter.in.web.request.WriteHealthReportRequest;
 
-public record CreateHealthReportCommand(
+public record UpdateHealthReportCommand(
 		long memberId,
+		long healthReportId,
 		LocalDate healthCheckDate,
 		String institutionName,
 		Double height,
@@ -26,9 +27,10 @@ public record CreateHealthReportCommand(
 		Double alt,
 		Double gammaGtp
 ) {
-	public static CreateHealthReportCommand of(final long memberId, final WriteHealthReportRequest request) {
-		return new CreateHealthReportCommand(
+	public static UpdateHealthReportCommand of(final long memberId, final long healthReportId, final WriteHealthReportRequest request) {
+		return new UpdateHealthReportCommand(
 				memberId,
+				healthReportId,
 				request.healthCheckDate(),
 				request.institutionName(),
 				request.height(),

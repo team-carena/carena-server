@@ -22,11 +22,26 @@ public class HealthReportEmbeddingMapper {
 			final HealthReportEntity healthReportEntity
 	) {
 		return HealthReportEmbeddingEntity.builder()
+				.id(domain.getId())
 				.embeddingText(domain.getEmbeddingText())
 				.embedding(domain.getEmbedding())
 				.memberEntity(memberEntity)
 				.healthReportEntity(healthReportEntity)
 				.build();
+	}
 
+	public static HealthReportEmbeddingEntity toEntity(
+			final Long id,
+			final HealthReportEmbedding domain,
+			final MemberEntity memberEntity,
+			final HealthReportEntity healthReportEntity
+	) {
+		return HealthReportEmbeddingEntity.builder()
+				.id(id)
+				.embeddingText(domain.getEmbeddingText())
+				.embedding(domain.getEmbedding())
+				.memberEntity(memberEntity)
+				.healthReportEntity(healthReportEntity)
+				.build();
 	}
 }

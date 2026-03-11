@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.sopt.carena.healthreport.application.dto.command.CreateHealthReportCommand;
+import org.sopt.carena.healthreport.application.dto.command.UpdateHealthReportCommand;
 import org.sopt.carena.healthreport.domain.status.HealthStatusCarrier;
 import org.sopt.carena.healthreport.domain.value.liver.Alt;
 import org.sopt.carena.healthreport.domain.value.liver.Ast;
@@ -28,8 +29,8 @@ import lombok.Getter;
 
 @Getter
 public class HealthReport {
-	private long id;
-	private long memberId;
+	private Long id;
+	private Long memberId;
 	private Gender gender;
 	private LocalDate healthCheckDate;
 	private String institutionName;
@@ -64,8 +65,8 @@ public class HealthReport {
 
 	@Builder
 	private HealthReport(
-			final long id,
-			final long memberId,
+			final Long id,
+			final Long memberId,
 			final Gender gender,
 			final LocalDate healthCheckDate,
 			final String institutionName,
@@ -134,6 +135,27 @@ public class HealthReport {
 				.alt(command.alt())
 				.gammaGtp(command.gammaGtp())
 				.build();
+	}
+
+	public void update(final UpdateHealthReportCommand command) {
+		this.healthCheckDate = command.healthCheckDate();
+		this.institutionName = command.institutionName();
+		this.height = Height.from(command.height());
+		this.weight = Weight.from(command.weight());
+		this.waistCircumference = WaistCircumference.of(command.waistCircumference(), gender);
+		this.bmi = Bmi.from(command.bmi());
+		this.bloodPressure = BloodPressure.of(command.systolicBloodPressure(), command.diastolicBloodPressure());
+		this.hemoglobin = Hemoglobin.of(command.hemoglobin(), gender);
+		this.fastingGlucose = FastingGlucose.from(command.fastingGlucose());
+		this.totalCholesterol = TotalCholesterol.from(command.totalCholesterol());
+		this.hdl = Hdl.from(command.hdl());
+		this.ldl = Ldl.from(command.ldl());
+		this.triglyceride = Triglyceride.from(command.triglycerides());
+		this.serumCreatinine = SerumCreatinine.from(command.serumCreatinine());
+		this.egfr = Egfr.from(command.egfr());
+		this.ast = Ast.from(command.ast());
+		this.alt = Alt.from(command.alt());
+		this.gammaGtp = GammaGtp.of(command.gammaGtp(), gender);
 	}
 
 	public List<HealthStatusCarrier> getStatusCarriers() {

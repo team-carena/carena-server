@@ -52,11 +52,13 @@ public class HealthReportEmbeddingEntity extends BaseEntity {
 
 	@Builder
 	private HealthReportEmbeddingEntity(
+			Long id,
 			String embeddingText,
 			float[] embedding,
 			HealthReportEntity healthReportEntity,
 			MemberEntity memberEntity
 	) {
+		this.id = id;
 		this.embeddingText = embeddingText;
 		this.embedding = embedding;
 		this.healthReportEntity = healthReportEntity;
