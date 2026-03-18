@@ -10,4 +10,9 @@ server {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
+    location /stub_status {
+            stub_status on;
+            allow 172.0.0.0/8;
+            deny all;
+        }
 }
