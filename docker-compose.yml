@@ -154,3 +154,16 @@ services:
       - prometheus
     networks:
       - app-network
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter
+    container_name: nginx-exporter
+    command:
+      - '--nginx.scrape-uri=http://nginx/stub_status'
+    ports:
+      - "9113:9113"
+    depends_on:
+      - nginx
+    networks:
+      - app-network
+    restart: always

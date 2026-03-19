@@ -92,6 +92,12 @@ server {
   location /actuator/health {
     proxy_pass http://app/actuator/health;
   }
+
+  location /stub_status {
+      stub_status on;
+      allow 172.0.0.0/8;
+      deny all;
+    }
 }
 EOFCONF
   docker compose up -d
