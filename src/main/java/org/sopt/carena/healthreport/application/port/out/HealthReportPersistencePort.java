@@ -16,6 +16,8 @@ public interface HealthReportPersistencePort {
 
 	Optional<HealthReport> findByMemberIdAndHealthReportId(long memberId, long healthReportId);
 
+	Optional<HealthReport> findLatestHealthReportByMemberId(long memberId);
+
 	List<HealthReport> findLatestHealthReportsHeightIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
 
 	List<HealthReport> findLatestHealthReportsWeightIsNotNullByMemberId(long memberId, LocalDate healthCheckDate);
