@@ -46,7 +46,7 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 				.saveHealthReport(HealthReport.create(command, member.getGender()));
 
 		boolean isLatestReport = !healthReportPersistencePort
-				.existsNewerHealthReport(command.memberId(), command.healthCheckDate());
+				.hasMoreRecentHealthReport(command.memberId(), command.healthCheckDate());
 
 		if (isLatestReport) {
 			String embeddingText = HealthReportEmbeddingConverter.toEmbeddingText(healthReport);

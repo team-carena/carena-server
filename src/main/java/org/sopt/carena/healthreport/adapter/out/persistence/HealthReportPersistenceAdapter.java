@@ -37,7 +37,7 @@ public class HealthReportPersistenceAdapter implements HealthReportPersistencePo
 		return healthReportRepository.existsByMemberEntityIdAndHealthCheckDate(memberId, healthCheckDate);
 	}
 
-	public boolean existsNewerHealthReport(long memberId, LocalDate healthCheckDate) {
+	public boolean  hasMoreRecentHealthReport(long memberId, LocalDate healthCheckDate) {
 		return healthReportRepository
 				.existsByMemberEntityIdAndHealthCheckDateAfter(memberId, healthCheckDate);
 	}
