@@ -45,13 +45,16 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 		HealthReport healthReport = healthReportPersistencePort
 				.saveHealthReport(HealthReport.create(command, member.getGender()));
 
-		String embeddingText = HealthReportEmbeddingConverter.toEmbeddingText(healthReport);
+		boolean isLatestReport = !healthReportPersistencePort
+				.hasMoreRecentHealthReport(command.memberId(), command.healthCheckDate());
 
-		//점수 계산 -> 여기선 멤버의  Usecase호출 / member에서 점수 계산~~~
-		healthScoreUseCase.updateMemberScore(member, healthReport);
+		if (isLatestReport) {
+			String embeddingText = HealthReportEmbeddingConverter.toEmbeddingText(healthReport);
 
-		virtualExecutorService.submit(
-				() -> saveHealthReportEmbeddingUseCase.embeddingAndSave(embeddingText, member, healthReport));
-		createRecommendedMealUseCase.saveRagResult(member.getId());
+			healthScoreUseCase.updateMemberScore(member, healthReport);
+			virtualExecutorService.submit(
+					() -> saveHealthReportEmbeddingUseCase.embeddingAndSave(embeddingText, member, healthReport));
+			createRecommendedMealUseCase.saveRagResult(member.getId());
+		}
 	}
 }
