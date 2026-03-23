@@ -42,13 +42,11 @@ public class CreateHealthReportService implements CreateHealthReportUseCase {
 			throw new HealthReportAlreadyExistsException();
 		}
 
-		boolean isLatestReport = healthReportPersistencePort
-				.findLatestHealthReportByMemberId(command.memberId())
-				.map(latest -> !latest.getHealthCheckDate().isAfter(command.healthCheckDate()))
-				.orElse(true);
-
 		HealthReport healthReport = healthReportPersistencePort
 				.saveHealthReport(HealthReport.create(command, member.getGender()));
+
+		boolean isLatestReport = !healthReportPersistencePort
+				.existsNewerHealthReport(command.memberId(), command.healthCheckDate());
 
 		if (isLatestReport) {
 			String embeddingText = HealthReportEmbeddingConverter.toEmbeddingText(healthReport);

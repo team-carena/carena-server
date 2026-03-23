@@ -37,6 +37,12 @@ public class HealthReportPersistenceAdapter implements HealthReportPersistencePo
 		return healthReportRepository.existsByMemberEntityIdAndHealthCheckDate(memberId, healthCheckDate);
 	}
 
+	public boolean existsNewerHealthReport(long memberId, LocalDate healthCheckDate) {
+		return healthReportRepository
+				.existsByMemberEntityIdAndHealthCheckDateAfter(memberId, healthCheckDate);
+	}
+
+
 	public Slice<HealthReport> findAllByMemberIdOrderByHealthCheckDateDesc(final long memberId, final int index) {
 		Pageable pageable = PageRequest.of(index - 1, 10);
 		return healthReportRepository.findAllByMemberEntityIdOrderByHealthCheckDateDesc(memberId, pageable)

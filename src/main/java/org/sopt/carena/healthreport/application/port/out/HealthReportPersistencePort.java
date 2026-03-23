@@ -12,6 +12,8 @@ public interface HealthReportPersistencePort {
 
 	boolean existsByMemberIdAndHealthCheckDate(long memberId, LocalDate healthCheckDate);
 
+	boolean existsNewerHealthReport(long memberId, LocalDate healthCheckDate);
+
 	Slice<HealthReport> findAllByMemberIdOrderByHealthCheckDateDesc(long memberId, int index);
 
 	Optional<HealthReport> findByMemberIdAndHealthReportId(long memberId, long healthReportId);
