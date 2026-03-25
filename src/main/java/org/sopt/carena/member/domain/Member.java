@@ -55,7 +55,7 @@ public class Member {
             throw new InvalidNameException();
         }
         int year = birthdate.getYear();
-        if (year < 1960 || year > 2007) {
+        if (year < 1956 || year > 2007) {
             throw new InvalidBirthdateException();
         }
     }
