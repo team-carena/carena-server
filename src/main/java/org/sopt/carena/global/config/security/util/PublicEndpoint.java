@@ -12,6 +12,7 @@ import java.util.Arrays;
 public enum PublicEndpoint {
 
     HEALTH_CHECK("/actuator/health", HttpMethod.GET),
+    PROMETHEUS("/actuator/prometheus", HttpMethod.GET),
     OAUTH2_START("/oauth2/**", HttpMethod.GET),
     OAUTH2_CALLBACK("/login/oauth2/**", HttpMethod.GET),
     LOGIN("/login", HttpMethod.GET),

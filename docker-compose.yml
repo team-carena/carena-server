@@ -6,6 +6,8 @@ networks:
 
 volumes:
   redis_data:
+  prometheus_data:
+  grafana_data:
 
 services:
   redis:
@@ -122,4 +124,46 @@ services:
     environment:
       DOZZLE_USERNAME: ${DOZZLE_USERNAME}
       DOZZLE_PASSWORD: ${DOZZLE_PASSWORD}
+    restart: always
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - app-network
+    restart: always
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    restart: always
+    depends_on:
+      - prometheus
+    networks:
+      - app-network
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter
+    container_name: nginx-exporter
+    command:
+      - '--nginx.scrape-uri=http://nginx/stub_status'
+    ports:
+      - "9113:9113"
+    depends_on:
+      - nginx
+    networks:
+      - app-network
     restart: always
